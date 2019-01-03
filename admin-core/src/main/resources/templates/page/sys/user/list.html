@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/css-head :: css-head">
+</head>
+<style>
+	textarea{
+		width:100%;
+		height:100px;
+	}
+	
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+
+.chk_1{
+    display: none;
+}
+.chk_1 + label {
+	background-color: #FFF;
+	border: 1px solid #C1CACA;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+	padding: 9px;
+	border-radius: 5px;
+	display: inline-block;
+	position: relative;
+	margin-right: 30px;
+}
+.chk_1 + label:active {
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.chk_1:checked + label {
+	background-color: #ECF2F7;
+	border: 1px solid #92A1AC;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+	color: #243441;
+}
+
+.chk_1:checked + label:after {
+	content: '\2714';
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: #758794;
+	width: 100%;
+	text-align: center;
+	font-size: 1.4em;
+	padding: 1px 0 0 0;
+	vertical-align: text-top;
+}
+div.cbp label.font{
+	text-align: center;
+	font-size: 1.4em;
+	vertical-align: text-top;
+	margin-top: -15px;
+	margin-left: -10px;
+}
+
+</style>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    	西游记告诉我们：凡是有后台的妖怪都被接走了，
+    <small>凡是没后台的都被一棒子打死了</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统管理</a></li>
+    <li class="active">用户管理</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">用户列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1'}" class="btn btn-success btn-sm" id="addUser"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加用户</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="roleList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+	                  <th>用户ID</th>
+	                  <th>用户头像</th>
+	                  <th>用户名称</th>
+	                  <th>用户昵称</th>
+	                  <th>创建时间</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1'}" th:each="user,stat :${users}">
+                  <td th:text="${stat.count}">1</td>
+                  <td th:text="${user.userId}">用户ID</td>
+                  <td><img style="border-radius: 15px;height: 30px;width: 30px" th:src="${user.picPath}" src="/images/logo.png"></img></td>
+                  <td th:text="${user.username}">用户名称</td>
+                  <td th:text="${user.nickName}">用户昵称</td>
+                  <td th:text="${user.createTime}">创建时间</td>
+                  <td>
+                  	<div th:if="${user.userId != 1 || meid == '1'}">
+	                  	<span data-toggle="tooltip" title="给用户分配角色" th:if="${QX.edit == '1'}" class="btn btn-xs btn-primary" th:data-id="${user.userId}" th:onclick="allotRole(this.getAttribute('data-id'));"><i class="fa fa-user-md"></i> 分配角色</span>
+	                  	<span data-toggle="tooltip" title="编辑用户信息" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info" th:data-id="${user.userId}"  th:data-username="${user.username}" th:data-nickName="${user.nickName}" th:data-picPath="${user.picPath}" th:onclick="editUser(this.getAttribute('data-id'),this.getAttribute('data-username'),this.getAttribute('data-nickName'),this.getAttribute('data-picPath'));"><i class="fa fa-edit"></i> </span>
+	                  	<span data-toggle="tooltip" title="删除用户" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger" th:data-id="${user.userId}" th:data-picPath="${user.picPath}"  th:onclick="delUser(this.getAttribute('data-id'),this.getAttribute('data-picPath'));"><i class="fa fa-trash-o"></i> </span>
+	                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1' || QX.add == '1' || QX.del == '1'}" ><i class="fa fa-lock"></i> </span>
+                  	</div>
+                  	<div th:if="${user.userId == 1 && meid != '1'}">
+	                  	<span><i class="fa fa-lock"></i></span>
+                  	</div>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1'}" >
+                	<td colspan="7" align="center">
+						<h2>此用户无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+               </table>
+			</div>
+       </div>
+</section>
+
+
+<!-- 新增或修改的模态框 -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title text-center" id="usermodelHead">添加用户</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal"  role="form">
+				  <input type="hidden" name="url" value=""/>
+				  <input type="hidden" name="user_id" value=""/>
+				  <input type="hidden" name="oldpath" value=""/>
+				  <div class="form-group" data-toggle="tooltip" title="如果不修改则不需要选择文件">
+				    <label for="imgfile" class="col-sm-2 control-label">上传头像</label>
+				    <div class="col-sm-10">
+						<form id="imgForm" name="imgForm" enctype="multipart/form-data" method="post">
+				      		<a href="javascript:void(0)"><input type="file" class="form-control file" name="file" value="" id="imgfile" placeholder="请选择文件"></a>
+						</form>
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="imgfile" class="col-sm-2 control-label"></label>
+				    <div class="col-sm-10">
+				      <div><img src="" data-toggle="tooltip" title="当前头像或更新后的头像" id="showImg" style="width: 50px;"></div>
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="username" class="col-sm-2 control-label">用户名称</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" name="username" value="" id="username" placeholder="请输入用户名">
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="nick_name" class="col-sm-2 control-label">用户昵称</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" name="nick_name" value="" id="nick_name" placeholder="请输入昵称">
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="password" class="col-sm-2 control-label">用户密码</label>
+				    <div class="col-sm-10">
+				      <input type="password" class="form-control" name="password" value="" id="password" placeholder="请输入密码">
+				    </div>
+				  </div>
+				  
+				 </form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<button type="submit" class="btn btn-success"  id="imgSubmit" >确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 角色权限模态框 -->
+<div class="modal fade" id="edituserRoleModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title text-center" id="userRoleModelHead">编辑角色权限</h4>
+			</div>
+			<div class="modal-body">
+				<div class="cbp">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<button type="submit" class="btn btn-success"  id="roleSubmit" >确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/ztree/js/jquery.ztree.core.js}"></script>
+<script th:src="@{/ztree/js/jquery.ztree.excheck.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/path.js}"></script>
+<script>
+$(function(){
+	 //提示框
+    $("[data-toggle='tooltip']").tooltip();
+	//表格分页
+    $('#roleList').DataTable({
+    	"scrollX"	  : true,
+  		'paging'      : true,
+  	    'lengthChange': true,
+  	    'searching'   : true,
+  	    'ordering'    : true,
+  	    'info'        : true,
+  	    'autoWidth'   : false,
+  	  	"pagingType"  : "full_numbers",
+  	  	"pageLength"  : 10
+    });
+	
+	$("#addUser").click(function(){
+		reloadModelData(_ctx+"/sys/user/add","添加用户","添加","","","","","","","add");
+		$("#userModal").modal("show");
+	});
+	
+	//确认按钮
+	$("#imgSubmit").click(function(){
+		var userId = $("input[name='user_id']").val();
+		var oldpath = $("input[name='oldpath']").val();
+		var url = $("input[name='url']").val();
+		var username= $("input[name='username']").val();
+		var nickName= $("input[name='nick_name']").val();
+		var password= $("input[name='password']").val();
+		var picPath= $("#showImg").attr("src");
+		if(url == _ctx+'/sys/user/add'){
+			if(!checkAccount(username,nickName,password)){
+				return false;
+			}
+		}
+		$.ajax({
+			type:"post",
+			url:url,
+			cache:false,
+			dataType:"json",
+			data:{userId:userId,oldpath:oldpath,username:username,password:password,nickName:nickName,picPath:picPath,time:new Date().getTime()},
+			success:function(data){
+				if(data.status == '200'){
+					$("#userModal").modal("hide");
+					window.location.href=window.location.href;
+				}else{
+					alert(data.message);
+				}
+			}
+		});
+	});
+	
+	//确认按钮
+	$("#roleSubmit").click(function(){
+		var ids="";
+		$("input[name='roleids']:checked").each(function(){
+			ids = ids + $(this).val() +",";
+		});
+		var userId = $("input[name='role_user_id']").val();
+		$.ajax({
+			type:"POST",
+			url:_ctx+"/sys/user/editRole",
+			cache:false,
+			dataType:"json",
+			data:{userId:userId,ids:ids,time:new Date().getTime()},
+			success:function(data){
+				if(data.status == '200'){
+					window.location.href= window.location.href;
+				}else{
+					alert(data.message);
+				}
+			}
+		});
+	});
+
+	// 图片上传
+    $("#imgfile").off('change','#imgfile').on("change",function(){
+        var form = new FormData(document.forms.namedItem("imgForm"));
+        var file =  document.getElementById("imgfile").files[0];
+        var formData = new FormData($('#imgForm')[0]);
+        formData.append('file', file);
+        $.ajax({
+            url:_ctx+"/upload/image",
+            type:"post",
+            data:formData,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                if(data.status == "200"){
+                    $("#showImg").attr("src",data.data);
+				}else {
+                    alert(data.message);
+				}
+                console.log("data=",data);
+            },error:function(e){
+                alert("错误！！");
+            }
+        });
+    });
+})
+
+//删除用户
+function delUser(userId,path){
+	if(confirm("你确定要删除此用户吗？")){
+		$.ajax({
+			type:"POST",
+			url:_ctx+"/sys/user/del",
+			dataType:"json",
+			data:{userId:userId,picPath:path},
+			cache:false,
+			success:function(data){
+				if(data.status == "200"){
+					window.location.href=window.location.href;
+				}else{
+					alert(data.message);
+				}
+			}
+		});
+	}
+}
+
+//分配角色
+function allotRole(userId){
+	$(".modal-body .cbp p").remove();
+	$.ajax({
+		type:"GET",
+		url:_ctx+"/sys/user/getRole",
+		dataType:"json",
+		data:{userId:userId,time:new Date().getTime()},
+		cache:false,
+		success:function(data){
+			if(data.status == '200'){
+				var str = "<p><input type='hidden' name='role_user_id' value='"+userId+"' />";
+				var arr = data.data;
+				console.log("data=====",data);
+				for(var i =0;i<arr.length;i++){
+					var rolestr = "";
+					if(arr[i].checked){
+						rolestr="<p><input type='checkbox' name='roleids' id='id"+(i+1)+"' value='"+arr[i].roleId+"' class='chk_1' checked />";
+					}else{
+						rolestr="<p><input type='checkbox' name='roleids' id='id"+(i+1)+"' value='"+arr[i].roleId+"' class='chk_1'/>";
+					}
+					rolestr = rolestr +"<label for='id"+(i+1)+"'></label><label data-toggle='tooltip' title='"+arr[i].roleDesc+"' data-placement='right' class='font'>"+arr[i].roleName+"</label></p>";
+					str = str + rolestr;
+				}
+				$(".modal-body .cbp").append(str);
+				//这是为了让title 属性生效
+				$.getScript("/js/tip.js");
+				$("#edituserRoleModal").modal("show");
+			}else{
+				alert(data.message);
+			}
+		}
+	});
+
+
+}
+
+//编辑用户
+function editUser(user_id,username,nickName,path){
+	console.log(user_id+","+username+","+nickName+","+path);
+	reloadModelData(_ctx+"/sys/user/edit","编辑用户","更新",user_id,"",path,username,nickName,"","edit");
+	$("#userModal").modal("show");
+}
+
+//验证数据
+function checkAccount(username,nickName,password){
+	if(username == ''){
+		$("input[name='username']").focus();
+		alert("用户名不能为空");
+		return false;
+	}
+	if(nickName == ''){
+		$("input[name='nick_name']").focus();
+		alert("昵称不能为空");
+		return false;
+	}
+	if(password == ''){
+		$("input[name='password']").focus();
+		alert("密码不能为空");
+		return false;
+	}
+	return true;
+}
+
+//加载模态框的数据
+function reloadModelData(url,title,btntext,user_id,pics,oldpath,username,nick_name,password,type){
+	$("#userModal #usermodelHead").text(title);
+	$("#userModal #imgSubmit").text(btntext);
+	$("#showImg").attr("src",oldpath);
+	$("input[name='url']").val(url);
+	$("input[name='user_id']").val(user_id);
+	$("input[name='username']").val(username);
+	$("input[name='nick_name']").val(nick_name);
+	$("input[name='password']").val(password);
+	if(type == 'add'){
+		$("input[name='username']").attr("disabled",false);
+	}else{
+		$("input[name='username']").attr("disabled",true);
+	}
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/css-head :: css-head">
+</head>
+<style>
+	textarea{
+		width:100%;
+		height:100px;
+	}
+</style>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    <small></small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统管理</a></li>
+    <li class="active">角色管理</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">角色列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1'}" class="btn btn-success btn-sm" id="addRole"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加角色</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="roleList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+	                  <th>角色名称</th>
+	                  <th>角色描述</th>
+	                  <th>菜单权限</th>
+	                  <th>添加权限</th>
+	                  <th>删除权限</th>
+	                  <th>修改权限</th>
+	                  <th>查看权限</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1'}" th:each="role,stat :${roles}">
+                  <td th:text="${stat.count}">1</td>
+                  <td th:text="${role.roleName}">角色名称</td>
+                  <td><span th:text="${#strings.abbreviate(role.roleDesc,20)}" th:title="${role.roleDesc}" data-toggle="tooltip" data-placement="left" title="角色描述">管理员</span></td>
+                  <td>
+                  	<span data-toggle="tooltip" data-placement="left" title="赋予角色的菜单权限" th:if="${QX.edit == '1'}" class="btn btn-xs btn-default" th:data-id="${role.roleId}" th:onclick="roleMenu(this.getAttribute('data-id'),'rights','编辑菜单权限');"><i class="fa fa-list"></i> 菜单权限</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                  <td>
+                  	<span data-toggle="tooltip" data-placement="left" title="赋予菜单添加的权限" th:if="${QX.edit == '1'}" class="btn btn-xs btn-default" th:data-id="${role.roleId}" th:onclick="roleMenu(this.getAttribute('data-id'),'add_qx','编辑添加权限');"><i class="fa fa-plus"></i> 添加权限</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                  <td>
+                  	<span data-toggle="tooltip" data-placement="left" title="赋予菜单删除的权限" th:if="${QX.edit == '1'}" class="btn btn-xs btn-default" th:data-id="${role.roleId}" th:onclick="roleMenu(this.getAttribute('data-id'),'del_qx','编辑删除权限');"><i class="fa fa-trash-o"></i> 删除权限</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                  <td>
+                  	<span data-toggle="tooltip" data-placement="left" title="赋予菜单编辑的权限" th:if="${QX.edit == '1'}" class="btn btn-xs btn-default" th:data-id="${role.roleId}" th:onclick="roleMenu(this.getAttribute('data-id'),'edit_qx','编辑修改权限');"><i class="fa fa-edit"></i> 修改权限</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                  <td>
+                  	<span data-toggle="tooltip" data-placement="left" title="赋予菜单查看的权限" th:if="${QX.edit == '1'}" class="btn btn-xs btn-default" th:data-id="${role.roleId}" th:onclick="roleMenu(this.getAttribute('data-id'),'query_qx','编辑查看权限');"><i class="fa fa-eye"></i> 查看权限</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                  <td>
+                  	<span class="btn btn-xs btn-danger" th:if="${QX.del == '1'}"  th:data-id="${role.roleId}" th:onclick="delRole(this.getAttribute('data-id'));"><i class="fa fa-trash-o"></i> </span>
+                  	<span class="btn btn-xs btn-info" th:if="${QX.edit == '1'}" th:data-roleId="${role.roleId}" th:data-roleName="${role.roleName}" th:data-roleDesc="${role.roleDesc}" th:onclick="editRole(this.getAttribute('data-roleId'),this.getAttribute('data-roleName'),this.getAttribute('data-roleDesc'));"><i class="fa fa-edit"></i> </span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.del == '1' || QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1'}" >
+                	<td colspan="9" align="center">
+						<h2>此用户无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+               </table>
+               
+       </div>
+	 </div>
+</section>
+
+<!-- 权限分配的模态框 -->
+<div class="modal fade" id="qxModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title text-center" id="modelHead">编辑权限</h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" name="qx" value="">
+				<input type="hidden" name="role_id" value="">
+				<div class="zTreeDemoBackground left">
+					<ul id="roleTree" class="ztree"></ul>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-success" id="submit-qxBtn" >更改</button>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<!-- 新增或修改的模态框 -->
+<div class="modal fade" id="roleModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title text-center" id="rolemodelHead">添加角色</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<input type="hidden" name="role_id" value="0"/>
+					<input type="hidden" name="url" value="/"/>
+				  <div class="form-group">
+				    <label for="role_name" class="col-sm-2 control-label">角色名称</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" name="role_name" value="" id="role_name" placeholder="请输入名称">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="role_desc" class="col-sm-2 control-label">角色描述</label>
+				    <div class="col-sm-10">
+				    <textarea rows="" maxlength="50"  cols="" name="role_desc" placeholder="请输入角色描述" id="role_desd"></textarea>
+				    </div>
+				  </div>
+				  
+				  
+				 </form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-success" id="submit-roleBtn" >添加</button>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<script th:src="@{/static/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/static/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/static/ztree/js/jquery.ztree.core.js}"></script>
+<script th:src="@{/static/ztree/js/jquery.ztree.excheck.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/static/js/path.js}"></script>
+<script th:src="@{/static/js/role.js}"></script>
+</body>
+</html>

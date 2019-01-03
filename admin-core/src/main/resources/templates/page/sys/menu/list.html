@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    <small></small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统管理</a></li>
+    <li class="active">菜单管理</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">菜单列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1'}" class="btn btn-success btn-sm" id="addFirstMenu"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加菜单</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+	                  <th>菜单名称</th>
+	                  <th>菜单地址</th>
+	                  <th>菜单类型</th>
+	                  <th>菜单ICON</th>
+	                  <th>菜单排序</th>
+	                  <th>菜单操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1'}" th:each="menu,stat :${menus}">
+                  <td th:text="${stat.count}">1</td>
+                  <td th:text="${menu.menuName}">系统消息</td>
+                  <td th:text="${menu.menuUrl}">system/list</td>
+                  <td th:if="${menu.menuType == '1'}" >系统</td>
+                  <td th:if="${menu.menuType == '2'}">业务</td>
+                  <td><i class="fa fa-dashboard" th:class="${menu.menuIcon}"></i>&nbsp;&nbsp;&nbsp;<span th:text="${menu.menuIcon}"> fa fa-dashboard</span> </td>
+                  <td th:text="${menu.sortNum}">1</td>
+                  <td th:if="${menu.menuId == 1}">
+                  	 <span th:unless="${QX.add == '1' || QX.edit == '1' || QX.query == '1'}"><i class="fa fa-lock"></i> 无权限</span>
+					  <span  title="添加子菜单" th:if="${QX.add == '1'}" class="btn btn-xs btn-success" th:data-id="${menu.menuId}" th:data-name="${menu.menuId}" th:onclick="addMenu(this.getAttribute('data-id'),this.getAttribute('data-name'));"><i class="fa fa-plus"></i> 添加</span>
+                  	 <span  title="修改菜单" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info"  th:data-id="${menu.menuId}" th:onclick="editMenu(this.getAttribute('data-id'))"><i class="fa fa-edit"></i> 修改</span>
+                  	 <span  title="展开菜单" class="btn btn-xs btn-primary spreadSubm" th:attr="data-id=${menu.menuId}"><i class="fa fa-list-ul"></i> <font>展开</font></span>
+                  </td>
+                  <td th:unless="${menu.menuId == 1}">
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1'}"><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="添加子菜单" th:if="${QX.add == '1'}"  th:data-id="${menu.menuId}" class="btn btn-xs btn-success" th:onclick="addMenu(this.getAttribute('data-id'));"><i class="fa fa-plus"></i> 添加</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改菜单" th:if="${QX.edit == '1'}"  th:data-id="${menu.menuId}" class="btn btn-xs btn-info" th:onclick="editMenu(this.getAttribute('data-id'));"><i class="fa fa-edit"></i> 修改</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="展开菜单" class="btn btn-xs btn-primary spreadSubm" th:attr="data-id=${menu.menuId}"><i class="fa fa-list-ul"></i> <font>展开</font></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除菜单" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger"  th:data-id="${menu.menuId}" th:onclick="delMenu(this.getAttribute('data-id'));"><i class="fa fa-trash-o"></i> 删除</span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1'}" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>此用户无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+	 </div>
+</section>
+
+<div class="modal fade" id="menuModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="menumodelHead">添加菜单</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="menu_id" value="0"/>
+						<input type="hidden" name="parent_id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+					  <div class="form-group">
+					    <label for="menu_name" class="col-sm-2 control-label">菜单名称</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" name="menu_name" value="" id="menu_name" placeholder="请输入名称">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="menu_url" class="col-sm-2 control-label">菜单地址</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" name="menu_url" value="" id="menu_url" placeholder="请输入菜单地址">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="menu_type" class="col-sm-2 control-label">菜单类型</label>
+					    <div class="col-sm-10">
+						    <select name="menu_type" class="form-control">
+						      <option value="1">系统</option>
+						      <option value="2" selected="selected" >业务</option>
+						    </select>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="menu_icon" class="col-sm-2 control-label">菜单ICON</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" name="menu_icon" value="" id="menu_icon" placeholder="请输入icon">
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="menu_order" class="col-sm-2 control-label">菜单顺序</label>
+					    <div class="col-sm-10">
+					      <input type="number" class="form-control" name="menu_order" value="" id="menu_order" placeholder="请输入菜单顺序">
+					    </div>
+					  </div>
+					  
+					  
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/static/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/static/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/static/js/path.js}"></script>
+<script th:src="@{/static/js/menu.js}"></script>
+</body>
+</html>

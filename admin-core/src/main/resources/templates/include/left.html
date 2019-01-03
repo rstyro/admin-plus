@@ -1,0 +1,49 @@
+		<aside th:fragment="admin-left" class="main-sidebar">
+			<!-- sidebar: style can be found in sidebar.less 菜单-->
+			<section class="sidebar">
+				<div class="user-panel">
+					<div class="pull-left image">
+						<img src="dist/img/user2-160x160.jpg" th:src="${userPath}" style="height: 45px !important;"  class="img-circle"
+							alt="User Image">
+					</div>
+					<div class="pull-left info">
+						<p th:text="${userName}">Alexander Pierce</p>
+						<a href="#" th:text="${userStatus}"><i class="fa fa-circle text-success"></i> Online</a>
+					</div>
+				</div>
+				<!-- search form -->
+				<form action="#" method="get" class="sidebar-form">
+					<div class="input-group">
+						<input type="text" name="q" class="form-control"
+							placeholder="Search..."> <span class="input-group-btn">
+							<button type="submit" name="search" id="search-btn"
+								class="btn btn-flat">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div>
+				</form>
+
+				<ul class="sidebar-menu" data-widget="tree">
+					<li class="header">主导航</li>
+					<li class="treeview" th:if="${menu.hasMenu}" th:each="menu,mStat:${menus}"><a  href="#">
+							<i class="fa fa-dashboard" th:class="${menu.menuIcon}"></i>
+							<span th:text="${menu.menuName}">菜单</span> <span
+							class="pull-right-container"> <i
+								class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+						<ul class="treeview-menu">
+							<li th:if="${subm.hasMenu}"
+								th:each="subm,submStat:${menu.subMenu}"><a
+								target="mainFrame" href="404.html"
+								th:href="@{${subm.menuUrl}}"> <i
+									class="fa fa-circle-o"></i> <label
+									th:text="${subm.menuName}">子菜单</label>
+							</a></li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<!-- /.sidebar -->
+		</aside>
