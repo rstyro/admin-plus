@@ -1,13 +1,6 @@
 package com.lrs.generator;
 
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.FileOutConfig;
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
-import com.lrs.generator.utils.DBUtils;
 import com.lrs.generator.utils.Freemarker;
 
 import java.util.*;

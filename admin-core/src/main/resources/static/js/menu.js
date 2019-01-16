@@ -17,7 +17,7 @@ $(function () {
     //添加一级菜单
     $("#addFirstMenu").click(function(){
     	reloadMenuModel("添加菜单","",0,"","","2","","");
-    	reloadActionBtn(_ctx+"/sys/menu/add","添加");
+    	reloadActionBtn(_ctx+"/admin/menu/add","添加");
 	  	$("#menuModal").modal("show");
     });
     
@@ -30,7 +30,7 @@ $(function () {
     		$(this).find("font").text("折叠");
     		$.ajax({
 				type:"GET",
-		        url:_ctx+"/sys/menu/getSubMenu",
+		        url:_ctx+"/admin/menu/getSubMenu",
 		        data:{parentId:parentId,time:new Date().getTime()},
 		        dataType:"json",
 		        cache:false,
@@ -80,7 +80,7 @@ $(function () {
   //添加子菜单
   function addMenu(parentId){
 	  reloadMenuModel("添加菜单","",parentId,"","","2","","");
-	  reloadActionBtn(_ctx+"/sys/menu/add","添加");
+	  reloadActionBtn(_ctx+"/admin/menu/add","添加");
 	  $("#menuModal").modal("show");
   }
   
@@ -89,7 +89,7 @@ $(function () {
 	  if(confirm("你确定要删除此菜单吗？")){
 		  $.ajax({
 			  type:"GET",		  
-			  url:_ctx+"/sys/menu/del/"+menuId,
+			  url:_ctx+"/admin/menu/del/"+menuId,
 			  data:{time:new Date()},
 			  dataType:"json",
 			  cache:false,
@@ -107,7 +107,7 @@ $(function () {
   function editMenu(menuId){
 	  $.ajax({
 		  type:"GET",		  
-		  url:_ctx+"/sys/menu/query/"+menuId,
+		  url:_ctx+"/admin/menu/query/"+menuId,
 		  data:{time:new Date()},
 		  dataType:"json",
 		  cache:false,
@@ -116,7 +116,7 @@ $(function () {
 				  var obj = data.data;
 				  console.log("obj:",obj);
 				  reloadMenuModel("编辑菜单",obj.menuId,obj.parentId,obj.menuName,obj.menuUrl,obj.menuType,obj.menuIcon,obj.sortNum);
-				  reloadActionBtn(_ctx+"/sys/menu/edit","更新");
+				  reloadActionBtn(_ctx+"/admin/menu/edit","更新");
 				  $("#menuModal").modal("show");
 			  }else{
 				  alert(data.message);

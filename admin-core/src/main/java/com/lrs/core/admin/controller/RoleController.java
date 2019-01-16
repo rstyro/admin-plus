@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/role")
 public class RoleController extends BaseController {
 
-    private final static String qxurl="sys/role/list";
+    private final static String qxurl="admin/role/list";
 
     @Autowired
     private IRoleService roleService;
@@ -36,7 +36,7 @@ public class RoleController extends BaseController {
     @GetMapping(value="/list")
     public Object list(Model model) throws Exception {
         model.addAttribute("roles", roleService.getRolelist());
-        return "page/sys/role/list";
+        return "page/admin/role/list";
     }
 
     /**

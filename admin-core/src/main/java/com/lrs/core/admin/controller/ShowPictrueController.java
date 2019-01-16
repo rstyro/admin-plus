@@ -19,7 +19,7 @@ public class ShowPictrueController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Value("${upload.path.root}")
+	@Value("${admin.upload.root}")
 	public String root_fold;
 
 	//显示本地图片

@@ -41,7 +41,7 @@ public class UserController extends BaseController {
     public Object login(Model model) throws Exception {
         model.addAttribute("users", userService.getUserList());
         model.addAttribute("meid", ((User)this.getSession().getAttribute(Const.SESSION_USER)).getUserId());
-        return "page/sys/user/list";
+        return "page/admin/user/list";
     }
 
     /**

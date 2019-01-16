@@ -25,10 +25,10 @@ public class UploadController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Value("${upload.path.root}")
+	@Value("${admin.upload.root}")
 	public String rootPath;
 
-    @Value("${upload.path.pre}")
+    @Value("${admin.upload.pre}")
     public String prePath;
 
 

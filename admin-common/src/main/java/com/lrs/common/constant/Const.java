@@ -10,5 +10,8 @@ public class Const {
 	public final static String SESSION_ALL_MENU="SESSION_ALL_MENU";
 	public final static String GLOBAL_SESSION="GLOBAL_SESSION";
 	public final static String SESSION_QX="QX";
-	
+
+	public final static String YES="Y";
+	public final static String NO="N";
+
 }

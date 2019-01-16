@@ -259,7 +259,7 @@ $(function(){
     });
 	
 	$("#addUser").click(function(){
-		reloadModelData(_ctx+"/sys/user/add","添加用户","添加","","","","","","","add");
+		reloadModelData(_ctx+"/admin/user/add","添加用户","添加","","","","","","","add");
 		$("#userModal").modal("show");
 	});
 	
@@ -272,7 +272,7 @@ $(function(){
 		var nickName= $("input[name='nick_name']").val();
 		var password= $("input[name='password']").val();
 		var picPath= $("#showImg").attr("src");
-		if(url == _ctx+'/sys/user/add'){
+		if(url == _ctx+'/admin/user/add'){
 			if(!checkAccount(username,nickName,password)){
 				return false;
 			}
@@ -303,7 +303,7 @@ $(function(){
 		var userId = $("input[name='role_user_id']").val();
 		$.ajax({
 			type:"POST",
-			url:_ctx+"/sys/user/editRole",
+			url:_ctx+"/admin/user/editRole",
 			cache:false,
 			dataType:"json",
 			data:{userId:userId,ids:ids,time:new Date().getTime()},
@@ -348,7 +348,7 @@ function delUser(userId,path){
 	if(confirm("你确定要删除此用户吗？")){
 		$.ajax({
 			type:"POST",
-			url:_ctx+"/sys/user/del",
+			url:_ctx+"/admin/user/del",
 			dataType:"json",
 			data:{userId:userId,picPath:path},
 			cache:false,
@@ -368,7 +368,7 @@ function allotRole(userId){
 	$(".modal-body .cbp p").remove();
 	$.ajax({
 		type:"GET",
-		url:_ctx+"/sys/user/getRole",
+		url:_ctx+"/admin/user/getRole",
 		dataType:"json",
 		data:{userId:userId,time:new Date().getTime()},
 		cache:false,
@@ -403,7 +403,7 @@ function allotRole(userId){
 //编辑用户
 function editUser(user_id,username,nickName,path){
 	console.log(user_id+","+username+","+nickName+","+path);
-	reloadModelData(_ctx+"/sys/user/edit","编辑用户","更新",user_id,"",path,username,nickName,"","edit");
+	reloadModelData(_ctx+"/admin/user/edit","编辑用户","更新",user_id,"",path,username,nickName,"","edit");
 	$("#userModal").modal("show");
 }
 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UploadConfig {
 
-	@Value("${upload.path.root}")
+	@Value("${admin.upload.root}")
 	public String rootPath;
 	
 	/**

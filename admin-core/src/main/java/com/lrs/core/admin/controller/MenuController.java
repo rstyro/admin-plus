@@ -31,7 +31,7 @@ public class MenuController extends BaseController {
     @GetMapping("/list")
     public String list(Model model){
         model.addAttribute("menus",menuService.getAllParentMenuList());
-        return "page/sys/menu/list";
+        return "page/admin/menu/list";
     }
 
     @PostMapping(value="/add")

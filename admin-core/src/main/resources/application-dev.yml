@@ -3,6 +3,9 @@ server:
 
 admin:
   name: Admin LRS
+  upload:
+    root: upload
+    pre: http://localhost:8800/show/
 mybatis-plus:
   mapper-locations:
        - classpath:mapper/*/*.xml
@@ -11,6 +14,11 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   type-aliases-package: com.lrs.core.*.entity
+  #配置逻辑删除
+  global-config:
+    db-config:
+      logic-delete-value: Y # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: N # 逻辑未删除值(默认为 0)
 spring:
   datasource:
     sql-script-encoding: UTF-8
@@ -47,9 +55,4 @@ spring:
         max-active: 8
         max-wait: -1ms
     timeout: 10000ms
-
-upload:
-  path:
-    root: upload
-    pre: http://localhost:8800/show/
 
