@@ -31,11 +31,3 @@
   </ol>
   <br/>
 </section>
-
-<!-- Main content -->
-<section class="content">
-	 <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">配置列表</h3>
-              <br><br>
-              <button th:if="<@notTran name= "QX.add == '1' && QX.query == '1'" />" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>

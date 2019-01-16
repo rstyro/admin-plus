@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.lrs.generator.utils.DBUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +52,7 @@ public class CodeGenerator {
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/admin?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC");
-        // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
+        DataSourceConfig dsc = DBUtils.getDateSource();
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -78,7 +74,6 @@ public class CodeGenerator {
         focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                System.out.println("tableInfo="+ JSON.toJSONString(tableInfo));
                 // 自定义输入文件名称
                 return projectPath + "/admin-core/src/main/resources/mapper/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
