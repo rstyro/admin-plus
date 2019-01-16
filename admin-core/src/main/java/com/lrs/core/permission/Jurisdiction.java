@@ -1,10 +1,10 @@
 package com.lrs.core.permission;
 
+import com.lrs.common.constant.Const;
 import com.lrs.common.utils.permission.RightsHelper;
-import com.lrs.core.entity.Const;
-import com.lrs.core.sys.entity.Menu;
-import com.lrs.core.sys.entity.Role;
-import com.lrs.core.sys.entity.User;
+import com.lrs.core.admin.entity.Menu;
+import com.lrs.core.admin.entity.Role;
+import com.lrs.core.admin.entity.User;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;

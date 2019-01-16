@@ -1,7 +1,8 @@
 package com.lrs.core.exception;
 
-import com.lrs.core.entity.ApiResultEnum;
-import com.lrs.core.entity.ResponseModel;
+import com.lrs.common.constant.ApiResultEnum;
+import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.exception.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

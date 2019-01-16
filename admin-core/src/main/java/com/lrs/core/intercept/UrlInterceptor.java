@@ -2,11 +2,11 @@ package com.lrs.core.intercept;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lrs.common.annotation.Permission;
-import com.lrs.core.entity.ApiResultEnum;
-import com.lrs.core.entity.Const;
-import com.lrs.core.entity.ResponseModel;
+import com.lrs.common.constant.ApiResultEnum;
+import com.lrs.common.constant.Const;
+import com.lrs.common.constant.ResponseModel;
+import com.lrs.core.admin.entity.User;
 import com.lrs.core.permission.Jurisdiction;
-import com.lrs.core.sys.entity.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;

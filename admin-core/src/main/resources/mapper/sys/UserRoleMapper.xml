@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lrs.core.sys.mapper.UserRoleMapper">
+<mapper namespace="com.lrs.core.admin.mapper.UserRoleMapper">
 
     <select id="getUserRoles" parameterType="Integer" resultType="Role">
 	 	SELECT
 			a.*
 		from
-			sys_role a
+			admin_role a
 		LEFT JOIN
-			sys_user_role b
+			admin_user_role b
 		ON
 			a.role_id = b.role_id
 		WHERE
