@@ -1,10 +1,9 @@
-package com.lrs.core.act.service;
+package ${package.Service};
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
 import com.lrs.common.constant.ResponseModel;
 import com.lrs.common.dto.PageDTO;
-import com.lrs.core.act.entity.Acticle;
-
 import javax.servlet.http.HttpSession;
 
 /**
@@ -13,12 +12,12 @@ import javax.servlet.http.HttpSession;
  * </p>
  *
  * @author rstyro
- * @since 2019-01-16
+ * @since ${.now?date}
  */
-public interface IActicleService extends IService<Acticle> {
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
     public ResponseModel getList(PageDTO dto) throws  Exception;
-    public ResponseModel add(Acticle item, HttpSession session) throws  Exception;
-    public ResponseModel edit(Acticle item, HttpSession session) throws  Exception;
+    public ResponseModel add(${entity} item, HttpSession session) throws  Exception;
+    public ResponseModel edit(${entity} item, HttpSession session) throws  Exception;
     public ResponseModel del(Long id, HttpSession session) throws  Exception;
     public ResponseModel getDetail(Long id) throws  Exception;
 }

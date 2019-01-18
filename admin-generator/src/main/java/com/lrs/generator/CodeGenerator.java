@@ -1,5 +1,6 @@
 package com.lrs.generator;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -9,15 +10,16 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.MyFreemarkerTemplateEngine;
+import com.lrs.generator.utils.Freemarker;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Mybatis-plus 的代码生成类
  */
 public class CodeGenerator {
+
     /**
      * <p>
      * 读取控制台内容
@@ -61,12 +63,11 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(scanner("模块名"));
+        String modelName=scanner("模块名");
+        pc.setModuleName(modelName);
         pc.setParent("com.lrs.core");
         mpg.setPackageInfo(pc);
-
-
-
+        String isGeneratorPage = scanner("是否生成页面：1 -- 生成，0 -- 不生成");
         // 自定义配置
         InjectionConfig cfg = new InjectionConfig() {
             @Override
@@ -84,6 +85,19 @@ public class CodeGenerator {
             }
         });
 
+        if("1".equals(isGeneratorPage)){
+            focList.add(new FileOutConfig("templates/pageTemplates/list.ftl") {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    System.out.println("====JOSN="+ JSON.toJSONString(tableInfo));
+                    generatorPage(tableInfo,modelName);
+                    // 自定义输入文件名称
+                    return projectPath + "/admin-core/src/main/resources/templates/page/"+modelName+"/"+tableInfo.getEntityPath()+"_list.html";
+                }
+            });
+
+        }
+
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
         mpg.setTemplate(new TemplateConfig().setXml(null));
@@ -94,15 +108,62 @@ public class CodeGenerator {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 //        strategy.setSuperEntityClass("com.lrs.admin");
         strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(true);
         strategy.setSuperControllerClass("com.lrs.core.base.BaseController");
         strategy.setInclude(scanner("表名"));
 //        strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
-        mpg.setStrategy(strategy);
+        Map<String,String> map  = new HashMap<>();
+        if("1".equals(isGeneratorPage)){
+            //如果生成页面的话，自己定义膜拜
+            strategy.setRestControllerStyle(false);
+            TemplateConfig tc = new TemplateConfig();
+            tc.setController("templates/codeTemplates/Controller.java");
+            tc.setServiceImpl("templates/codeTemplates/ServiceImpl.java");
+            tc.setService("templates/codeTemplates/Service.java");
+            tc.setMapper("templates/codeTemplates/mapper.java");
+            tc.setEntity("templates/codeTemplates/entity.java");
+            tc.setXml("");
+            mpg.setTemplate(tc);
+        }else {
+            strategy.setRestControllerStyle(true);
+        }
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+        mpg.setStrategy(strategy);
         mpg.execute();
+    }
+
+    /**
+     * 生成页面
+     * @param tableInfo
+     * @param modelName
+     */
+    public static void generatorPage(TableInfo tableInfo,String modelName){
+        try {
+            Map<String,Object> root = new HashMap<String,Object>();		//创建数据模型
+            root.put("modelName",modelName);
+            setData(root,tableInfo);
+            String ftlNmae="list.ftl";
+            String projectPath = System.getProperty("user.dir");
+            Freemarker.printFile(ftlNmae,root,projectPath + "/admin-core/src/main/resources/templates/page/"+modelName+"/"+tableInfo.getEntityPath()+"_list.html","templates/pageTemplates/");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 添加
+     * @param root
+     * @param tableInfo
+     */
+    public static void setData(Map<String,Object> root,TableInfo tableInfo){
+        root.put("entityPath", tableInfo.getEntityPath());
+        root.put("fields",tableInfo.getFields());
+        root.put("controllerName",tableInfo.getControllerName());
+        root.put("serviceImplName",tableInfo.getServiceImplName());
+        root.put("serviceName",tableInfo.getServiceName());
+        root.put("entityName",tableInfo.getEntityName());
+        root.put("mapperName",tableInfo.getMapperName());
     }
 
 }

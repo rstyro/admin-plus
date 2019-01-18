@@ -10,10 +10,99 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2019-01-16 18:05:16
+Date: 2019-01-18 15:02:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for act_acticle
+-- ----------------------------
+DROP TABLE IF EXISTS `act_acticle`;
+CREATE TABLE `act_acticle` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `auther` varchar(20) DEFAULT NULL COMMENT '作者',
+  `title` varchar(50) DEFAULT NULL COMMENT '标题',
+  `content` text COMMENT '内容',
+  `is_deleted` varchar(10) DEFAULT 'N' COMMENT '是否删除',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1085810963130765316 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of act_acticle
+-- ----------------------------
+INSERT INTO `act_acticle` VALUES ('1', 'rstyro11', 'aabb', 'aabb', 'N', '2019-01-17 10:05:21', '2019-01-17 10:05:22');
+INSERT INTO `act_acticle` VALUES ('97', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:02');
+INSERT INTO `act_acticle` VALUES ('98', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:03');
+INSERT INTO `act_acticle` VALUES ('99', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:03');
+INSERT INTO `act_acticle` VALUES ('101', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('102', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('103', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('104', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('108', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('109', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('110', '帅大叔', '测试', '测试，我就是我，不一样的烟火', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('111', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('112', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('113', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('114', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('115', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('123', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('124', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('125', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('126', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('127', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('128', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('129', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('130', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('131', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('132', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('133', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('134', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('135', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('136', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('137', 'rstyroAA', 'aaSDFAA', 'aaASDFAA', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('138', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('154', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('155', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('156', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('157', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('158', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('159', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('160', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('161', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('162', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('163', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('164', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('165', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('166', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('167', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('168', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('169', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('170', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('171', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('172', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('173', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('174', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('175', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('176', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('177', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('178', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('179', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('180', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('181', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('182', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('183', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('184', 'rstyro', 'aaasdf', 'aasadf', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('185', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
+INSERT INTO `act_acticle` VALUES ('1085797015769735169', '11', 'SpringBoot(十四)：SpringBoot 国际化配置', '11', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
+INSERT INTO `act_acticle` VALUES ('1085797165867098114', '11', 'ASDF', 'ASDF', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
+INSERT INTO `act_acticle` VALUES ('1085804092781105154', 'aaaaa', 'bbbb', 'ccccc', 'Y', null, null);
+INSERT INTO `act_acticle` VALUES ('1085804241066528770', 'AAA', 'AAAA', 'AAA', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
+INSERT INTO `act_acticle` VALUES ('1085810963130765314', 'ASDFADFAF', 'SpringBoot(十四)', 'ASDFSAFSAFASFAFAFAF', 'Y', null, null);
+INSERT INTO `act_acticle` VALUES ('1085810963130765315', '帅大叔', '测试', '123456789', 'N', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
 
 -- ----------------------------
 -- Table structure for admin_login
@@ -24,12 +113,147 @@ CREATE TABLE `admin_login` (
   `user_id` int(11) NOT NULL,
   `last_login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后登录时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of admin_login
 -- ----------------------------
 INSERT INTO `admin_login` VALUES ('15', '1', '2018-12-18 10:17:13');
+INSERT INTO `admin_login` VALUES ('16', '1', '2018-12-18 10:23:47');
+INSERT INTO `admin_login` VALUES ('17', '1', '2018-12-18 10:24:49');
+INSERT INTO `admin_login` VALUES ('18', '1', '2018-12-18 10:25:03');
+INSERT INTO `admin_login` VALUES ('19', '2', '2018-12-18 10:28:09');
+INSERT INTO `admin_login` VALUES ('20', '2', '2018-12-18 10:29:31');
+INSERT INTO `admin_login` VALUES ('21', '2', '2018-12-18 10:29:33');
+INSERT INTO `admin_login` VALUES ('22', '2', '2018-12-18 10:29:49');
+INSERT INTO `admin_login` VALUES ('23', '2', '2018-12-18 10:30:39');
+INSERT INTO `admin_login` VALUES ('24', '2', '2018-12-18 10:31:39');
+INSERT INTO `admin_login` VALUES ('25', '2', '2018-12-18 10:35:06');
+INSERT INTO `admin_login` VALUES ('26', '2', '2018-12-19 01:37:42');
+INSERT INTO `admin_login` VALUES ('27', '2', '2018-12-19 01:59:16');
+INSERT INTO `admin_login` VALUES ('28', '2', '2018-12-19 02:02:01');
+INSERT INTO `admin_login` VALUES ('29', '2', '2018-12-19 02:04:06');
+INSERT INTO `admin_login` VALUES ('30', '1', '2018-12-19 02:04:19');
+INSERT INTO `admin_login` VALUES ('31', '2', '2018-12-19 02:07:07');
+INSERT INTO `admin_login` VALUES ('32', '2', '2018-12-19 02:11:48');
+INSERT INTO `admin_login` VALUES ('33', '1', '2018-12-19 02:12:01');
+INSERT INTO `admin_login` VALUES ('34', '1', '2018-12-19 02:24:09');
+INSERT INTO `admin_login` VALUES ('35', '1', '2018-12-19 02:47:56');
+INSERT INTO `admin_login` VALUES ('36', '1', '2018-12-19 02:50:48');
+INSERT INTO `admin_login` VALUES ('37', '1', '2018-12-19 02:51:58');
+INSERT INTO `admin_login` VALUES ('38', '1', '2018-12-19 03:53:12');
+INSERT INTO `admin_login` VALUES ('39', '1', '2018-12-19 03:56:38');
+INSERT INTO `admin_login` VALUES ('40', '1', '2018-12-19 03:59:09');
+INSERT INTO `admin_login` VALUES ('41', '1', '2018-12-19 04:49:58');
+INSERT INTO `admin_login` VALUES ('42', '1', '2018-12-19 05:05:50');
+INSERT INTO `admin_login` VALUES ('43', '1', '2018-12-19 05:07:28');
+INSERT INTO `admin_login` VALUES ('44', '1', '2018-12-19 05:09:09');
+INSERT INTO `admin_login` VALUES ('45', '1', '2018-12-19 05:14:12');
+INSERT INTO `admin_login` VALUES ('46', '1', '2018-12-19 05:17:19');
+INSERT INTO `admin_login` VALUES ('47', '1', '2018-12-19 06:05:29');
+INSERT INTO `admin_login` VALUES ('48', '1', '2018-12-19 08:13:07');
+INSERT INTO `admin_login` VALUES ('49', '1', '2018-12-19 08:14:12');
+INSERT INTO `admin_login` VALUES ('50', '1', '2018-12-19 08:18:26');
+INSERT INTO `admin_login` VALUES ('51', '1', '2018-12-19 08:20:54');
+INSERT INTO `admin_login` VALUES ('52', '1', '2018-12-19 08:23:04');
+INSERT INTO `admin_login` VALUES ('53', '1', '2018-12-19 08:23:47');
+INSERT INTO `admin_login` VALUES ('54', '1', '2018-12-19 08:27:08');
+INSERT INTO `admin_login` VALUES ('55', '1', '2018-12-19 08:51:07');
+INSERT INTO `admin_login` VALUES ('56', '1', '2018-12-19 09:20:47');
+INSERT INTO `admin_login` VALUES ('57', '1', '2018-12-19 10:31:56');
+INSERT INTO `admin_login` VALUES ('58', '1', '2018-12-19 10:34:23');
+INSERT INTO `admin_login` VALUES ('59', '1', '2018-12-25 09:28:34');
+INSERT INTO `admin_login` VALUES ('60', '1', '2018-12-26 03:16:07');
+INSERT INTO `admin_login` VALUES ('61', '1', '2018-12-28 08:34:14');
+INSERT INTO `admin_login` VALUES ('62', '1', '2018-12-28 11:36:03');
+INSERT INTO `admin_login` VALUES ('63', '1', '2018-12-28 11:39:57');
+INSERT INTO `admin_login` VALUES ('64', '1', '2018-12-28 11:40:41');
+INSERT INTO `admin_login` VALUES ('65', '1', '2018-12-29 03:03:14');
+INSERT INTO `admin_login` VALUES ('66', '1', '2018-12-29 12:58:21');
+INSERT INTO `admin_login` VALUES ('67', '1', '2018-12-29 13:00:24');
+INSERT INTO `admin_login` VALUES ('68', '1', '2018-12-29 13:04:47');
+INSERT INTO `admin_login` VALUES ('69', '1', '2018-12-29 13:07:17');
+INSERT INTO `admin_login` VALUES ('70', '1', '2018-12-29 13:40:09');
+INSERT INTO `admin_login` VALUES ('71', '1', '2018-12-29 13:41:59');
+INSERT INTO `admin_login` VALUES ('72', '1', '2018-12-29 14:00:47');
+INSERT INTO `admin_login` VALUES ('73', '1', '2018-12-29 14:03:06');
+INSERT INTO `admin_login` VALUES ('74', '1', '2018-12-29 14:04:31');
+INSERT INTO `admin_login` VALUES ('75', '1', '2018-12-29 14:17:42');
+INSERT INTO `admin_login` VALUES ('76', '1', '2018-12-29 14:19:44');
+INSERT INTO `admin_login` VALUES ('77', '1', '2018-12-29 14:35:58');
+INSERT INTO `admin_login` VALUES ('78', '1', '2018-12-29 15:15:51');
+INSERT INTO `admin_login` VALUES ('79', '1', '2018-12-29 15:41:25');
+INSERT INTO `admin_login` VALUES ('80', '1', '2019-01-03 07:37:29');
+INSERT INTO `admin_login` VALUES ('81', '1', '2019-01-03 07:39:25');
+INSERT INTO `admin_login` VALUES ('82', '1', '2019-01-03 07:42:43');
+INSERT INTO `admin_login` VALUES ('83', '4', '2019-01-03 07:43:08');
+INSERT INTO `admin_login` VALUES ('84', '1', '2019-01-03 07:43:17');
+INSERT INTO `admin_login` VALUES ('85', '4', '2019-01-03 07:43:51');
+INSERT INTO `admin_login` VALUES ('86', '1', '2019-01-03 07:44:01');
+INSERT INTO `admin_login` VALUES ('87', '4', '2019-01-03 07:46:04');
+INSERT INTO `admin_login` VALUES ('88', '1', '2019-01-03 07:47:40');
+INSERT INTO `admin_login` VALUES ('89', '4', '2019-01-03 07:47:45');
+INSERT INTO `admin_login` VALUES ('90', '1', '2019-01-03 07:49:05');
+INSERT INTO `admin_login` VALUES ('91', '4', '2019-01-03 07:49:11');
+INSERT INTO `admin_login` VALUES ('92', '4', '2019-01-03 07:50:52');
+INSERT INTO `admin_login` VALUES ('93', '1', '2019-01-03 07:51:59');
+INSERT INTO `admin_login` VALUES ('94', '4', '2019-01-03 07:52:04');
+INSERT INTO `admin_login` VALUES ('95', '1', '2019-01-03 07:52:28');
+INSERT INTO `admin_login` VALUES ('96', '4', '2019-01-03 07:52:59');
+INSERT INTO `admin_login` VALUES ('97', '1', '2019-01-03 07:53:12');
+INSERT INTO `admin_login` VALUES ('98', '4', '2019-01-03 07:53:26');
+INSERT INTO `admin_login` VALUES ('99', '4', '2019-01-03 07:59:22');
+INSERT INTO `admin_login` VALUES ('100', '1', '2019-01-03 07:59:33');
+INSERT INTO `admin_login` VALUES ('101', '4', '2019-01-03 08:01:25');
+INSERT INTO `admin_login` VALUES ('102', '4', '2019-01-03 08:03:28');
+INSERT INTO `admin_login` VALUES ('103', '4', '2019-01-03 08:04:41');
+INSERT INTO `admin_login` VALUES ('104', '1', '2019-01-03 08:05:44');
+INSERT INTO `admin_login` VALUES ('105', '1', '2019-01-03 08:06:54');
+INSERT INTO `admin_login` VALUES ('106', '1', '2019-01-03 08:30:21');
+INSERT INTO `admin_login` VALUES ('107', '1', '2019-01-04 09:23:18');
+INSERT INTO `admin_login` VALUES ('108', '1', '2019-01-04 09:23:44');
+INSERT INTO `admin_login` VALUES ('109', '1', '2019-01-04 09:26:11');
+INSERT INTO `admin_login` VALUES ('110', '2', '2019-01-16 18:03:26');
+INSERT INTO `admin_login` VALUES ('111', '2', '2019-01-16 18:03:54');
+INSERT INTO `admin_login` VALUES ('112', '2', '2019-01-17 09:57:13');
+INSERT INTO `admin_login` VALUES ('113', '2', '2019-01-17 09:59:33');
+INSERT INTO `admin_login` VALUES ('114', '2', '2019-01-17 10:00:09');
+INSERT INTO `admin_login` VALUES ('115', '2', '2019-01-17 10:02:05');
+INSERT INTO `admin_login` VALUES ('116', '2', '2019-01-17 10:04:10');
+INSERT INTO `admin_login` VALUES ('117', '2', '2019-01-17 10:06:49');
+INSERT INTO `admin_login` VALUES ('118', '2', '2019-01-17 10:10:36');
+INSERT INTO `admin_login` VALUES ('119', '2', '2019-01-17 10:30:38');
+INSERT INTO `admin_login` VALUES ('120', '2', '2019-01-17 10:33:10');
+INSERT INTO `admin_login` VALUES ('121', '2', '2019-01-17 10:34:20');
+INSERT INTO `admin_login` VALUES ('122', '2', '2019-01-17 10:42:04');
+INSERT INTO `admin_login` VALUES ('123', '2', '2019-01-17 11:02:00');
+INSERT INTO `admin_login` VALUES ('124', '2', '2019-01-17 11:05:55');
+INSERT INTO `admin_login` VALUES ('125', '2', '2019-01-17 11:07:29');
+INSERT INTO `admin_login` VALUES ('126', '2', '2019-01-17 11:13:20');
+INSERT INTO `admin_login` VALUES ('127', '2', '2019-01-17 11:14:12');
+INSERT INTO `admin_login` VALUES ('128', '2', '2019-01-17 11:15:53');
+INSERT INTO `admin_login` VALUES ('129', '2', '2019-01-17 15:03:22');
+INSERT INTO `admin_login` VALUES ('130', '2', '2019-01-17 15:06:58');
+INSERT INTO `admin_login` VALUES ('131', '2', '2019-01-17 15:11:12');
+INSERT INTO `admin_login` VALUES ('132', '2', '2019-01-17 15:21:34');
+INSERT INTO `admin_login` VALUES ('133', '2', '2019-01-17 15:25:22');
+INSERT INTO `admin_login` VALUES ('134', '2', '2019-01-17 15:28:07');
+INSERT INTO `admin_login` VALUES ('135', '2', '2019-01-17 15:39:50');
+INSERT INTO `admin_login` VALUES ('136', '2', '2019-01-17 15:43:49');
+INSERT INTO `admin_login` VALUES ('137', '2', '2019-01-17 15:50:10');
+INSERT INTO `admin_login` VALUES ('138', '2', '2019-01-17 15:55:19');
+INSERT INTO `admin_login` VALUES ('139', '2', '2019-01-17 16:01:11');
+INSERT INTO `admin_login` VALUES ('140', '2', '2019-01-17 16:04:03');
+INSERT INTO `admin_login` VALUES ('141', '2', '2019-01-17 16:11:15');
+INSERT INTO `admin_login` VALUES ('142', '2', '2019-01-17 16:14:40');
+INSERT INTO `admin_login` VALUES ('143', '2', '2019-01-17 16:19:00');
+INSERT INTO `admin_login` VALUES ('144', '2', '2019-01-17 16:21:42');
+INSERT INTO `admin_login` VALUES ('145', '2', '2019-01-18 11:14:53');
+INSERT INTO `admin_login` VALUES ('146', '2', '2019-01-18 11:17:30');
+INSERT INTO `admin_login` VALUES ('147', '2', '2019-01-18 11:54:59');
+INSERT INTO `admin_login` VALUES ('148', '2', '2019-01-18 14:54:54');
+INSERT INTO `admin_login` VALUES ('149', '2', '2019-01-18 14:59:47');
+INSERT INTO `admin_login` VALUES ('150', '2', '2019-01-18 15:00:24');
 
 -- ----------------------------
 -- Table structure for admin_menu
@@ -48,7 +272,7 @@ CREATE TABLE `admin_menu` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of admin_menu
@@ -58,9 +282,8 @@ INSERT INTO `admin_menu` VALUES ('2', '1', '菜单管理', 'admin/menu/list', '1
 INSERT INTO `admin_menu` VALUES ('3', '1', '角色管理', 'admin/role/list', '1', null, '2', '1', '0', '2019-01-16 18:03:45', '2017-09-07 14:52:41');
 INSERT INTO `admin_menu` VALUES ('4', '1', '用户管理', 'admin/user/list', '1', '', '3', '1', '0', '2019-01-16 18:03:48', '2017-09-07 14:52:41');
 INSERT INTO `admin_menu` VALUES ('5', '0', '商户管理', '#', '2', 'fa fa-tasks', '2', '1', '0', '2018-07-30 19:12:51', '2017-09-07 14:52:41');
-INSERT INTO `admin_menu` VALUES ('6', '5', '商户列表', '/member/list', '2', '', '1', '1', '1', '2018-12-19 18:34:36', '2017-09-07 14:52:41');
-INSERT INTO `admin_menu` VALUES ('7', '5', '测试', 'dailyDetail/list', '2', '', '1', '1', '0', '2018-12-19 18:35:43', null);
-INSERT INTO `admin_menu` VALUES ('8', '0', '测试', '#', '1', 'fa fa-888', '1', '1', '1', '2018-12-19 18:36:03', null);
+INSERT INTO `admin_menu` VALUES ('6', '5', '商户列表', 'act/acticle/list', '2', '', '1', '1', '0', '2019-01-17 09:58:35', '2017-09-07 14:52:41');
+INSERT INTO `admin_menu` VALUES ('7', '5', '测试', 'test/people/list', '2', '', '1', '1', '0', '2019-01-18 11:14:26', null);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -83,7 +306,7 @@ CREATE TABLE `admin_role` (
 -- ----------------------------
 -- Records of admin_role
 -- ----------------------------
-INSERT INTO `admin_role` VALUES ('1', '管理员', '管理员权限', '1267650600228229401496703205375', '190', '190', '190', '190', '1', '2019-01-03 15:52:41');
+INSERT INTO `admin_role` VALUES ('1', '管理员', '管理员权限', '1267650600228229401496703205375', '254', '254', '254', '254', '1', '2019-01-17 09:59:29');
 INSERT INTO `admin_role` VALUES ('2', 'tyro', '随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的', '190', '190', '160', '190', '190', '1', '2019-01-03 16:31:18');
 
 -- ----------------------------
@@ -106,7 +329,7 @@ CREATE TABLE `admin_user` (
 -- Records of admin_user
 -- ----------------------------
 INSERT INTO `admin_user` VALUES ('1', 'admin', '超级管理员', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '87906722879D6DFCC6032721B4935B00', '2017-08-18 13:57:32');
-INSERT INTO `admin_user` VALUES ('2', 'rstyro', '管理员', '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '86633AC1E371190AAE1A14322EB87840', '2017-08-18 13:57:32');
+INSERT INTO `admin_user` VALUES ('2', 'rstyro', '管理员', '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '666940E56E1D99D6A7F2D80895B34B00', '2017-08-18 13:57:32');
 INSERT INTO `admin_user` VALUES ('4', 'asdf', 'asdf', '', 'http://localhost:8800/show//20190103/1546504246866.jpg', 'unlock', 'EADF971A41F761702C2C93CA090BDB09', '2019-01-03 07:40:07');
 
 -- ----------------------------
@@ -128,3 +351,23 @@ INSERT INTO `admin_user_role` VALUES ('30', '4', '1', '2019-01-03 16:31:01');
 INSERT INTO `admin_user_role` VALUES ('31', '4', '2', '2019-01-03 16:31:01');
 INSERT INTO `admin_user_role` VALUES ('32', '2', '1', '2019-01-03 16:31:04');
 INSERT INTO `admin_user_role` VALUES ('33', '2', '2', '2019-01-03 16:31:04');
+
+-- ----------------------------
+-- Table structure for test_people
+-- ----------------------------
+DROP TABLE IF EXISTS `test_people`;
+CREATE TABLE `test_people` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL COMMENT '姓名',
+  `age` int(5) DEFAULT NULL COMMENT '年龄',
+  `sex` int(1) DEFAULT '1' COMMENT '性别：1--男，0 -- 女',
+  `is_deleted` varchar(2) DEFAULT 'N' COMMENT '是否删除，Y/N',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `midify_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of test_people
+-- ----------------------------
+INSERT INTO `test_people` VALUES ('1', 'rstyro', '24', '1', 'N', '2019-01-18 11:44:24', '2019-01-18 11:44:26');

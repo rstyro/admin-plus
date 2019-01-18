@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/css-head :: css-head">
+</head>
+<style>
+	textarea{
+		width:100%;
+		height:100px;
+	}
+</style>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    <small></small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统管理</a></li>
+    <li class="active">角色管理</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">角色列表</h3>
+              <br><br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<input type="hidden" name="unifyId" id="unifyId" th:value="${unifyId}"/>
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+				<button th:if="${QX.add == '1' && QX.query == '1'}" class="btn btn-success btn-sm" ><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="roleList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+	                  <th>ID</th>
+	                  <th>作者</th>
+	                  <th>标题</th>
+	                  <th>内容</th>
+	                  <th>是否删除</th>
+	                  <th>创建时间</th>
+	                  <th>更新时间</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1'}" th:each="item,stat :${list.data.records}">
+                  <td th:text="${stat.count}">1</td>
+                  <td> <div th:text="${item.id}"></div></td>
+                  <td> <div th:text="${item.auther}"></div></td>
+                  <td> <div th:text="${item.title}"></div></td>
+                  <td> <div th:text="${item.content}"></div></td>
+                  <td th:switch="${item.isDeleted}">
+					  <div th:case="N">未删除</div>
+					  <div th:case="Y">已删除</div>
+				  </td>
+					<td> <div th:text="${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}"></div></td>
+					<td> <div th:text="${item.modifyTime}"></div></td>
+					<td>
+						<span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1'}"><i class="fa fa-lock"></i> 无权限</span>
+						<span data-toggle="tooltip" data-placement="left" title="添加" th:if="${QX.add == '1'}"  class="btn btn-xs btn-success" th:onclick="add();"><i class="fa fa-plus"></i></span>
+						<span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1'}"  th:data-id="${item.id}" class="btn btn-xs btn-info" th:onclick="edit(this.getAttribute('data-id'));"><i class="fa fa-edit"></i></span>
+						<span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger"  th:data-id="${item.id}" th:onclick="del(this.getAttribute('data-id'));"><i class="fa fa-trash-o"></i></span>
+					</td>
+                </tr>
+                <tr th:unless="${QX.query == '1'}" >
+                	<td colspan="9" align="center">
+						<h2>此用户无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+               </table>
+               
+       </div>
+	 </div>
+	<div style="max-width:800px;margin:0 auto;">
+		<div id="kkpager"></div>
+	</div>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="itemModelHead">添加</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+
+					<input type="hidden" name="id" value="0"/>
+					<input type="hidden" name="actionurl" value="/"/>
+					<div class="form-group">
+						<label for="menu_name" class="col-sm-2 control-label">菜单名称</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="menu_name" value="" id="menu_name" placeholder="请输入名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="menu_url" class="col-sm-2 control-label">菜单地址</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="menu_url" value="" id="menu_url" placeholder="请输入菜单地址">
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script th:src="@{/static/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/static/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:src="@{/static/page/src/kkpager.js}"></script>
+<script th:inline="javascript">
+    //init
+    $(function(){
+        var pageNo = getParameter('pageNo');
+        if(!pageNo){
+            pageNo = 1;
+        }
+        //生成分页
+        kkpager.generPageHtml({
+            pno : [[${list.data.current}]],
+            //总页码
+            total : [[${list.data.pages}]],
+            //总数据条数
+            totalRecords : [[${list.data.total}]],
+            mode : 'click',//默认值是link，可选link或者click
+            click : function(n){
+                // do something
+                window.location.href=_ctx+"/act/acticle/list?pageNo="+n;
+                //手动选中按钮
+                this.selectPage(n);
+                return false;
+            }
+        });
+    });
+
+    function add(){
+
+	}
+    function edit(){
+
+    }
+    function del(){
+
+    }
+</script>
+</body>
+</html>

@@ -30,6 +30,7 @@
 			
 		//iframe 自适应
 		function setIframeHeight(iframe) {
+            iframe.height =0;
 			if (iframe) {
 				var iframeWin = iframe.contentWindow
 						|| iframe.contentDocument.parentWindow;
@@ -43,6 +44,7 @@
 		window.onload = function() {
 			setIframeHeight(document.getElementById('mainBodyFrame'));
 		};
+
 	</script>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
