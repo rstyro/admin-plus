@@ -13,6 +13,25 @@
 #### 导入mysql 脚本。admin.sql
 #### 账号密码：admin/admin
 
+### 温馨提示：如果表结构有datetime 类型的，在实体类要加个`DateTimeFormat` 、`JsonFormat`注解，如下
+```
+/**
+ * Y/N
+ * 逻辑删除的注解
+ */
+@TableLogic
+private String isDeleted;
+
+@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+private LocalDateTime createTime;
+
+@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+private LocalDateTime modifyTime;
+
+```
+
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/1.png)
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/2.png)
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/3.png)
