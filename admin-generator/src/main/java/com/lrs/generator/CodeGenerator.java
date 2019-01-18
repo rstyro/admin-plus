@@ -1,6 +1,5 @@
 package com.lrs.generator;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -10,7 +9,6 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.MyFreemarkerTemplateEngine;
 import com.lrs.generator.utils.Freemarker;
 
 import java.util.*;
@@ -52,7 +50,6 @@ public class CodeGenerator {
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
-//        DataSourceConfig dsc = DBUtils.getDateSource();
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://localhost:3306/admin?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Hongkong");
         // dsc.setSchemaName("public");
@@ -89,7 +86,6 @@ public class CodeGenerator {
             focList.add(new FileOutConfig("templates/pageTemplates/list.ftl") {
                 @Override
                 public String outputFile(TableInfo tableInfo) {
-                    System.out.println("====JOSN="+ JSON.toJSONString(tableInfo));
                     generatorPage(tableInfo,modelName);
                     // 自定义输入文件名称
                     return projectPath + "/admin-core/src/main/resources/templates/page/"+modelName+"/"+tableInfo.getEntityPath()+"_list.html";

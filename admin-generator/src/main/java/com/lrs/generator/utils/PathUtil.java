@@ -4,8 +4,6 @@ import java.io.File;
 
 /** 
  * 说明：路径工具类
- * 创建人：FH Q313596790
- * 修改时间：2014年9月20日
  * @version
  */
 public class PathUtil {
