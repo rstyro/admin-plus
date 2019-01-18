@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * <p>
- *  服务类
+ *  ${table.comment!} 服务类
  * </p>
  *
  * @author rstyro

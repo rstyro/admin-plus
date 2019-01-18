@@ -18,24 +18,19 @@ import java.util.*;
  */
 public class CodeGenerator {
 
-    /**
-     * <p>
-     * 读取控制台内容
-     * </p>
-     */
-    public static String scanner(String tip) {
-        Scanner scanner = new Scanner(System.in);
-        StringBuilder help = new StringBuilder();
-        help.append("请输入" + tip + "：");
-        System.out.println(help.toString());
-        if (scanner.hasNext()) {
-            String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
-                return ipt;
-            }
-        }
-        throw new MybatisPlusException("请输入正确的" + tip + "！");
-    }
+    //页面生成根目录
+    public static String projectPageRelativePath="/admin-core/src/main/resources/templates/page/";
+    //自定义 页面模板路径
+    public static String pageTemplatesPath="templates/pageTemplates/list.ftl";
+
+    //自定义Controller模板路径
+    public static String controlTemplatesPath="templates/codeTemplates/Controller.java.ftl";
+    //自定义ServiceImpl模板路径
+    public static String serviceImplTemplatesPath="templates/codeTemplates/ServiceImpl.java.ftl";
+    //自定义Service模板路径
+    public static String serviceTemplatesPath="templates/codeTemplates/Service.java.ftl";
+
+
 
     public static void main(String[] args) {
         // 代码生成器
@@ -64,39 +59,6 @@ public class CodeGenerator {
         pc.setModuleName(modelName);
         pc.setParent("com.lrs.core");
         mpg.setPackageInfo(pc);
-        String isGeneratorPage = scanner("是否生成页面：1 -- 生成，0 -- 不生成");
-        // 自定义配置
-        InjectionConfig cfg = new InjectionConfig() {
-            @Override
-            public void initMap() {
-                // to do nothing
-            }
-        };
-        List<FileOutConfig> focList = new ArrayList<>();
-        focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                // 自定义输入文件名称
-                return projectPath + "/admin-core/src/main/resources/mapper/" + pc.getModuleName()
-                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
-            }
-        });
-
-        if("1".equals(isGeneratorPage)){
-            focList.add(new FileOutConfig("templates/pageTemplates/list.ftl") {
-                @Override
-                public String outputFile(TableInfo tableInfo) {
-                    generatorPage(tableInfo,modelName);
-                    // 自定义输入文件名称
-                    return projectPath + "/admin-core/src/main/resources/templates/page/"+modelName+"/"+tableInfo.getEntityPath()+"_list.html";
-                }
-            });
-
-        }
-
-        cfg.setFileOutConfigList(focList);
-        mpg.setCfg(cfg);
-        mpg.setTemplate(new TemplateConfig().setXml(null));
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
@@ -108,58 +70,77 @@ public class CodeGenerator {
         strategy.setInclude(scanner("表名"));
 //        strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
+        strategy.setRestControllerStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
-        Map<String,String> map  = new HashMap<>();
+
+        String isGeneratorPage = scanner("是否生成页面：1 -- 生成，0 -- 不生成");
+        // 自定义配置
+        InjectionConfig cfg = new InjectionConfig() {
+            public void initMap() {}
+        };
+        List<FileOutConfig> focList = new ArrayList<>();
+        focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + "/admin-core/src/main/resources/mapper/" + pc.getModuleName()+ "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+            }
+        });
+
+        //项目相对路径
+        String projectRelative ="/admin-core/src/main/java/com/lrs/core/"+modelName;
         if("1".equals(isGeneratorPage)){
-            //如果生成页面的话，自己定义膜拜
             strategy.setRestControllerStyle(false);
-            TemplateConfig tc = new TemplateConfig();
-            tc.setController("templates/codeTemplates/Controller.java");
-            tc.setServiceImpl("templates/codeTemplates/ServiceImpl.java");
-            tc.setService("templates/codeTemplates/Service.java");
-            tc.setMapper("templates/codeTemplates/mapper.java");
-            tc.setEntity("templates/codeTemplates/entity.java");
-            tc.setXml("");
-            mpg.setTemplate(tc);
-        }else {
-            strategy.setRestControllerStyle(true);
+            focList.add(new FileOutConfig(pageTemplatesPath) {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    return projectPath + projectPageRelativePath +modelName+"/"+tableInfo.getEntityPath()+"_list.html";
+                }
+            });
+
+            focList.add(new FileOutConfig(controlTemplatesPath) {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    return projectPath + projectRelative+"/controller/"+tableInfo.getControllerName()+StringPool.DOT_JAVA;
+                }
+            });
+            focList.add(new FileOutConfig(serviceImplTemplatesPath) {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    return projectPath +projectRelative+"/service/impl/"+tableInfo.getServiceImplName()+StringPool.DOT_JAVA;
+                }
+            });
+            focList.add(new FileOutConfig(serviceTemplatesPath) {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    return projectPath +projectRelative+"/service/"+tableInfo.getServiceName()+StringPool.DOT_JAVA;
+                }
+            });
+
         }
+        cfg.setFileOutConfigList(focList);
+        mpg.setCfg(cfg);
+        mpg.setTemplate(new TemplateConfig().setXml(null));
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.setStrategy(strategy);
         mpg.execute();
     }
 
     /**
-     * 生成页面
-     * @param tableInfo
-     * @param modelName
+     * <p>
+     * 读取控制台内容
+     * </p>
      */
-    public static void generatorPage(TableInfo tableInfo,String modelName){
-        try {
-            Map<String,Object> root = new HashMap<String,Object>();		//创建数据模型
-            root.put("modelName",modelName);
-            setData(root,tableInfo);
-            String ftlNmae="list.ftl";
-            String projectPath = System.getProperty("user.dir");
-            Freemarker.printFile(ftlNmae,root,projectPath + "/admin-core/src/main/resources/templates/page/"+modelName+"/"+tableInfo.getEntityPath()+"_list.html","templates/pageTemplates/");
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static String scanner(String tip) {
+        Scanner scanner = new Scanner(System.in);
+        StringBuilder help = new StringBuilder();
+        help.append("请输入" + tip + "：");
+        System.out.println(help.toString());
+        if (scanner.hasNext()) {
+            String ipt = scanner.next();
+            if (StringUtils.isNotEmpty(ipt)) {
+                return ipt;
+            }
         }
-    }
-
-    /**
-     * 添加
-     * @param root
-     * @param tableInfo
-     */
-    public static void setData(Map<String,Object> root,TableInfo tableInfo){
-        root.put("entityPath", tableInfo.getEntityPath());
-        root.put("fields",tableInfo.getFields());
-        root.put("controllerName",tableInfo.getControllerName());
-        root.put("serviceImplName",tableInfo.getServiceImplName());
-        root.put("serviceName",tableInfo.getServiceName());
-        root.put("entityName",tableInfo.getEntityName());
-        root.put("mapperName",tableInfo.getMapperName());
+        throw new MybatisPlusException("请输入正确的" + tip + "！");
     }
 
 }

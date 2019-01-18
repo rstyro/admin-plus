@@ -1,11 +1,3 @@
-<#macro mapperEl value>${r"#{"}${value}}</#macro>
-
-<#macro gemHtml parameterName >
-	<@compress single_line=true>
-		${r"${"} ${parameterName} }
-	</@compress> 
-</#macro>
-
 <#macro gemTH  name>
 	<@compress single_line=true>
 		${r"${item."}${name} }
@@ -60,7 +52,7 @@
                 <thead>
                 <tr>
                     <th>序号</th>
-	                <#list fields as column>
+	                <#list table.fields as column>
                         <#if column.comment == ''>
                             <th>${column.propertyName}</th>
                         <#else>
@@ -73,7 +65,7 @@
                 <tbody>
                 <tr th:if="<@notTran name="QX.query == '1'" />" th:each="item,stat :<@notTran name="list.data.records" />" >
                     <td th:text="${r'${stat.count}'}">1</td>
-                  <#list fields as column>
+                  <#list table.fields as column>
                       <#if column.propertyType == 'LocalDateTime'>
                         <td><div th:text="<@notTran name="#temporals.format(item.${column.propertyName}, 'yyyy-MM-dd HH:mm:ss')"/>" >${column.comment}</div></td>
                       <#else>
@@ -87,7 +79,7 @@
                     </td>
                 </tr>
                 <tr th:unless="<@notTran name="QX.query == '1'" />" >
-                    <td colspan="${fields?size+2}" rowspan="1" align="center">
+                    <td colspan="${table.fields?size+2}" rowspan="1" align="center">
                         <h2>您无权限查看该页面</h2>
                     </td>
                 </tr>
@@ -111,13 +103,13 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
-                    <#list fields as column>
+                    <#list table.fields as column>
                         <#if column.keyFlag >
                          <input type="hidden" name="${column.propertyName}" id="${column.propertyName}" value="0"/>
                         </#if>
                     </#list>
                     <input type="hidden" name="actionurl" id="actionurl" value="/"/>
-                    <#list fields as column>
+                    <#list table.fields as column>
                         <#if column.propertyName != 'isDeleted' && !column.keyFlag>
                             <div class="form-group">
                                 <label for="${column.propertyName}" class="col-sm-2 control-label"> <#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if></label>
@@ -170,15 +162,15 @@
         //提交按钮
         $("#submitBtn").click(function(){
             var url = $("input[name='actionurl']").val();
-            <#list fields as column>
+            <#list table.fields as column>
             var ${column.propertyName} = $("#${column.propertyName}").val();
             </#list>
-            if(checkData(<#list fields as column><#if !column.keyFlag>${column.propertyName}<#if column_has_next>,</#if></#if></#list>)){
+            if(checkData(<#list table.fields as column><#if !column.keyFlag>${column.propertyName}<#if column_has_next>,</#if></#if></#list>)){
                 $.ajax({
                     type:"POST",
                     url:_ctx+url,
                     cache:false,
-                    data:{<#list fields as column>${column.propertyName}:${column.propertyName},</#list> time:new Date().getTime()},
+                    data:{<#list table.fields as column>${column.propertyName}:${column.propertyName},</#list> time:new Date().getTime()},
                     dataType:"json",
                      success:function(data){
                     if(data.status == "200"){
@@ -193,11 +185,11 @@
 
         });
     });
-    var listUrl = "/${modelName}/${entityPath}/list";
-    var editUrl = "/${modelName}/${entityPath}/edit";
-    var addUrl = "/${modelName}/${entityPath}/add";
-    var delUrl = "/${modelName}/${entityPath}/del";
-    var queryUrl = "/${modelName}/${entityPath}/query";
+    var listUrl = "/${package.ModuleName}/${table.entityPath}/list";
+    var editUrl = "/${package.ModuleName}/${table.entityPath}/edit";
+    var addUrl = "/${package.ModuleName}/${table.entityPath}/add";
+    var delUrl = "/${package.ModuleName}/${table.entityPath}/del";
+    var queryUrl = "/${package.ModuleName}/${table.entityPath}/query";
 
     //跳转页面
     function  skipPage(pageNo) {
@@ -212,7 +204,7 @@
         $("input[name='actionurl']").val(addUrl);
         $("#modelHead").text("新增");
         $("#submitBtn").text("新增");
-        setData(<#list fields as column>""<#if column_has_next>,</#if></#list>);
+        setData(<#list table.fields as column>""<#if column_has_next>,</#if></#list>);
         $("#itemModal").modal("show");
     }
     /**
@@ -228,7 +220,7 @@
             if(data.status == "200"){
                 var item = data.data;
                 console.log("item:",item);
-                setData(<#list fields as column> item.${column.propertyName} <#if column_has_next>,</#if></#list>)
+                setData(<#list table.fields as column> item.${column.propertyName} <#if column_has_next>,</#if></#list>)
             }else{
                 alert(data.message);
             }
@@ -254,8 +246,8 @@
      * 校验参数
      * @returns {boolean}
      */
-    function checkData(<#list fields as column><#if !column.keyFlag>${column.propertyName}<#if column_has_next>,</#if></#if></#list>){
-        <#list fields as column>
+    function checkData(<#list table.fields as column><#if !column.keyFlag>${column.propertyName}<#if column_has_next>,</#if></#if></#list>){
+        <#list table.fields as column>
             <#if !column.keyFlag && column.propertyType != 'LocalDateTime' && column.propertyName != 'isDeleted'>
             if(${column.propertyName} == ""){
                 alert("<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>不能为空");
@@ -271,8 +263,8 @@
     /**
      *  赋值
       */
-    function setData( <#list fields as column> ${column.propertyName} <#if column_has_next>,</#if></#list>){
-        <#list fields as column>
+    function setData( <#list table.fields as column> ${column.propertyName} <#if column_has_next>,</#if></#list>){
+        <#list table.fields as column>
          $("#${column.propertyName}").val(${column.propertyName});
         </#list>
     }

@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.lrs.common.utils.PathsUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -44,7 +47,7 @@ public class Freemarker {
 	 */
 	public static void printFile(String ftlName, Map<String,Object> root, String outFile, String filePath, String ftlPath) throws Exception{
 		try {
-			File file = new File(PathUtil.getClasspath() + filePath + outFile);
+			File file = new File(PathsUtils.getClasspath() + filePath + outFile);
 			if(!file.getParentFile().exists()){				//判断有没有父路径，就是判断文件整个路径是否存在
 				file.getParentFile().mkdirs();				//不存在就全部创建
 			}
@@ -95,12 +98,23 @@ public class Freemarker {
 		try {
 			Configuration cfg = new Configuration();  												//通过Freemaker的Configuration读取相应的ftl
 			cfg.setEncoding(Locale.CHINA, "utf-8");
-			cfg.setDirectoryForTemplateLoading(new File(PathUtil.getClassResources()+ftlPath));		//设定去哪里读取相应的ftl模板文件
+			cfg.setDirectoryForTemplateLoading(new File(PathsUtils.getClassResources()+ftlPath));		//设定去哪里读取相应的ftl模板文件
 			Template temp = cfg.getTemplate(ftlName);												//在模板文件目录中找到名称为name的文件
 			return temp;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void main(String[] args) throws Exception {
+		Map<String,Object> root = new HashMap<String,Object>(); //创建数据模型
+		Map<String,Object> table = new HashMap<String,Object>();	//表信息
+		table.put("fields",new ArrayList<String>());
+		root.put("modelName","xxx");
+		root.put("table",table);
+		String ftlNmae="list.ftl";
+		String projectPath = System.getProperty("user.dir");
+		Freemarker.printFile(ftlNmae,root,projectPath + "/admin-core/src/main/resources/templates/page/_list.html","templates/pageTemplates/");
 	}
 }
