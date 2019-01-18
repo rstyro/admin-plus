@@ -9,6 +9,8 @@
 #### Redis 配置已设置好，不用把配置注释即可
 #### 内含代码生成器，一键运行，自动生成页面超级方便，下面是教程示例图
 #### 不太清楚怎么用的提 Issues
+#### 导入mysql 脚本。admin.sql
+#### 账号密码：admin/admin
 
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/1.png)
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/2.png)
