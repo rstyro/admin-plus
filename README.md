@@ -5,6 +5,20 @@
 ## admin-generator  代码生成器
 ### 主要技术栈：Springboot 2 + MybatisPlus 
 
+## 快速使用
+### 1、把公用包安装到本地仓库
+```
+# 进入amdin-common 把 admin-common 安装到 本地仓库
+cd ./admin-common
+mvn clean install
+
+# 然后就可以去 admin-core 启动 Application
+```
+### 2、代码生成器
+```
+直接 去 admin-generator 启动Application,按照控制台提示输入即可
+```
+
 #### 已有菜单权限、角色权限、用户管理
 #### MybatisPlus 文档：[https://mp.baomidou.com/guide/config.html](https://mp.baomidou.com/guide/config.html)
 #### Redis 配置已设置好，不用把配置注释即可
