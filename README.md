@@ -35,10 +35,14 @@
 + 启动 `Application` 即可
 
 ## Tip
-#### 1、MybatisPlus 文档：  
+#### 1、demo 示例
+`admin-core` 模块下的 `com.lrs.core.act` 就是一个 demo 包  
+对应的表就是 `act_acticle`,这个包里面的代码大部分是代码生成器生成的  
+可以仿造它写，就可以使用了，会使用之后，把与其想关的删除掉即可
+#### 2、MybatisPlus 文档：  
 [https://mp.baomidou.com/guide/config.html](https://mp.baomidou.com/guide/config.html)
 
-#### 2、如果表结构有datetime 类型的  
+#### 3、如果表结构有datetime 类型的  
 在实体类要加个`DateTimeFormat` 、`JsonFormat`注解，如下
 ```
 /**
@@ -58,7 +62,7 @@ private LocalDateTime modifyTime;
 
 ```
 
-#### 3、代码生成器教程示例图
+#### 4、代码生成器教程示例图
 
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/1.png)
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/2.png)
