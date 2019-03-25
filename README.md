@@ -35,9 +35,11 @@
 + 启动 `Application` 即可
 
 ## Tip
-#### MybatisPlus 文档：[https://mp.baomidou.com/guide/config.html](https://mp.baomidou.com/guide/config.html)
+#### 1、MybatisPlus 文档：  
+[https://mp.baomidou.com/guide/config.html](https://mp.baomidou.com/guide/config.html)
 
-### 如果表结构有datetime 类型的，在实体类要加个`DateTimeFormat` 、`JsonFormat`注解，如下
+#### 2、如果表结构有datetime 类型的  
+在实体类要加个`DateTimeFormat` 、`JsonFormat`注解，如下
 ```
 /**
  * Y/N
@@ -56,7 +58,7 @@ private LocalDateTime modifyTime;
 
 ```
 
-#### 代码生成器教程示例图
+#### 3、代码生成器教程示例图
 
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/1.png)
 ![示例图](https://github.com/rstyro/admin-plus/blob/master/2.png)
