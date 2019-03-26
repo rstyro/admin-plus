@@ -3,16 +3,18 @@ package com.lrs.core.act.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Result;
 import com.lrs.common.dto.PageDTO;
-import org.springframework.util.StringUtils;
-import javax.servlet.http.HttpSession;
-
+import com.lrs.common.exception.TryAgainException;
 import com.lrs.core.act.entity.Acticle;
 import com.lrs.core.act.mapper.ActicleMapper;
 import com.lrs.core.act.service.IActicleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lrs.core.aspect.IsTryAgain;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -52,9 +54,18 @@ public class ActicleServiceImpl extends ServiceImpl<ActicleMapper, Acticle> impl
         return Result.ok();
     }
 
-    @Override
+    /**
+     * 更新失败就重试
+     * @param item
+     * @param session
+     * @return
+     * @throws Exception
+     */
+    @IsTryAgain
     public Result edit(Acticle item, HttpSession session) throws Exception {
-        this.updateById(item);
+        if(!this.updateById(item)){
+            throw new TryAgainException(ApiResultEnum.ERROR);
+        }
        return Result.ok();
     }
 
