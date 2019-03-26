@@ -31,6 +31,12 @@ public class CodeGenerator {
     public static String serviceTemplatesPath="templates/codeTemplates/Service.java.ftl";
 
 
+    /**
+     * 自定义 entity 模板
+     */
+    public static String entityTemplatesPath="templates/codeTemplates/entity.java.ftl";
+
+
 
     public static void main(String[] args) {
         // 代码生成器
@@ -112,6 +118,13 @@ public class CodeGenerator {
                 @Override
                 public String outputFile(TableInfo tableInfo) {
                     return projectPath +projectRelative+"/service/"+tableInfo.getServiceName()+StringPool.DOT_JAVA;
+                }
+            });
+
+            focList.add(new FileOutConfig(entityTemplatesPath) {
+                @Override
+                public String outputFile(TableInfo tableInfo) {
+                    return projectPath +projectRelative+"/entity/"+tableInfo.getEntityName()+StringPool.DOT_JAVA;
                 }
             });
 
