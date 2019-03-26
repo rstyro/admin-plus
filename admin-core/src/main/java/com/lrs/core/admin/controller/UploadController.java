@@ -2,6 +2,7 @@ package com.lrs.core.admin.controller;
 
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.ImgUtil;
 import com.lrs.common.utils.PathsUtils;
@@ -34,7 +35,7 @@ public class UploadController {
 
 	@PostMapping(value = "/image")
 	@ResponseBody
-	public ResponseModel imgUpload(@RequestParam(value = "file") MultipartFile file){
+	public Result imgUpload(@RequestParam(value = "file") MultipartFile file){
 		if (file.isEmpty()) {
            throw new ApiException(ApiResultEnum.FILE_IS_NULL,null);
         }
@@ -48,9 +49,9 @@ public class UploadController {
             file.transferTo(dest);
         }catch (IOException e) {
             logger.error(e.getMessage(),e);
-            return new ResponseModel(ApiResultEnum.ERROR_IO,null);
+            throw new ApiException(ApiResultEnum.ERROR_IO);
         }
-		return new ResponseModel(prePath+folder+fileName);
+        return Result.ok(prePath+folder+fileName);
 	}
 	
 

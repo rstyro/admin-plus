@@ -25,6 +25,9 @@ public class ApiException extends RuntimeException{
 		this.data = data;
 		this.exception = exception;
 	}
+	public ApiException(ApiResultEnum apiResultEnum) {
+		this(apiResultEnum.getStatus(),apiResultEnum.getMessage(),null,null);
+	}
 	public ApiException(ApiResultEnum apiResultEnum, Object data) {
 		this(apiResultEnum.getStatus(),apiResultEnum.getMessage(),data,null);
 	}

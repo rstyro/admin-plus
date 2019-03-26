@@ -1,8 +1,9 @@
 package com.lrs.core.exception;
 
 import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
+import com.lrs.common.exception.TryAgainException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -20,24 +21,54 @@ import java.io.IOException;
 public class RestExceptionHandler {
 
 	private Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
-	
-	@ExceptionHandler(Exception.class)  
-	public ResponseModel exceptionHandler(Exception ex) {
-		logger.info(ex.getMessage(), ex);
-		if(ex instanceof ApiException){
-			return new ResponseModel(((ApiException) ex).getStatus(),ex.getMessage(),null);
-		}else if(ex instanceof NullPointerException){
-			return new ResponseModel(ApiResultEnum.ERROR_NULL, null);
-		}else if(ex instanceof ClassCastException){
-			return new ResponseModel(ApiResultEnum.ERROR_CLASS_CAST, null);
-		}else if(ex instanceof IOException){
-			return new ResponseModel(ApiResultEnum.ERROR_IO, null);
-		}else if(ex instanceof HttpRequestMethodNotSupportedException){
-			return new ResponseModel(ApiResultEnum.ERROR_MOTHODNOTSUPPORT, null);
-		}else if(ex instanceof RuntimeException){
-			return new ResponseModel(ApiResultEnum.ERROR_RUNTION, null);
-		}
-		return new ResponseModel(ApiResultEnum.FAILED, null);
+
+	@ExceptionHandler(NullPointerException.class)
+	public Result NullPointer(NullPointerException ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR_NULL);
+	}
+
+	@ExceptionHandler(ClassCastException.class)
+	public Result ClassCastException(ClassCastException ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR_CLASS_CAST);
+	}
+
+	@ExceptionHandler(IOException.class)
+	public Result IOException(IOException ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR_IO);
+	}
+
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public Result HttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR_MOTHODNOTSUPPORT);
+	}
+
+	@ExceptionHandler(TryAgainException.class)
+	public Result TryAgainException(TryAgainException ex) {
+		logger.error("全局异常========正在重试");
+		return Result.error(ex.getStatus(),ex.getMessage());
+	}
+
+
+	@ExceptionHandler(ApiException.class)
+	public Result ApiException(ApiException ex) {
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ex.getStatus(),ex.getMessage());
+	}
+
+	@ExceptionHandler(RuntimeException.class)
+	public Result RuntimeException(RuntimeException ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR_RUNTION);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public Result exception(Exception ex){
+		logger.error(ex.getMessage(),ex);
+		return Result.error(ApiResultEnum.ERROR);
 	}
 	
 }

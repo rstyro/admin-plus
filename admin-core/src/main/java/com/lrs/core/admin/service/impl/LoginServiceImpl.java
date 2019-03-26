@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
-import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.Tools;
 import com.lrs.common.utils.encrypt.SHA;
@@ -59,21 +59,21 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public ResponseModel login(LoginDTO dto, HttpSession session) throws Exception {
+    public Result login(LoginDTO dto, HttpSession session) throws Exception {
         String psw =dto.getPassword();
         String userName = dto.getUsername();
         if(Tools.isEmpty(userName) || Tools.isEmpty(psw)){
-            return new ResponseModel(ApiResultEnum.PARAMETER_NULL,null);
+            throw new ApiException(ApiResultEnum.PARAMETER_NULL);
         }
         psw = SHA.encryptSHA(psw);
         QueryWrapper<User> queryWrapper = new QueryWrapper();
         queryWrapper.lambda().eq(User::getUsername,dto.getUsername()).eq(User::getPassword,psw);
         User user = userService.getOne(queryWrapper);
         if(user == null){
-            throw  new ApiException(ApiResultEnum.ACCOUNT_NOT_FOUND,null);
+            throw  new ApiException(ApiResultEnum.ACCOUNT_NOT_FOUND);
         }
         if("lock".equalsIgnoreCase(user.getStatus())){
-            return new ResponseModel(ApiResultEnum.ACCOUNT_LOCK,null);
+            throw new ApiException(ApiResultEnum.ACCOUNT_LOCK);
         }
         //获取用户权限
         Integer userId = user.getUserId();
@@ -111,7 +111,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         loginLog.setLastLoginTime(LocalDateTime.now());
         loginLog.setUserId(userId);
         this.save(loginLog);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     /**

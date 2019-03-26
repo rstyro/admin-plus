@@ -2,7 +2,7 @@ package com.lrs.core.admin.controller;
 
 
 import com.lrs.common.constant.Const;
-import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.core.admin.dto.LoginDTO;
 import com.lrs.core.admin.entity.Menu;
 import com.lrs.core.admin.entity.User;
@@ -73,7 +73,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value={"/login"},method=RequestMethod.POST)
     @ResponseBody
-    public ResponseModel login(LoginDTO dto) throws Exception {
+    public Result login(LoginDTO dto) throws Exception {
         return loginService.login(dto, this.getSession());
     }
 

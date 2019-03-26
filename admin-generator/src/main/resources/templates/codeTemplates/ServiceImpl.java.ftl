@@ -3,8 +3,7 @@ package ${package.ServiceImpl};
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.dto.PageDTO;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
@@ -28,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName}{
 
     @Override
-    public ResponseModel getList(PageDTO dto) throws Exception {
+    public Result getList(PageDTO dto) throws Exception {
         IPage<${entity}> page = new Page<>();
         if(dto.getPageNo() != null){
             page.setCurrent(dto.getPageNo());
@@ -44,30 +43,30 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     //                    .like(${entity}::getTitle,dto.getKeyword());
     //        }
         IPage<${entity}> iPage = this.page(page, queryWrapper);
-        return new ResponseModel(ApiResultEnum.SUCCESS,iPage);
+        return Result.ok(iPage);
     }
 
     @Override
-    public ResponseModel add(${entity} item, HttpSession session) throws Exception {
+    public Result add(${entity} item, HttpSession session) throws Exception {
         this.save(item);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel edit(${entity} item, HttpSession session) throws Exception {
+    public Result edit(${entity} item, HttpSession session) throws Exception {
         this.updateById(item);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+       return Result.ok();
     }
 
     @Override
-    public ResponseModel del(Long id, HttpSession session) throws Exception {
+    public Result del(Long id, HttpSession session) throws Exception {
         this.removeById(id);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel getDetail(Long id) throws Exception {
+    public Result getDetail(Long id) throws Exception {
     ${entity} item = this.getOne(new QueryWrapper<${entity}>().lambda().eq(${entity}::getId,id));
-        return new ResponseModel(ApiResultEnum.SUCCESS,item);
+         return Result.ok(item);
     }
 }

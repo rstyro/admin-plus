@@ -3,17 +3,17 @@ package com.lrs.core.act.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.dto.PageDTO;
+import org.springframework.util.StringUtils;
+import javax.servlet.http.HttpSession;
+
 import com.lrs.core.act.entity.Acticle;
 import com.lrs.core.act.mapper.ActicleMapper;
 import com.lrs.core.act.service.IActicleService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -21,13 +21,13 @@ import javax.servlet.http.HttpSession;
  * </p>
  *
  * @author rstyro
- * @since 2019-01-16
+ * @since 2019-03-26
  */
 @Service
-public class ActicleServiceImpl extends ServiceImpl<ActicleMapper, Acticle> implements IActicleService {
+public class ActicleServiceImpl extends ServiceImpl<ActicleMapper, Acticle> implements IActicleService{
 
     @Override
-    public ResponseModel getList(PageDTO dto) throws Exception {
+    public Result getList(PageDTO dto) throws Exception {
         IPage<Acticle> page = new Page<>();
         if(dto.getPageNo() != null){
             page.setCurrent(dto.getPageNo());
@@ -36,37 +36,37 @@ public class ActicleServiceImpl extends ServiceImpl<ActicleMapper, Acticle> impl
             page.setSize(dto.getPageSize());
         }
         QueryWrapper<Acticle> queryWrapper = new QueryWrapper();
-//        if(!StringUtils.isEmpty(dto.getKeyword())){
-//            queryWrapper.lambda()
-//                    .like(Acticle::getAuther,dto.getKeyword())
-//                    .like(Acticle::getContent,dto.getKeyword())
-//                    .like(Acticle::getTitle,dto.getKeyword());
-//        }
+    //        if(!StringUtils.isEmpty(dto.getKeyword())){
+    //            queryWrapper.lambda()
+    //                    .like(Acticle::getAuther,dto.getKeyword())
+    //                    .like(Acticle::getContent,dto.getKeyword())
+    //                    .like(Acticle::getTitle,dto.getKeyword());
+    //        }
         IPage<Acticle> iPage = this.page(page, queryWrapper);
-        return new ResponseModel(ApiResultEnum.SUCCESS,iPage);
+        return Result.ok(iPage);
     }
 
     @Override
-    public ResponseModel add(Acticle item, HttpSession session) throws Exception {
+    public Result add(Acticle item, HttpSession session) throws Exception {
         this.save(item);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel edit(Acticle item, HttpSession session) throws Exception {
+    public Result edit(Acticle item, HttpSession session) throws Exception {
         this.updateById(item);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+       return Result.ok();
     }
 
     @Override
-    public ResponseModel del(Long id, HttpSession session) throws Exception {
+    public Result del(Long id, HttpSession session) throws Exception {
         this.removeById(id);
-        return new ResponseModel(ApiResultEnum.SUCCESS,null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel getDetail(Long id) throws Exception {
-        Acticle acticle = this.getOne(new QueryWrapper<Acticle>().lambda().eq(Acticle::getId,id));
-        return new ResponseModel(ApiResultEnum.SUCCESS,acticle);
+    public Result getDetail(Long id) throws Exception {
+    Acticle item = this.getOne(new QueryWrapper<Acticle>().lambda().eq(Acticle::getId,id));
+         return Result.ok(item);
     }
 }

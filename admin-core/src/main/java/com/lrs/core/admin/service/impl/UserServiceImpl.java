@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.encrypt.SHA;
 import com.lrs.core.admin.dto.UserDTO;
@@ -47,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public ResponseModel getRole(String userId) throws Exception{
+    public Result getRole(String userId) throws Exception{
         List<UserRole> userRoles = userRoleService.list(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userId));
         List<Role> roles = roleService.list(new QueryWrapper<Role>());
         for (Role role:roles){
@@ -60,11 +61,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 }
             }
         }
-        return new ResponseModel(roles);
+        return Result.ok(roles);
     }
 
     @Override
-    public ResponseModel add(User user) throws Exception{
+    public Result add(User user) throws Exception{
         if(StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())){
             throw new ApiException(ApiResultEnum.PARAMETER_NULL,null);
         }
@@ -75,20 +76,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setPassword(SHA.encryptSHA(user.getPassword()));
         user.setCreateTime(LocalDateTime.now());
         this.save(user);
-        return new ResponseModel(null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel edit(User user) throws Exception{
+    public Result edit(User user) throws Exception{
         if(!StringUtils.isEmpty(user.getPassword())){
             user.setPassword(SHA.encryptSHA(user.getPassword()));
         }
         this.saveOrUpdate(user);
-        return new ResponseModel(null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel editRole(UserDTO dto) throws Exception{
+    public Result editRole(UserDTO dto) throws Exception{
         userRoleService.remove(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId,dto.getUserId()));
         String strIds = dto.getIds();
         //移除之前的
@@ -106,13 +107,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 userRoleService.saveBatch(userRoles,1000);
             }
         }
-        return new ResponseModel(null);
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel del(String userId) throws Exception{
+    public Result del(String userId) throws Exception{
         this.removeById(Integer.parseInt(userId));
-        return new ResponseModel(null);
+        return Result.ok();
     }
 
     @Override

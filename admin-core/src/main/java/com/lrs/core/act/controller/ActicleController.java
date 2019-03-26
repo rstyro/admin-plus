@@ -1,11 +1,9 @@
 package com.lrs.core.act.controller;
-
-
 import com.lrs.common.annotation.Permission;
 import com.lrs.common.annotation.PermissionType;
-import com.lrs.common.dto.PageDTO;
 import com.lrs.core.act.entity.Acticle;
 import com.lrs.core.act.service.IActicleService;
+import com.lrs.common.dto.PageDTO;
 import com.lrs.core.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 /**
  * <p>
- *  前端控制器
+ *   前端控制器
  * </p>
  *
  * @author rstyro
- * @since 2019-01-16
+ * @since 2019-3-26
  */
 @Controller
 @RequestMapping("/act/acticle")

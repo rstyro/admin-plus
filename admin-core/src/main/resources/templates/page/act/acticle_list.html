@@ -30,7 +30,7 @@
             <div class="search">
                 <div class="input-group" style="float: right;width: 300px;">
                     <input type="text" class="form-control" id="keyword" th:value="${keyword }" placeholder="请输入关键字">
-                    <span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+                    <span class="input-group-addon searcher" style="cursor:pointer;"><i class="fa fa-search"></i> 搜素</span>
                 </div>
             </div>
             <button th:onclick="add();" th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" ><i class="fa fa-plus"></i> &nbsp;&nbsp;新增</button>
@@ -194,7 +194,6 @@
 
         });
     });
-
     var listUrl = "/act/acticle/list";
     var editUrl = "/act/acticle/edit";
     var addUrl = "/act/acticle/add";

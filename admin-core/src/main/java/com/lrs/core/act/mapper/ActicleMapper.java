@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rstyro
- * @since 2019-01-16
+ * @since 2019-03-26
  */
 public interface ActicleMapper extends BaseMapper<Acticle> {
 
