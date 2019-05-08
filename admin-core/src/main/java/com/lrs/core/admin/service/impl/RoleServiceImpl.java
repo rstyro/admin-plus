@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.permission.RightsHelper;
 import com.lrs.core.admin.dto.QxDTO;
@@ -43,7 +44,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
-    public ResponseModel getMenu(QxDTO dto)  throws  Exception{
+    public Result getMenu(QxDTO dto)  throws  Exception{
         String QXtype = dto.getQx();
         BigInteger qx = null;
         List<Menu> menus =null;
@@ -81,11 +82,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
                 }
             }
         }
-        return new ResponseModel(menus);
+        return Result.ok(menus);
     }
 
     @Override
-    public ResponseModel edit(Role role)  throws  Exception{
+    public Result edit(Role role)  throws  Exception{
         System.out.println("======role="+role);
         String idstr = role.getIds();
         if(StringUtils.isNotEmpty(idstr)){
@@ -105,18 +106,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             }
         }
         this.updateById(role);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel add(Role role, HttpSession session) throws  Exception{
+    public Result add(Role role, HttpSession session) throws  Exception{
         this.save(role);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel del(Integer roleId)  throws  Exception{
+    public Result del(Integer roleId)  throws  Exception{
         this.removeById(roleId);
-        return new ResponseModel("");
+        return Result.ok();
     }
 }

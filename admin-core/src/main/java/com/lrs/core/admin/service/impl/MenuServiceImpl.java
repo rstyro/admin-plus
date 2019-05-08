@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.core.admin.entity.Menu;
 import com.lrs.core.admin.mapper.MenuMapper;
@@ -60,34 +61,34 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public ResponseModel getSubMenuList(Integer parentId) {
+    public Result getSubMenuList(Integer parentId) {
         if(parentId == null) throw  new ApiException(ApiResultEnum.PARAMETER_NULL,null);
-        return new ResponseModel(this.getSubMenuListByParentId(parentId));
+        return Result.ok(this.getSubMenuListByParentId(parentId));
     }
 
     @Override
-    public ResponseModel addMenu(Menu menu, HttpSession session) {
+    public Result addMenu(Menu menu, HttpSession session) {
         this.save(menu);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel delMenu(Integer menuId) {
+    public Result delMenu(Integer menuId) {
         Menu menu = new Menu();
         menu.setMenuId(menuId);
         menu.setIsDel(1);
         this.updateById(menu);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel editMenu(Menu menu) {
+    public Result editMenu(Menu menu) {
         this.updateById(menu);
-        return new ResponseModel("");
+        return Result.ok();
     }
 
     @Override
-    public ResponseModel findMenu(Integer menuId) {
-        return new ResponseModel(this.getOne(new QueryWrapper<Menu>().lambda().eq(Menu::getMenuId,menuId)));
+    public Result findMenu(Integer menuId) {
+        return Result.ok(this.getOne(new QueryWrapper<Menu>().lambda().eq(Menu::getMenuId,menuId)));
     }
 }

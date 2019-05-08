@@ -1,7 +1,6 @@
 package com.lrs.common.constant;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class Result extends HashMap<String, Object> {
@@ -35,11 +34,6 @@ public class Result extends HashMap<String, Object> {
 		return r;
 	}
 
-	public static Result ok(Map<String, Object> map) {
-		Result r = new Result();
-		r.putAll(map);
-		return r;
-	}
 	public static Result ok(Object data) {
 		Result r = new Result();
 		r.put("data",data);

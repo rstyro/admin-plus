@@ -2,6 +2,7 @@ package com.lrs.core.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lrs.common.constant.ResponseModel;
+import com.lrs.common.constant.Result;
 import com.lrs.core.admin.entity.Menu;
 
 import javax.servlet.http.HttpSession;
@@ -45,30 +46,30 @@ public interface IMenuService extends IService<Menu> {
      * 获取二级菜单列表,json格式返回
      * @return
      */
-    public ResponseModel getSubMenuList(Integer parentId);
+    public Result getSubMenuList(Integer parentId);
 
     /**
      * 添加菜单
      * @param session
      * @return
      */
-    public ResponseModel addMenu(Menu menu, HttpSession session);
+    public Result addMenu(Menu menu, HttpSession session);
 
     /**
      * 删除菜单
      * @return
      */
-    public ResponseModel delMenu(Integer menuId);
+    public Result delMenu(Integer menuId);
 
     /**
      * 编辑菜单
      * @return
      */
-    public ResponseModel editMenu(Menu menu);
+    public Result editMenu(Menu menu);
 
     /**
      * 查询菜单
      * @return
      */
-    public ResponseModel findMenu(Integer menuId);
+    public Result findMenu(Integer menuId);
 }
