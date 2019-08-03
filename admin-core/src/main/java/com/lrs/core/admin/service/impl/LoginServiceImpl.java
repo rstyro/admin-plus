@@ -76,7 +76,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             throw new ApiException(ApiResultEnum.ACCOUNT_LOCK);
         }
         //获取用户权限
-        Integer userId = user.getUserId();
+        Long userId = user.getUserId();
         List<Role> roles =userRoleService.getUserRoles(userId);
         long maxMenuId = menuService.getMaxId();
         Role uRole = new Role(new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"));

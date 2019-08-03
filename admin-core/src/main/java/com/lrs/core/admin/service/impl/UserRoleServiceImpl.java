@@ -27,7 +27,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private UserRoleMapper userRoleMapper;
 
     @Override
-    public List<Role> getUserRoles(Integer userId) throws Exception {
+    public List<Role> getUserRoles(Long userId) throws Exception {
         return userRoleMapper.getUserRoles(userId);
     }
 }

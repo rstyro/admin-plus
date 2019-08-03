@@ -20,7 +20,7 @@
   <!-- 文件保存日志的相关配置 --> 
   <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
      <!-- 保存日志文件的路径 -->
-    <file>e:/logs/admin_info.log</file>
+    <file>logs/admin_info.log</file>
     <!-- 
     <file>/var/logs/info.log</file>
      -->
@@ -40,7 +40,7 @@
     <!-- 循环政策：基于时间创建日志文件 -->
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- 日志文件名格式 -->
-      <fileNamePattern>e:/logs/admin_info.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>logs/admin_info.%d{yyyy-MM-dd}.log</fileNamePattern>
       <!-- 最大保存时间：30天-->
       <maxHistory>30</maxHistory>
     </rollingPolicy>
@@ -49,7 +49,7 @@
   
   <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
      <!-- 保存日志文件的路径 -->
-    <file>e:/logs/admin_error.log</file>
+    <file>logs/admin_error.log</file>
     <!-- 
     <file>/var/logs/error.log</file>
      -->
@@ -69,7 +69,7 @@
     <!-- 循环政策：基于时间创建日志文件 -->
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- 日志文件名格式 -->
-      <fileNamePattern>e:/logs/admin_error.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>logs/admin_error.%d{yyyy-MM-dd}.log</fileNamePattern>
       <!-- 最大保存时间：30天-->
       <maxHistory>30</maxHistory>
     </rollingPolicy>

@@ -15,5 +15,5 @@ import java.util.List;
  * @since 2018-12-14
  */
 public interface IUserRoleService extends IService<UserRole> {
-    public List<Role> getUserRoles(Integer userId) throws Exception;
+    public List<Role> getUserRoles(Long userId) throws Exception;
 }

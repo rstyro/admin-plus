@@ -319,7 +319,6 @@ $(function(){
 
 	// 图片上传
     $("#imgfile").off('change','#imgfile').on("change",function(){
-        var form = new FormData(document.forms.namedItem("imgForm"));
         var file =  document.getElementById("imgfile").files[0];
         var formData = new FormData($('#imgForm')[0]);
         formData.append('file', file);

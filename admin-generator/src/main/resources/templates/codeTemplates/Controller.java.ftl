@@ -43,21 +43,21 @@ public class ${table.controllerName} extends BaseController {
     @Permission(url = qxurl,type = PermissionType.ADD)
     public Object add(${table.entityName} item) throws Exception {
         item.setId(null);
-        return ${table.entityPath}Service.add(item,this.getSession());
+        return ${table.entityPath}Service.add(item,this.getAdminUser());
     }
 
     @PostMapping(value="/edit")
     @ResponseBody
     @Permission(url = qxurl,type = PermissionType.EDIT)
     public Object edit(${table.entityName} item) throws Exception {
-        return ${table.entityPath}Service.edit(item,this.getSession());
+        return ${table.entityPath}Service.edit(item,this.getAdminUser());
     }
 
     @PostMapping(value="/del")
     @ResponseBody
     @Permission(url = qxurl,type = PermissionType.DEL)
     public Object del(Long id) throws Exception {
-        return ${table.entityPath}Service.del(id,this.getSession());
+        return ${table.entityPath}Service.del(id,this.getAdminUser());
     }
 
     @GetMapping(value="/query")

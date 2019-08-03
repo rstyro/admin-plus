@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.constant.Result;
 import com.lrs.common.dto.PageDTO;
 import org.springframework.util.StringUtils;
-import javax.servlet.http.HttpSession;
+import com.lrs.core.admin.entity.User;
+import java.time.LocalDateTime;
 
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
@@ -47,19 +48,25 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     }
 
     @Override
-    public Result add(${entity} item, HttpSession session) throws Exception {
+    public Result add(${entity} item, User adminUser) throws Exception {
+        if(item.getCreateTime() == null){
+            item.setCreateBy(adminUser.getUserId());
+            item.setCreateTime(LocalDateTime.now());
+        }
         this.save(item);
         return Result.ok();
     }
 
     @Override
-    public Result edit(${entity} item, HttpSession session) throws Exception {
+    public Result edit(${entity} item, User adminUser) throws Exception {
+        item.setModifyBy(adminUser.getUserId());
+        item.setModifyTime(LocalDateTime.now());
         this.updateById(item);
        return Result.ok();
     }
 
     @Override
-    public Result del(Long id, HttpSession session) throws Exception {
+    public Result del(Long id, User adminUser) throws Exception {
         this.removeById(id);
         return Result.ok();
     }

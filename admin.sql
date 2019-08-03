@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50720
+Source Server         : 本地
+Source Server Version : 80016
 Source Host           : localhost:3306
 Source Database       : admin
 
 Target Server Type    : MYSQL
-Target Server Version : 50720
+Target Server Version : 80016
 File Encoding         : 65001
 
-Date: 2019-01-18 15:02:21
+Date: 2019-08-03 11:11:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for act_acticle
+-- Table structure for `act_acticle`
 -- ----------------------------
 DROP TABLE IF EXISTS `act_acticle`;
 CREATE TABLE `act_acticle` (
@@ -57,63 +57,17 @@ INSERT INTO `act_acticle` VALUES ('127', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 
 INSERT INTO `act_acticle` VALUES ('128', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
 INSERT INTO `act_acticle` VALUES ('129', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
 INSERT INTO `act_acticle` VALUES ('130', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('131', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('132', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('133', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('134', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('135', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('136', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('137', 'rstyroAA', 'aaSDFAA', 'aaASDFAA', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('138', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('154', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('155', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('156', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('157', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('158', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('159', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('160', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('161', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('162', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('163', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('164', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('165', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('166', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('167', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('168', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('169', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('170', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('171', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('172', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('173', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('174', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('175', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('176', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('177', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('178', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('179', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('180', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('181', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('182', 'rstyro', 'aa', 'aa', 'N', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('183', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('184', 'rstyro', 'aaasdf', 'aasadf', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('185', 'rstyro', 'aa', 'aa', 'Y', '2019-01-17 10:05:21', '2019-01-17 10:35:04');
-INSERT INTO `act_acticle` VALUES ('1085797015769735169', '11', 'SpringBoot(十四)：SpringBoot 国际化配置', '11', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
-INSERT INTO `act_acticle` VALUES ('1085797165867098114', '11', 'ASDF', 'ASDF', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
-INSERT INTO `act_acticle` VALUES ('1085804092781105154', 'aaaaa', 'bbbb', 'ccccc', 'Y', null, null);
-INSERT INTO `act_acticle` VALUES ('1085804241066528770', 'AAA', 'AAAA', 'AAA', 'Y', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
-INSERT INTO `act_acticle` VALUES ('1085810963130765314', 'ASDFADFAF', 'SpringBoot(十四)', 'ASDFSAFSAFASFAFAFAF', 'Y', null, null);
-INSERT INTO `act_acticle` VALUES ('1085810963130765315', '帅大叔', '测试', '123456789', 'N', '2019-10-12 10:00:00', '2019-10-12 10:00:00');
 
 -- ----------------------------
--- Table structure for admin_login
+-- Table structure for `admin_login`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_login`;
 CREATE TABLE `admin_login` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(11) NOT NULL,
   `last_login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后登录时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of admin_login
@@ -254,9 +208,16 @@ INSERT INTO `admin_login` VALUES ('147', '2', '2019-01-18 11:54:59');
 INSERT INTO `admin_login` VALUES ('148', '2', '2019-01-18 14:54:54');
 INSERT INTO `admin_login` VALUES ('149', '2', '2019-01-18 14:59:47');
 INSERT INTO `admin_login` VALUES ('150', '2', '2019-01-18 15:00:24');
+INSERT INTO `admin_login` VALUES ('151', '2', '2019-08-03 10:20:41');
+INSERT INTO `admin_login` VALUES ('152', '2', '2019-08-03 10:23:24');
+INSERT INTO `admin_login` VALUES ('153', '2', '2019-08-03 10:50:24');
+INSERT INTO `admin_login` VALUES ('154', '2', '2019-08-03 10:57:04');
+INSERT INTO `admin_login` VALUES ('155', '2', '2019-08-03 10:59:51');
+INSERT INTO `admin_login` VALUES ('156', '2', '2019-08-03 11:00:22');
+INSERT INTO `admin_login` VALUES ('157', '2', '2019-08-03 11:09:23');
 
 -- ----------------------------
--- Table structure for admin_menu
+-- Table structure for `admin_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_menu`;
 CREATE TABLE `admin_menu` (
@@ -272,7 +233,7 @@ CREATE TABLE `admin_menu` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of admin_menu
@@ -281,12 +242,12 @@ INSERT INTO `admin_menu` VALUES ('1', '0', '系统管理', '#', '1', 'fa fa-gear
 INSERT INTO `admin_menu` VALUES ('2', '1', '菜单管理', 'admin/menu/list', '1', '#', '1', '1', '0', '2019-01-16 18:03:44', '2017-09-07 14:52:41');
 INSERT INTO `admin_menu` VALUES ('3', '1', '角色管理', 'admin/role/list', '1', null, '2', '1', '0', '2019-01-16 18:03:45', '2017-09-07 14:52:41');
 INSERT INTO `admin_menu` VALUES ('4', '1', '用户管理', 'admin/user/list', '1', '', '3', '1', '0', '2019-01-16 18:03:48', '2017-09-07 14:52:41');
-INSERT INTO `admin_menu` VALUES ('5', '0', '商户管理', '#', '2', 'fa fa-tasks', '2', '1', '0', '2018-07-30 19:12:51', '2017-09-07 14:52:41');
-INSERT INTO `admin_menu` VALUES ('6', '5', '商户列表', 'act/acticle/list', '2', '', '1', '1', '0', '2019-01-17 09:58:35', '2017-09-07 14:52:41');
-INSERT INTO `admin_menu` VALUES ('7', '5', '测试', 'test/people/list', '2', '', '1', '1', '0', '2019-01-18 11:14:26', null);
+INSERT INTO `admin_menu` VALUES ('5', '0', '测试管理', '#', '2', 'fa fa-tasks', '2', '1', '0', '2019-08-03 11:00:15', '2017-09-07 14:52:41');
+INSERT INTO `admin_menu` VALUES ('6', '5', '文章列表', 'act/acticle/list', '2', '', '1', '1', '0', '2019-08-03 11:00:02', '2017-09-07 14:52:41');
+INSERT INTO `admin_menu` VALUES ('7', '5', '测试', 'test/people/list', '2', '', '2', '1', '0', '2019-08-03 11:09:46', null);
 
 -- ----------------------------
--- Table structure for admin_role
+-- Table structure for `admin_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role` (
@@ -301,20 +262,20 @@ CREATE TABLE `admin_role` (
   `user_id` varchar(10) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of admin_role
 -- ----------------------------
 INSERT INTO `admin_role` VALUES ('1', '管理员', '管理员权限', '1267650600228229401496703205375', '254', '254', '254', '254', '1', '2019-01-17 09:59:29');
-INSERT INTO `admin_role` VALUES ('2', 'tyro', '随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的随便创建的', '190', '190', '160', '190', '190', '1', '2019-01-03 16:31:18');
+INSERT INTO `admin_role` VALUES ('2', 'tyro', '111', '254', '254', '160', '190', '254', '1', '2019-08-03 11:09:59');
 
 -- ----------------------------
--- Table structure for admin_user
+-- Table structure for `admin_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_user`;
 CREATE TABLE `admin_user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
   `nick_name` varchar(50) DEFAULT NULL COMMENT '昵称',
   `password` varchar(50) DEFAULT NULL,
@@ -323,37 +284,36 @@ CREATE TABLE `admin_user` (
   `sessionId` varchar(50) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of admin_user
 -- ----------------------------
 INSERT INTO `admin_user` VALUES ('1', 'admin', '超级管理员', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '87906722879D6DFCC6032721B4935B00', '2017-08-18 13:57:32');
-INSERT INTO `admin_user` VALUES ('2', 'rstyro', '管理员', '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '666940E56E1D99D6A7F2D80895B34B00', '2017-08-18 13:57:32');
-INSERT INTO `admin_user` VALUES ('4', 'asdf', 'asdf', '', 'http://localhost:8800/show//20190103/1546504246866.jpg', 'unlock', 'EADF971A41F761702C2C93CA090BDB09', '2019-01-03 07:40:07');
+INSERT INTO `admin_user` VALUES ('2', 'rstyro', '管理员', '86f7e437faa5a7fce15d1ddcb9eaeaea377667b8', 'http://www.lrshuai.top/upload/user/20170612/05976238.png', 'unlock', '2479928844EB9E0C7C35914DF696D819', '2017-08-18 13:57:32');
+INSERT INTO `admin_user` VALUES ('4', 'asdf', 'asdf', '', 'http://localhost:8800/show//20190803/1564801821805.jpg', 'unlock', 'EADF971A41F761702C2C93CA090BDB09', '2019-01-03 07:40:07');
 
 -- ----------------------------
--- Table structure for admin_user_role
+-- Table structure for `admin_user_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_user_role`;
 CREATE TABLE `admin_user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of admin_user_role
 -- ----------------------------
-INSERT INTO `admin_user_role` VALUES ('30', '4', '1', '2019-01-03 16:31:01');
-INSERT INTO `admin_user_role` VALUES ('31', '4', '2', '2019-01-03 16:31:01');
 INSERT INTO `admin_user_role` VALUES ('32', '2', '1', '2019-01-03 16:31:04');
 INSERT INTO `admin_user_role` VALUES ('33', '2', '2', '2019-01-03 16:31:04');
+INSERT INTO `admin_user_role` VALUES ('34', '4', '1', '2019-08-03 10:51:08');
 
 -- ----------------------------
--- Table structure for test_people
+-- Table structure for `test_people`
 -- ----------------------------
 DROP TABLE IF EXISTS `test_people`;
 CREATE TABLE `test_people` (
@@ -362,12 +322,14 @@ CREATE TABLE `test_people` (
   `age` int(5) DEFAULT NULL COMMENT '年龄',
   `sex` int(1) DEFAULT '1' COMMENT '性别：1--男，0 -- 女',
   `is_deleted` varchar(2) DEFAULT 'N' COMMENT '是否删除，Y/N',
+  `create_by` bigint(20) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `midify_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `modify_by` bigint(20) DEFAULT NULL,
+  `modify_time` datetime DEFAULT NULL COMMENT '鏇存柊鏃堕棿',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of test_people
 -- ----------------------------
-INSERT INTO `test_people` VALUES ('1', 'rstyro', '24', '1', 'N', '2019-01-18 11:44:24', '2019-01-18 11:44:26');
+INSERT INTO `test_people` VALUES ('1', 'rstyro', '24', '1', 'N', '1', '2019-01-18 11:44:24', '1', '2019-01-18 11:44:26');

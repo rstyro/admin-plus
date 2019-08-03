@@ -1,5 +1,7 @@
 package com.lrs.core.base;
 
+import com.lrs.common.constant.Const;
+import com.lrs.core.admin.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoader;
@@ -105,4 +107,12 @@ public class BaseController {
 		return ip;
 	}
 
+	/**
+	 * 获取admin 用户
+	 * @return
+	 */
+	public User getAdminUser(){
+		User user = (User) this.getSession().getAttribute(Const.SESSION_USER);
+		return user;
+	}
 }
