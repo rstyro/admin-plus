@@ -35,6 +35,7 @@ public class ${table.controllerName} extends BaseController {
     public String list(Model model, PageDTO dto) throws Exception {
         System.out.println(dto);
         model.addAttribute("list",${table.entityPath}Service.getList(dto));
+        model.addAttribute("keyword",dto.getKeyword());
         return "page/${package.ModuleName}/${table.entityPath}_list";
     }
 

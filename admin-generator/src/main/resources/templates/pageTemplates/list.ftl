@@ -15,6 +15,11 @@
 <head th:include="include/css-head :: css-head">
 </head>
 <style>
+    body{
+        min-width: 900px;
+        overflow: auto;
+    }
+
     textarea{
         width:100%;
         height:100px;

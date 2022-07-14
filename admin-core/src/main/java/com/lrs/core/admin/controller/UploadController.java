@@ -1,7 +1,6 @@
 package com.lrs.core.admin.controller;
 
 import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.ResponseModel;
 import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.ImgUtil;
@@ -51,7 +50,8 @@ public class UploadController {
             logger.error(e.getMessage(),e);
             throw new ApiException(ApiResultEnum.ERROR_IO);
         }
-        return Result.ok(prePath+folder+fileName);
+//        return Result.ok(prePath+folder+fileName);
+        return Result.ok("/show"+folder+fileName);
 	}
 	
 

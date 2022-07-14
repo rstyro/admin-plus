@@ -30,11 +30,7 @@
 		</plugins>
 	</build>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-	</properties>
+
 -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -42,6 +38,14 @@
 		<version>2.1.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<mybatis-plus.version>3.5.2</mybatis-plus.version>
+		<druid.version>1.1.20</druid.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -79,8 +83,14 @@
 
 		<dependency>
 			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>3.0.1</version>
+			<artifactId>mybatis-plus-boot-starter-test</artifactId>
+			<version>${mybatis-plus.version}</version>
+		</dependency>
+		<!--  阿里巴巴数据库连接池     -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>${druid.version}</version>
 		</dependency>
 
 		<dependency>

@@ -83,6 +83,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result edit(User user) throws Exception{
         if(!StringUtils.isEmpty(user.getPassword())){
             user.setPassword(SHA.encryptSHA(user.getPassword()));
+        }else {
+            user.setPassword(null);
         }
         this.saveOrUpdate(user);
         return Result.ok();

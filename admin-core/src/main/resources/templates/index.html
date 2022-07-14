@@ -32,11 +32,23 @@
 		function setIframeHeight(iframe) {
             iframe.height =0;
 			if (iframe) {
-				var iframeWin = iframe.contentWindow
+				// var iframeWin = iframe.contentWindow
+				// 		|| iframe.contentDocument.parentWindow;
+				// if (iframeWin.document.body) {
+				// 	iframe.height = iframeWin.document.documentElement.scrollHeight
+				// 			|| iframeWin.document.body.scrollHeight;
+				// }
+
+
+				let iframeWin = iframe.contentWindow
 						|| iframe.contentDocument.parentWindow;
 				if (iframeWin.document.body) {
+					let winHeight=window.screen.height-260;
 					iframe.height = iframeWin.document.documentElement.scrollHeight
 							|| iframeWin.document.body.scrollHeight;
+					if(winHeight>iframe.height){
+						iframe.height=winHeight;
+					}
 				}
 			}
 		};
@@ -59,7 +71,7 @@
 		<div class="content-wrapper">
 			<!-- 主体部分！！！！ -->
 			<iframe name="mainFrame" id="mainBodyFrame" th:src="@{/include/main}"
-				frameborder="0" scrolling="no" width="100%" style="min-height: 900px;" onload="setIframeHeight(this)"></iframe>
+				frameborder="0" scrolling="auto"  width="100%" style="min-height: 900px;" onload="setIframeHeight(this)"></iframe>
 		</div>
 
 		<!-- /.content-wrapper -->

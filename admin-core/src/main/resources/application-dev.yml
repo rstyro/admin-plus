@@ -24,18 +24,45 @@ spring:
     sql-script-encoding: UTF-8
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong&autoReconnect=true&allowPublicKeyRetrieval=true
-    username: rstyro
-    password: rstyro
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 15
-      auto-commit: true
-      idle-timeout: 30000
-      connection-timeout: 30000
-      pool-name: HikariCP
-      max-lifetime: 1800000
-      connection-test-query: SELECT 1
+    username: root
+    password: root
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      minimum-idle: 5
+#      maximum-pool-size: 15
+#      auto-commit: true
+#      idle-timeout: 30000
+#      connection-timeout: 30000
+#      pool-name: HikariCP
+#      max-lifetime: 1800000
+#      connection-test-query: SELECT 1
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 30
+      max-wait: 6000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #login-username: admin
+        #login-password: admin
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
 
   thymeleaf:
     mode: LEGACYHTML5
