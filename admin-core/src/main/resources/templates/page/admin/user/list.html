@@ -126,12 +126,12 @@ div.cbp label.font{
                   <td>
 					  <div th:if="${user.userId != 1 || (user.userId == 1 && meid == 1)}">
 						  <span data-toggle="tooltip" title="给用户分配角色" th:if="${QX.edit == '1'}" class="btn btn-xs btn-primary" th:data-id="${user.userId}" th:onclick="allotRole(this.getAttribute('data-id'));"><i class="fa fa-user-md"></i> 分配角色</span>
-						  <span data-toggle="tooltip" title="编辑用户信息" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info" th:data-id="${user.userId}"  th:data-username="${user.username}" th:data-nickName="${user.nickName}" th:data-picPath="${user.picPath}" th:onclick="editUser(this.getAttribute('data-id'),this.getAttribute('data-username'),this.getAttribute('data-nickName'),this.getAttribute('data-picPath'));"><i class="fa fa-edit"></i> </span>
-						  <span data-toggle="tooltip" title="删除用户" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger" th:data-id="${user.userId}" th:data-picPath="${user.picPath}"  th:onclick="delUser(this.getAttribute('data-id'),this.getAttribute('data-picPath'));"><i class="fa fa-trash-o"></i> </span>
-						  <span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1' || QX.add == '1' || QX.del == '1'}" ><i class="fa fa-lock"></i> </span>
+						  <span data-toggle="tooltip" title="编辑用户信息" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info" th:data-id="${user.userId}"  th:data-username="${user.username}" th:data-nickName="${user.nickName}" th:data-picPath="${user.picPath}" th:onclick="editUser(this.getAttribute('data-id'),this.getAttribute('data-username'),this.getAttribute('data-nickName'),this.getAttribute('data-picPath'));"><i class="fa fa-edit"></i> 编辑</span>
+						  <span data-toggle="tooltip" title="删除用户" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger" th:data-id="${user.userId}" th:data-picPath="${user.picPath}"  th:onclick="delUser(this.getAttribute('data-id'),this.getAttribute('data-picPath'));"><i class="fa fa-trash-o"></i> 删除</span>
+						  <span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1' || QX.add == '1' || QX.del == '1'}" ><i class="fa fa-lock"></i>无权限</span>
 					  </div>
 					  <div th:unless="${user.userId != 1 || (user.userId == 1 && meid == 1)}">
-						  <span><i class="fa fa-lock"></i></span>
+						  <span><i class="fa fa-lock"></i>无权限</span>
 					  </div>
                   </td>
                 </tr>
@@ -232,14 +232,15 @@ div.cbp label.font{
 </div>
 
 
-<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
-<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
-<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/adminlte/js/app.js}"></script>
 <script th:src="@{/ztree/js/jquery.ztree.core.js}"></script>
 <script th:src="@{/ztree/js/jquery.ztree.excheck.min.js}"></script>
-<!-- AdminLTE App -->
-<script th:src="@{/dist/js/adminlte.min.js}"></script>
 <script th:src="@{/js/common.js}"></script>
 <script>
 $(function(){

@@ -70,9 +70,9 @@
                   	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
                   </td>
                   <td>
-                  	<span class="btn btn-xs btn-danger" th:if="${QX.del == '1'}"  th:data-id="${role.roleId}" th:onclick="delRole(this.getAttribute('data-id'));"><i class="fa fa-trash-o"></i> </span>
-                  	<span class="btn btn-xs btn-info" th:if="${QX.edit == '1'}" th:data-roleId="${role.roleId}" th:data-roleName="${role.roleName}" th:data-roleDesc="${role.roleDesc}" th:onclick="editRole(this.getAttribute('data-roleId'),this.getAttribute('data-roleName'),this.getAttribute('data-roleDesc'));"><i class="fa fa-edit"></i> </span>
-                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.del == '1' || QX.edit == '1'}" ><i class="fa fa-lock"></i> </span>
+                  	<span class="btn btn-xs btn-danger" th:if="${QX.del == '1'}"  th:data-id="${role.roleId}" th:onclick="delRole(this.getAttribute('data-id'));"><i class="fa fa-trash-o"></i>删除</span>
+                  	<span class="btn btn-xs btn-info" th:if="${QX.edit == '1'}" th:data-roleId="${role.roleId}" th:data-roleName="${role.roleName}" th:data-roleDesc="${role.roleDesc}" th:onclick="editRole(this.getAttribute('data-roleId'),this.getAttribute('data-roleName'),this.getAttribute('data-roleDesc'));"><i class="fa fa-edit"></i>编辑</span>
+                  	<span data-toggle="tooltip" title="权限不够" th:unless="${QX.del == '1' || QX.edit == '1'}" ><i class="fa fa-lock"></i>无权限</span>
                   </td>
                 </tr>
                 <tr th:unless="${QX.query == '1'}" >
@@ -149,15 +149,15 @@
 		</div>
 	</div>
 </div>
-	
-<script th:src="@{/static/bower_components/jquery/dist/jquery.min.js}"></script>
-<script th:src="@{/static/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
-<script th:src="@{/static/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+
+<script th:src="@{/static/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/static/adminlte/js/app.js}"></script>
 <script th:src="@{/static/ztree/js/jquery.ztree.core.js}"></script>
 <script th:src="@{/static/ztree/js/jquery.ztree.excheck.min.js}"></script>
-<!-- AdminLTE App -->
-<script th:src="@{/static/dist/js/adminlte.min.js}"></script>
 <script th:src="@{/static/js/common.js}"></script>
 <script th:src="@{/static/js/role.js}"></script>
 </body>

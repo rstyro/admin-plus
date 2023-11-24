@@ -1,6 +1,6 @@
 package com.lrs.core.admin.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
@@ -20,6 +20,8 @@ import com.lrs.core.admin.service.ILoginService;
 import com.lrs.core.admin.service.IMenuService;
 import com.lrs.core.admin.service.IUserRoleService;
 import com.lrs.core.admin.service.IUserService;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ import java.util.Map;
  * @author rstyro
  * @since 2018-12-14
  */
+@Slf4j
 @Transactional
 @Service
 public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements ILoginService {
@@ -54,9 +57,6 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
     @Autowired
     private IMenuService menuService;
-
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Result login(LoginDTO dto, HttpSession session) throws Exception {
@@ -77,15 +77,17 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         }
         //获取用户权限
         Long userId = user.getUserId();
-        List<Role> roles =userRoleService.getUserRoles(userId);
-        long maxMenuId = menuService.getMaxId();
-        Role uRole = new Role(new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"));
-        checkUserRole(roles, uRole, maxMenuId);
-        System.out.println("==ROLE=="+JSON.toJSONString(uRole));
-        user.setRole(uRole);
-        //父级菜单
-        List<Menu> parentMenuList = menuService.getAllMenuList();
-        checkMenuRole(parentMenuList, uRole.getRights(),user.getUsername());
+//        List<Role> roles =userRoleService.getUserRoles(userId);
+//        long maxMenuId = menuService.getMaxId();
+//        Role uRole = new Role(new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"));
+//        checkUserRole(roles, uRole, maxMenuId);
+//        System.out.println("==ROLE=="+ JSON.toJSONString(uRole));
+//        user.setRole(uRole);
+//        //父级菜单
+//        List<Menu> parentMenuList = menuService.getAllMenuList();
+//        checkMenuRole(parentMenuList, uRole.getRights(),user.getUsername());
+
+        List<Menu> parentMenuList = getPermsMenu(user);
         ServletContext servletContext = session.getServletContext();
         Map<String,User> globalUser = (Map<String, User>) servletContext.getAttribute(Const.GLOBAL_SESSION);
         if(globalUser == null){
@@ -113,6 +115,25 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         this.save(loginLog);
         return Result.ok();
     }
+
+    @SneakyThrows
+    @Override
+    public List<Menu> getPermsMenu(User user){
+        //获取用户权限
+        Long userId = user.getUserId();
+        List<Role> roles =userRoleService.getUserRoles(userId);
+        long maxMenuId = menuService.getMaxId();
+        Role uRole = new Role(new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"),new BigInteger("0"));
+        checkUserRole(roles, uRole, maxMenuId);
+        System.out.println("==ROLE=="+ JSON.toJSONString(uRole));
+        user.setRole(uRole);
+        //父级菜单
+        List<Menu> parentMenuList = menuService.getAllMenuList();
+        checkMenuRole(parentMenuList, uRole.getRights(),user.getUsername());
+        return  parentMenuList;
+    }
+
+
 
     /**
      * 验证权限

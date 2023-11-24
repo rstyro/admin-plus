@@ -3,7 +3,6 @@ package com.lrs.core.admin.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.ResponseModel;
 import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.permission.RightsHelper;
@@ -38,7 +37,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public List<Role> getRolelist()  throws  Exception{
-        List<Role> list = this.list(null);
+        List<Role> list = this.list();
         System.out.println("list="+list);
         return list;
     }

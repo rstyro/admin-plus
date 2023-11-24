@@ -43,7 +43,7 @@
                   <td th:text="${menu.menuUrl}">system/list</td>
                   <td th:if="${menu.menuType == '1'}" >系统</td>
                   <td th:if="${menu.menuType == '2'}">业务</td>
-                  <td><i class="fa fa-dashboard" th:class="${menu.menuIcon}"></i>&nbsp;&nbsp;&nbsp;<span th:text="${menu.menuIcon}"> fa fa-dashboard</span> </td>
+                  <td><i class="fa fa-dashboard" th:class="${menu.menuIcon}">。</i>&nbsp;&nbsp;&nbsp;<span th:text="${menu.menuIcon}"> fa fa-dashboard</span> </td>
                   <td th:text="${menu.sortNum}">1</td>
                   <td th:if="${menu.menuId == 1}">
                   	 <span th:unless="${QX.add == '1' || QX.edit == '1' || QX.query == '1'}"><i class="fa fa-lock"></i> 无权限</span>
@@ -129,13 +129,12 @@
 		</div>
 	</div>
 
-<script th:src="@{/static/bower_components/jquery/dist/jquery.min.js}"></script>
-<script th:src="@{/static/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
-<script th:src="@{/static/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/static/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/static/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
 <!-- AdminLTE App -->
-<script th:src="@{/static/dist/js/adminlte.min.js}"></script>
-<script th:src="@{/static/js/common.js}"></script>
+<script th:src="@{/static/adminlte/js/app.js}"></script>
 <script th:src="@{/static/js/menu.js}"></script>
 </body>
 </html>

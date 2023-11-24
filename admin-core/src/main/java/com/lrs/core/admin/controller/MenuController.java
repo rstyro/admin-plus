@@ -3,6 +3,7 @@ package com.lrs.core.admin.controller;
 
 import com.lrs.common.annotation.Permission;
 import com.lrs.common.annotation.PermissionType;
+import com.lrs.common.vo.TabsVo;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.admin.entity.Menu;
 import com.lrs.core.admin.service.IMenuService;
@@ -10,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -31,8 +36,12 @@ public class MenuController extends BaseController {
     @GetMapping("/list")
     public String list(Model model){
         model.addAttribute("menus",menuService.getAllParentMenuList());
+
         return "page/admin/menu/list";
     }
+
+
+
 
     @PostMapping(value="/add")
     @ResponseBody
@@ -68,4 +77,5 @@ public class MenuController extends BaseController {
     public Object getSubMenu(Integer parentId){
         return menuService.getSubMenuList(parentId);
     }
+
 }

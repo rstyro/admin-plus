@@ -3,15 +3,18 @@ package com.lrs.core.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
+import com.lrs.common.constant.Const;
 import com.lrs.common.constant.ResponseModel;
 import com.lrs.common.constant.Result;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.encrypt.SHA;
 import com.lrs.core.admin.dto.UserDTO;
+import com.lrs.core.admin.entity.Menu;
 import com.lrs.core.admin.entity.Role;
 import com.lrs.core.admin.entity.User;
 import com.lrs.core.admin.entity.UserRole;
 import com.lrs.core.admin.mapper.UserMapper;
+import com.lrs.core.admin.service.ILoginService;
 import com.lrs.core.admin.service.IRoleService;
 import com.lrs.core.admin.service.IUserRoleService;
 import com.lrs.core.admin.service.IUserService;
@@ -19,7 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +49,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private IRoleService roleService;
+
+    @Resource
+    private ILoginService loginService;
 
     @Override
     public List<User> getUserList() throws Exception{
@@ -109,6 +120,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 userRoleService.saveBatch(userRoles,1000);
             }
         }
+        // 刷新菜单权限
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Const.SESSION_USER);
+        List<Menu> permsMenu = loginService.getPermsMenu(user);
+        session.setAttribute(Const.SESSION_ALL_MENU, permsMenu);
         return Result.ok();
     }
 

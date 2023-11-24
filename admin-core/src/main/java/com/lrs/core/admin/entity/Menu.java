@@ -60,6 +60,10 @@ public class Menu implements Serializable {
      * 菜单Icon
      */
     private String menuIcon;
+    /**
+     * 菜单权限
+     */
+//    private String perms;
 
     /**
      * 排序

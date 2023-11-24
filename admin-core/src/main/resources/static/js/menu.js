@@ -47,6 +47,8 @@ $(function () {
     		$(".submenu"+parentId).remove();
     	}
     });
+
+
     
     $("#submitBtn").click(function(){
     	var menuId = $("input[name='menu_id']").val();
@@ -76,6 +78,7 @@ $(function () {
     	
     });
   })
+
   
   //添加子菜单
   function addMenu(parentId){
@@ -132,18 +135,27 @@ $(function () {
 	  var subStr="";
 	  for(var i=0;i<data.length;i++){
 		  var submenu = data[i];
-		  var menuType = "业务";
+		  var menuType = "目录";
 		  if(submenu.menuType == 1){
-			  menuType = "系统"
+			  menuType = "菜单"
+		  }else if(submenu.menuType == 2){
+			  menuType = "按钮"
+		  }
+		  var blankBlock="";
+		  for (let j = 0; j < submenu.menuType; j++) {
+			  blankBlock+="<span class='blank-block'></span>";
 		  }
 		  var subm = "<tr class='submenu"+parentId+"'>"
 			+"<td align='right'><i class='fa fa-angle-double-right'></i></td>"
-			+"<td>"+submenu.menuName+"</td>"
+			+"<td>"+blankBlock+submenu.menuName+"</td>"
 			+"<td>"+submenu.menuUrl+"</td>"
 			+"<td>"+menuType+"</td>"
 			+"<td>#</td>"
 			+"<td>"+submenu.sortNum+"</td>"
-			+"<td><span class='btn btn-xs btn-info' onclick='editMenu("+submenu.menuId+")'><i class='fa fa-edit'></i> 修改</span> <span class='btn btn-xs btn-danger' onclick='delMenu("+submenu.menuId+")'><i class='fa fa-trash-o'></i> 删除</span></td>"
+			+"<td>" +
+			  "<span class='btn btn-xs btn-info' onclick='editMenu("+submenu.menuId+")'><i class='fa fa-edit'></i> 修改</span> " +
+			  "<span class='btn btn-xs btn-danger' onclick='delMenu("+submenu.menuId+")'><i class='fa fa-trash-o'></i> 删除</span>" +
+			  "</td>"
 			+"</tr>"
 		  subStr += subm;
 	  }
