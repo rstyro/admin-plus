@@ -23,7 +23,7 @@ public class InterceptorAdapter implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		log.info("拦截");
-		registry.addInterceptor(new UrlInterceptor()).addPathPatterns("/**")
-				.excludePathPatterns("/","/login","/logout","/toLogin","/error/**","/upload/show/**","/static/**");
+//		registry.addInterceptor(new UrlInterceptor()).addPathPatterns("/**")
+//				.excludePathPatterns("/","/login","/logout","/toLogin","/error/**","/upload/show/**","/static/**");
 	}
 }

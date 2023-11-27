@@ -12,14 +12,15 @@ import lombok.Data;
 @Data
 public class ApiException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
-	private String status;
+	private Integer status;
 	private String message;
 	private Object data;
 	private Exception exception;
 	public ApiException() {
 		super();
 	}
-	public ApiException(String status, String message, Object data, Exception exception) {
+
+	public ApiException(Integer status, String message, Object data, Exception exception) {
 		this.status = status;
 		this.message = message;
 		this.data = data;
