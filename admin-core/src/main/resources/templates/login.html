@@ -34,8 +34,8 @@
             background-repeat: no-repeat;
             background-size: 100% 100%;
             background-attachment: fixed;
-            /*background-image: url("/static/images/bg1.jpg");*/
-            background-image: linear-gradient(275deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-image: url("/static/images/w.jpg");
+            /*background-image: linear-gradient(275deg, #f5f7fa 0%, #c3cfe2 100%);*/
             /*background-color: #8EC5FC;*/
             /*background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);*/
 
@@ -69,7 +69,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: url("/static/images/h2.png");
+            background-image: url("/static/images/h.jpg");
             background-size: cover;
         }
 
@@ -80,30 +80,44 @@
             align-items: center;
         }
 
+        .login-box {
+            width: 80%;
+            margin-top: 50px;
+        }
         .box .right h2 {
             color: rgb(144, 129, 241);
             font-size: 3rem;
             margin-top: 5rem;
+            text-align: center;
+            margin-bottom: 25px;
         }
 
-        .box .right form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .loginBtn{
+            width: 288px;
         }
-
     </style>
 </head>
 <body>
 <div class="box" id="app">
     <div class="left"></div>
     <div class="right">
-        <div style="width: 80%;">
-            <h2>登 录</h2>
+        <div class="login-box">
+            <h2>后台管理</h2>
             <el-input placeholder="请输入用户名" prefix-icon="el-icon-user" v-model="dto.username"></el-input>
+            <br/><br/>
             <el-input placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="dto.password"></el-input>
-            <el-button type="primary" @click="onSubmit">登录</el-button>
-            </el-form>
+            <br/><br/>
+            <el-row :gutter="1">
+                <el-col :span="14">
+                    <el-input placeholder="请输入验证码"
+                       v-model="dto.code"></el-input>
+                </el-col>
+                <el-col :span="9">
+                    <img id="authCode" onclick="changeCode()" src="/captcha" alt="验证码" title="点击更换" />
+                </el-col>
+            </el-row>
+            <br/><br/>
+            <el-button class="loginBtn" type="primary" @click="onSubmit">登录</el-button>
         </div>
 
     </div>
@@ -117,9 +131,10 @@
         el: '#app',
         data: function () {
             return {
-                dto:{
+                dto: {
                     username: '',
-                    password: ''
+                    password: '',
+                    code:''
                 }
 
             }
@@ -127,17 +142,37 @@
         methods: {
             onSubmit() {
                 axios({
-                    url:'/user/user_add',
-                    method:'post',
+                    url: '/login',
+                    method: 'post',
                     data: this.dto,
-                    header:{
-                        'Content-Type':'application/json'
+                    header: {
+                        'Content-Type': 'application/json'
                     }
-                })
+                }).then(r=>{
+                    if(r.status===200 && r.data.code===200){
+                        window.location.href="/index";
+                    }else {
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: r.data.msg,
+                            type: 'error'
+                        });
+                        console.log("result=",r);
+                    }
+                });
 
             },
         }
     })
+
+    console.log(ELEMENT);
+    function changeCode() {
+        document.getElementById("authCode").src = "/captcha?t=" + genTimestamp();
+    }
+    function genTimestamp() {
+        var time = new Date();
+        return time.getTime();
+    }
 </script>
 </body>
 </html>

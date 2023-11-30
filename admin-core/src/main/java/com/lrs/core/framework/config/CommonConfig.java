@@ -13,6 +13,8 @@ import java.util.List;
 public class CommonConfig {
     private String name;
 
+    private String systemName;
+
     @ConfigurationProperties(prefix = "admin.common.upload")
     @Configuration
     @Data

@@ -2,6 +2,7 @@ server:
   port: 8800
 admin:
   common:
+    systemName: 后台管理系统
     name: Admin LRS
     upload:
       root: upload
@@ -93,3 +94,4 @@ security:
     - /error/**
     - /toLogin
     - /login
+    - /captcha

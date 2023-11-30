@@ -7,6 +7,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 登录拦截，未登录重定向到登陆页面
+ */
 @Slf4j
 public class LoginIntercept implements HandlerInterceptor {
 

@@ -2,10 +2,13 @@ package com.lrs.common.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 验证码工具类
+ */
 public class CaptchaUtil {
+
     private static final String[] CODE = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "P",
             "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 

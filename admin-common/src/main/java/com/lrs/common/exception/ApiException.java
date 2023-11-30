@@ -27,13 +27,13 @@ public class ApiException extends RuntimeException{
 		this.exception = exception;
 	}
 	public ApiException(ApiResultEnum apiResultEnum) {
-		this(apiResultEnum.getStatus(),apiResultEnum.getMessage(),null,null);
+		this(apiResultEnum.getCode(),apiResultEnum.getMessage(),null,null);
 	}
 	public ApiException(ApiResultEnum apiResultEnum, Object data) {
-		this(apiResultEnum.getStatus(),apiResultEnum.getMessage(),data,null);
+		this(apiResultEnum.getCode(),apiResultEnum.getMessage(),data,null);
 	}
 	public ApiException(ApiResultEnum apiResultEnum, Object data, Exception exception) {
-		this(apiResultEnum.getStatus(),apiResultEnum.getMessage(),data,exception);
+		this(apiResultEnum.getCode(),apiResultEnum.getMessage(),data,exception);
 	}
 
 

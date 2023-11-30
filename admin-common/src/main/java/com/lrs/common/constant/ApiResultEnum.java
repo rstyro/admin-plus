@@ -10,22 +10,25 @@ public enum ApiResultEnum {
 	ERROR_IO(504,"上传文件异常"),
 	ERROR_MOTHODNOTSUPPORT(505,"请求方法错误"),
 
+	/**系统框架，报错code:1000-2000 */
+	SYSTEM_CODE_ERROR(1000,"验证码错误"),
+
 	;
-	
+
 	private String message;
-	private Integer status;
-	
+	private Integer code;
+
 	public String getMessage() {
 		return message;
 	}
 
-	public Integer getStatus() {
-		return status;
+	public Integer getCode() {
+		return code;
 	}
-	private ApiResultEnum(Integer status,String message) {
+	private ApiResultEnum(Integer code,String message) {
 		this.message = message;
-		this.status = status;
+		this.code = code;
 	}
 
-	
+
 }

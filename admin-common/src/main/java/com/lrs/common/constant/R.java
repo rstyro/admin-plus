@@ -68,7 +68,7 @@ public class R<T> implements Serializable {
     }
 
     public static <T> R<T> error(ApiResultEnum resultEnum) {
-        return restResult(null, resultEnum.getStatus(), resultEnum.getMessage());
+        return restResult(null, resultEnum.getCode(), resultEnum.getMessage());
     }
 
     /**

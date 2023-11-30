@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8"/>
@@ -17,6 +18,10 @@
     <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
+    <!-- element-ui -->
+    <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
 
     <style type="text/css">
         html {
@@ -77,7 +82,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">ALT</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg" th:text="${systemName}">后台管理系统</span>
+            <span class="logo-lg">综合管理系统</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -90,7 +95,7 @@
             </a>
             <div class="navbar-header">
                 <ul class="nav navbar-nav">
-<!--                    <li><a class="systitle">管理系统</a></li>-->
+                    <li><a class="systitle">管理系统</a></li>
                 </ul>
             </div>
 
@@ -128,7 +133,7 @@
                                     <a href="#" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" @click="logout" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i>登出</a>
+                                    <a href="#" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i>登出</a>
                                 </div>
                             </li>
                         </ul>
@@ -169,7 +174,7 @@
                     <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p th:text="${adminName}">Alexander Pierce</p>
+                    <p>Alexander Pierce</p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
@@ -237,7 +242,7 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 2.0
         </div>
-        <strong>Copyright &copy; 后台管理 All rights reserved.
+        <strong>Copyright &copy; <a href="#">fallstar0@qq.com</a>.</strong> All rights reserved.
     </footer>
 
     <!-- Control Sidebar -->
@@ -272,11 +277,6 @@
 <script src="adminlte/js/jquery.blockUI.min.js" th:src="@{/static/adminlte/js/jquery.blockUI.min.js}"></script>
 <!--tabs-->
 <script src="adminlte/js/app_iframe.js" th:src="@{/static/adminlte/js/app_iframe.js}"></script>
-<!-- element-ui -->
-<script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
-
 <script type="text/javascript">
     /**
      * 本地搜索菜单
@@ -318,13 +318,15 @@
         // });
         addTabs({
             id: "168",
-            title: "欢迎页",
+            text: "欢迎页",
             url: "/welcome",
             targetType: "iframe-tab",
+            icon: "fa fa-circle-o",
+            urlType: 'abosulte',
             close:false
         });
 
-        // App.fixIframeCotent();
+        App.fixIframeCotent();
 
 
         var menus = [
@@ -336,7 +338,7 @@
             },
             {
                 id: "9001",
-                text: "系统配置",
+                text: "UI Elements",
                 icon: "fa fa-laptop",
                 children: [
                     {
@@ -382,6 +384,50 @@
                         icon: "fa fa-circle-o"
                     }
                 ]
+            },
+            {
+                id: "9002",
+                text: "Forms",
+                icon: "fa fa-edit",
+                children: [
+                    {
+                        id: "90021",
+                        text: "advanced",
+                        url: "forms/advanced_iframe.html",
+                        targetType: "iframe-tab",
+                        icon: "fa fa-circle-o"
+                    },
+                    {
+                        id: "90022",
+                        text: "general",
+                        url: "forms/general_iframe.html",
+                        targetType: "iframe-tab",
+                        icon: "fa fa-circle-o"
+                    },
+                    {
+                        id: "90023",
+                        text: "editors",
+                        url: "forms/editors_iframe.html",
+                        targetType: "iframe-tab",
+                        icon: "fa fa-circle-o",
+                        children: [
+                            {
+                                id: "90021",
+                                text: "advanced",
+                                url: "forms/advanced_iframe.html",
+                                targetType: "iframe-tab",
+                                icon: "fa fa-circle-o"
+                            }]
+                    },
+                    {
+                        id: "90024",
+                        text: "百度",
+                        url: "https://www.baidu.com",
+                        targetType: "iframe-tab",
+                        icon: "fa fa-circle-o",
+                        urlType: 'abosulte'
+                    }
+                ]
             }
         ];
         $('.sidebar-menu').sidebarMenu({data: menus});
@@ -404,29 +450,6 @@
         }*/
 
     });
-
-    function logout(){
-        alert("aaaa");
-        axios({
-            url: '/logout',
-            method: 'post',
-            header: {
-                'Content-Type': 'application/json'
-            }
-        }).then(r=>{
-            debugger
-            if(r.status===200 && r.data.code===200){
-                window.location.href="/index";
-            }else {
-                ELEMENT.Message({
-                    showClose: true,
-                    message: r.data.msg,
-                    type: 'error'
-                });
-                console.log("result=",r);
-            }
-        });
-    }
 </script>
 
 </body>
