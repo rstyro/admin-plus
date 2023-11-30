@@ -1,8 +1,10 @@
-package com.lrs.core.config;
+package com.lrs.core.framework.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 
 @ConfigurationProperties(prefix = "admin.common")
@@ -17,6 +19,14 @@ public class CommonConfig {
     public class UploadConfig {
         private String root;
         private String pre;
+
+    }
+
+    @ConfigurationProperties(prefix = "security")
+    @Configuration
+    @Data
+    public class SecurityConfig {
+        private List<String> excludes;
 
     }
 }

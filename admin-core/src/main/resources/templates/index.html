@@ -8,14 +8,19 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>管理系统</title>
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/bootstrap/css/font-awesome.min.css}" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/static/bootstrap/css/font-awesome.min.css}" rel="stylesheet">
     <!-- Theme style -->
     <link href="adminlte/css/AdminLTE.lite.css" th:href="@{/static/adminlte/css/AdminLTE.lite.css}" rel="stylesheet"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
      folder instead of downloading all of them to reduce the load. -->
     <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
+    <!-- element-ui -->
+    <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
+
     <style type="text/css">
         html {
             overflow: hidden;
@@ -489,7 +494,8 @@
             url: "http://rstyro.gitee.io/blog/",
             targetType: "iframe-tab",
             icon: "fa fa-circle-o",
-            urlType: 'abosulte'
+            urlType: 'abosulte',
+            close:false
         });
 
         App.fixIframeCotent();

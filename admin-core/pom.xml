@@ -90,6 +90,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
 		</dependency>
 
 		<dependency>
@@ -137,6 +138,12 @@
 		    <groupId>org.springframework.boot</groupId>  
 		    <artifactId>spring-boot-devtools</artifactId>  
 		    <optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.8.16</version>
 		</dependency>
 
 

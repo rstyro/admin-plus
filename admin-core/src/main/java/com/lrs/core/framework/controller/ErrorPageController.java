@@ -1,6 +1,6 @@
-package com.lrs.core.controller;
+package com.lrs.core.framework.controller;
 
-import com.lrs.core.config.CommonConfig;
+import com.lrs.core.framework.config.CommonConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.lrs.core.config;
+package com.lrs.core.framework.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
