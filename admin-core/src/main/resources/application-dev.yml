@@ -1,10 +1,11 @@
 server:
   port: 8800
 admin:
-  name: Admin LRS
-  upload:
-    root: upload
-    pre: http://localhost:8800/show/
+  common:
+    name: Admin LRS
+    upload:
+      root: upload
+      pre: http://localhost:8800/show/
 mybatis-plus:
   mapper-locations:
        - classpath:mapper/*/*.xml
@@ -18,6 +19,7 @@ mybatis-plus:
     db-config:
       logic-delete-value: Y # 逻辑已删除值(默认为 1)
       logic-not-delete-value: N # 逻辑未删除值(默认为 0)
+
 spring:
   datasource:
     sql-script-encoding: UTF-8
@@ -59,19 +61,10 @@ spring:
     cache: false
     servlet:
       content-type: text/html
-  redis:
-    password:
-    database: 0
-    port: 6379
-    host: 127.0.0.1
-    lettuce:
-      pool:
-        max-idle: 8
-        min-idle: 0
-        max-active: 8
-        max-wait: -1ms
-    timeout: 10000ms
-
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 10240MB
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 #sa-token:

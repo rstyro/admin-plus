@@ -17,11 +17,11 @@ public class Application extends SpringBootServletInitializer implements WebServ
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-//        System.out.println("启动成功，Sa-Token 配置如下：" + SaManager.getConfig());
 	}
 
     @Override
     public void customize(ConfigurableWebServerFactory factory) {
+        // 自定义错误页面
         factory.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400"));
         factory.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500"));
         factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404"));
