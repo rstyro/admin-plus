@@ -18,7 +18,7 @@ public class LoginIntercept implements HandlerInterceptor {
         if(StpUtil.isLogin()){
             return true;
         }
-        response.sendRedirect("/toLogin");
+        response.sendRedirect(request.getContextPath()+"/toLogin");
         log.info("{} 重定向登录页",request.getServletPath());
         return false;
     }

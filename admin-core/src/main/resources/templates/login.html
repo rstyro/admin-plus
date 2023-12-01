@@ -113,7 +113,7 @@
                        v-model="dto.code"></el-input>
                 </el-col>
                 <el-col :span="9">
-                    <img id="authCode" onclick="changeCode()" src="/captcha" alt="验证码" title="点击更换" />
+                    <img id="authCode"  @click="changeCode" v-bind:src="captcha"  alt="验证码" title="点击更换" />
                 </el-col>
             </el-row>
             <br/><br/>
@@ -126,11 +126,19 @@
 <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
-<script>
+<script th:inline="javascript">
+    let ctx = [[@{/}]];
+
+    //TOCMAT重启之后 在ifrme框架登录后，重新跳出框架显示页面
+    if (window != top) {
+        top.location.href = location.href;
+    }
+
     new Vue({
         el: '#app',
         data: function () {
             return {
+                captcha:ctx+'captcha',
                 dto: {
                     username: '',
                     password: '',
@@ -140,9 +148,12 @@
             }
         },
         methods: {
+            changeCode(){
+                this.captcha=ctx+"captcha?t=" + new Date().getTime();
+            },
             onSubmit() {
                 axios({
-                    url: '/login',
+                    url: ctx+'login',
                     method: 'post',
                     data: this.dto,
                     header: {
@@ -150,7 +161,7 @@
                     }
                 }).then(r=>{
                     if(r.status===200 && r.data.code===200){
-                        window.location.href="/index";
+                        window.location.href=ctx+"index";
                     }else {
                         ELEMENT.Message({
                             showClose: true,
@@ -163,16 +174,9 @@
 
             },
         }
-    })
+    });
 
     console.log(ELEMENT);
-    function changeCode() {
-        document.getElementById("authCode").src = "/captcha?t=" + genTimestamp();
-    }
-    function genTimestamp() {
-        var time = new Date();
-        return time.getTime();
-    }
 </script>
 </body>
 </html>

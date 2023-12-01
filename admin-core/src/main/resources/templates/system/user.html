@@ -1,457 +1,248 @@
 ﻿<!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>管理系统</title>
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/static/bootstrap/css/font-awesome.min.css}" rel="stylesheet">
-    <!-- Theme style -->
-    <link href="adminlte/css/AdminLTE.lite.css" th:href="@{/static/adminlte/css/AdminLTE.lite.css}" rel="stylesheet"/>
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-     folder instead of downloading all of them to reduce the load. -->
-    <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
-    <!-- element-ui -->
-    <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
-
-    <style type="text/css">
-        html {
-            overflow: hidden;
+    <style>
+        .container{
+            padding: 5px;
         }
 
-        .systitle {
-            font-size: 1.4em;
-            font-weight: bold;
-            cursor: default;
+        .container .search-box{
+            margin-bottom: 20px;
         }
 
-        .systitle:hover {
-            cursor: default;
-            background-color: transparent;
+        .container .content-header{
+            margin-bottom: 10px;
         }
 
-        .subsystitle {
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .menu_tab {
-            padding: 0 10px !important;
-        }
-
-        .page_tab_title {
-            padding-right: 3px;
-            font-size: 1.1em;
-        }
-
-        .page_tab_close {
-            cursor: pointer;
-            font-size: 1.3em;
-            font-weight: bold;
+        .container .content-header .content-header-right {
+            text-align: right;
         }
     </style>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/r29/html5.min.js" ></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
+<body>
 
-<body class="hold-transition skin-blue sidebar-mini">
-<noscript>
-    <div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
-        <h3>您所用的浏览器未启用脚本，系统无法正常工作！</h3>
-    </div>
-</noscript>
-<div class="wrapper">
+<div id="app" class="container">
+    <el-card class="box-card search-box" v-show="showSearch">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="审批人">
+                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域">
+                <el-select v-model="formInline.region" placeholder="活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary">查询</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
 
-    <header class="main-header">
-        <!-- Logo -->
-        <a href="#" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini">ALT</span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg">综合管理系统</span>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <div class="navbar-header">
-                <ul class="nav navbar-nav">
-                    <li><a class="systitle">管理系统</a></li>
-                </ul>
-            </div>
+    <el-card class="box-card">
+        <section class="content-header">
+            <el-row :gutter="2">
+                <el-col :span="11" >
+                    <el-button type="success" size="mini" icon="el-icon-plus">新增</el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-edit">修改</el-button>
+                    <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                </el-col>
+                <el-col :span="11" :offset="2">
+                    <div class="content-header-right">
+                        <el-button @click="showSearchBox" size="mini" icon="el-icon-search" circle ></el-button>
+                        <el-button size="mini" type="info" icon="el-icon-message" circle></el-button>
+                        <el-button size="mini" type="warning" icon="el-icon-star-off" circle></el-button>
+                    </div>
+                </el-col>
+            </el-row>
 
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-
-                    <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-user-circle user-image"></i>
-                            <span class="hidden-xs">系统管理员</span>
-                        </a>
-                        <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle" alt="User Image">
-                            </li>
-                            <!-- Menu Body -->
-                            <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Followers</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Sales</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i>登出</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Control Sidebar Toggle Button -->
-                    <li>
-                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="navbar navbar-custom-menu" style="padding-right:20px;">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a class="subsystitle">子系统1</a>
-                    </li>
-                    <li>
-                        <a class="subsystitle">子系统2</a>
-                    </li>
-                    <li>
-                        <a class="subsystitle">子系统3</a>
-                    </li>
-                    <li>
-                        <a class="subsystitle">子系统4</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-
-            <!-- 用户头像 -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;" class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p>Alexander Pierce</p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                </div>
-            </div>
-
-            <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" autocomplete="off" placeholder="Search...">
-                    <span class="input-group-btn">
-                            <button type="button" name="search" id="search-btn" class="btn btn-flat"
-                                    onclick="search_menu()">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                </div>
-            </form>
-            <!-- /.search form -->
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-
-            </ul>
         </section>
-        <!-- /.sidebar -->
-    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" id="content-wrapper" style="min-height: 421px;">
-        <!--bootstrap tab风格 多标签页-->
-        <div class="content-tabs">
-            <button class="roll-nav roll-left tabLeft" onclick="scrollTabLeft()">
-                <i class="fa fa-backward"></i>
-            </button>
-            <nav class="page-tabs menuTabs tab-ui-menu" id="tab-menu">
-                <div class="page-tabs-content" style="margin-left: 0px;">
+        <!-- Main content -->
+        <section class="content">
+            <el-table
+                    ref="multipleTable"
+                    :data="tableData"
+                    tooltip-effect="light"
+                    style="width: 100%"
+                    max-height="550"
+                    @selection-change="handleSelectionChange">
+                <el-table-column
+                        type="selection"
+                        width="55">
+                </el-table-column>
+                <el-table-column
+                        label="日期"
+                        width="120">
+                    <template slot-scope="scope">{{ scope.row.date }}</template>
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="姓名"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="地址"
+                        show-overflow-tooltip>
+                </el-table-column>
+            </el-table>
 
-                </div>
-            </nav>
-            <button class="roll-nav roll-right tabRight" onclick="scrollTabRight()">
-                <i class="fa fa-forward" style="margin-left: 3px;"></i>
-            </button>
-            <div class="btn-group roll-nav roll-right">
-                <button class="dropdown tabClose" data-toggle="dropdown">
-                    页签操作<i class="fa fa-caret-down" style="padding-left: 3px;"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right" style="min-width: 128px;">
-                    <li><a class="tabReload" href="javascript:refreshTab();">刷新当前</a></li>
-                    <li><a class="tabCloseCurrent" href="javascript:closeCurrentTab();">关闭当前</a></li>
-                    <li><a class="tabCloseAll" href="javascript:closeOtherTabs(true);">全部关闭</a></li>
-                    <li><a class="tabCloseOther" href="javascript:closeOtherTabs();">除此之外全部关闭</a></li>
-                </ul>
+            <div>
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :page-size="20"
+                        :pager-count="11"
+                        layout="sizes,prev, pager, next"
+                        :total="1000">
+                </el-pagination>
             </div>
-            <button class="roll-nav roll-right fullscreen" onclick="App.handleFullScreen()">
-                <i class="fa fa-arrows-alt"></i>
-            </button>
-        </div>
-        <div class="content-iframe " style="background-color: #ffffff; ">
-            <div class="tab-content " id="tab-content">
-
+            <div style="margin-top: 20px">
+                <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+                <el-button @click="toggleSelection()">取消选择</el-button>
             </div>
-        </div>
-    </div>
-    <!-- /.content-wrapper -->
+        </section>
+    </el-card>
 
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.0
-        </div>
-        <strong>Copyright &copy; <a href="#">fallstar0@qq.com</a>.</strong> All rights reserved.
-    </footer>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs" style="display:none;">
-            <li class="active">
-                <a href="#control-sidebar-theme-demo-options-tab" data-toggle="tab" aria-expanded="true"><i
-                        class="fa fa-wrench"></i></a>
-            </li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content" id="ctrlbar-content">
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
 </div>
 
-<!-- jQuery -->
-<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js" th:src="@{/static/bootstrap/jquery.min.js}"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/static/bootstrap/bootstrap.min.js}"></script>
-<!-- Slimscroll -->
-<script src="adminlte/js/jquery.slimscroll.min.js" th:src="@{/static/adminlte/js/jquery.slimscroll.min.js}"></script>
-<!-- AdminLTE App -->
-<script src="adminlte/js/adminlte.lite.js" th:src="@{/static/adminlte/js/adminlte.lite.js}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="adminlte/js/adminlte.skin.js" th:src="@{/static/adminlte/js/adminlte.skin.js}"></script>
-<script src="adminlte/js/jquery.blockUI.min.js" th:src="@{/static/adminlte/js/jquery.blockUI.min.js}"></script>
-<!--tabs-->
-<script src="adminlte/js/app_iframe.js" th:src="@{/static/adminlte/js/app_iframe.js}"></script>
-<script type="text/javascript">
-    /**
-     * 本地搜索菜单
-     */
-    function search_menu() {
-        //要搜索的值
-        var text = $('input[name=q]').val();
+<!-- element-ui -->
+<script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
+<script type="text/javascript" th:inline="javascript">
 
-        var $ul = $('.sidebar-menu');
-        $ul.find("a.nav-link").each(function () {
-            var $a = $(this).css("border", "");
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                tableData2:[],
+                tableData: [{
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-08',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-06',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                },{
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }],
+                multipleSelection: [],
+                formInline: {
+                    user: '',
+                    region: ''
+                },
+                showSearch:false
 
-            //判断是否含有要搜索的字符串
-            if ($a.children("span.menu-text").text().indexOf(text) >= 0) {
-
-                //如果a标签的父级是隐藏的就展开
-                $ul = $a.parents("ul");
-
-                if ($ul.is(":hidden")) {
-                    $a.parents("ul").prev().click();
+            }
+        },
+        methods: {
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
                 }
-
-                //点击该菜单
-                $a.click().css("border", "1px solid");
-
-                //                return false;
-            }
-        });
-    }
-
-    $(function () {
-        //        console.log(window.location);
-        // addTabs({
-        //     id: '10008',
-        //     title: '欢迎页',
-        //     close: false,
-        //     url: 'about.html',
-        //     urlType: "relative"
-        // });
-        addTabs({
-            id: "168",
-            text: "欢迎页",
-            url: "/welcome",
-            targetType: "iframe-tab",
-            icon: "fa fa-circle-o",
-            urlType: 'abosulte',
-            close:false
-        });
-
-        App.fixIframeCotent();
-
-
-        var menus = [
-            {
-                id: "9000",
-                text: "header",
-                icon: "",
-                isHeader: true
             },
-            {
-                id: "9001",
-                text: "UI Elements",
-                icon: "fa fa-laptop",
-                children: [
-                    {
-                        id: "90011",
-                        text: "buttons",
-                        icon: "fa fa-circle-o",
-                        url: "UI/buttons_iframe.html",
-                        targetType: "iframe-tab"
-                    },
-                    {
-                        id: "90012",
-                        text: "icons",
-                        url: "UI/icons_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90013",
-                        text: "general",
-                        url: "UI/general_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90014",
-                        text: "modals",
-                        url: "UI/modals_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90015",
-                        text: "sliders",
-                        url: "UI/sliders_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90016",
-                        text: "timeline",
-                        url: "UI/timeline_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    }
-                ]
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
             },
-            {
-                id: "9002",
-                text: "Forms",
-                icon: "fa fa-edit",
-                children: [
-                    {
-                        id: "90021",
-                        text: "advanced",
-                        url: "forms/advanced_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90022",
-                        text: "general",
-                        url: "forms/general_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90023",
-                        text: "editors",
-                        url: "forms/editors_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o",
-                        children: [
-                            {
-                                id: "90021",
-                                text: "advanced",
-                                url: "forms/advanced_iframe.html",
-                                targetType: "iframe-tab",
-                                icon: "fa fa-circle-o"
-                            }]
-                    },
-                    {
-                        id: "90024",
-                        text: "百度",
-                        url: "https://www.baidu.com",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o",
-                        urlType: 'abosulte'
-                    }
-                ]
+            handleSizeChange(val) {
+                console.log(this.tableData);
+                console.log(this.tableData2);
+                this.tableData2=this.tableData.splice(0,val);
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            showSearchBox(){
+                this.showSearch=!this.showSearch;
             }
-        ];
-        $('.sidebar-menu').sidebarMenu({data: menus});
-
-        // 动态创建菜单后，可以重新计算 SlimScroll
-        // $.AdminLTE.layout.fixSidebar();
-
-        /*if ($.AdminLTE.options.sidebarSlimScroll) {
-            if (typeof $.fn.slimScroll != 'undefined') {
-                //Destroy if it exists
-                var $sidebar = $(".sidebar");
-                $sidebar.slimScroll({destroy: true}).height("auto");
-                //Add slimscroll
-                $sidebar.slimscroll({
-                    height: ($(window).height() - $(".main-header").height()) + "px",
-                    color: "rgba(0,0,0,0.2)",
-                    size: "3px"
-                });
-            }
-        }*/
-
+        }
     });
+
+
 </script>
 
 </body>
-
 </html>

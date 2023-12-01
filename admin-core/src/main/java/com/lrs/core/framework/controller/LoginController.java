@@ -65,8 +65,9 @@ public class LoginController {
      * 验证码
      */
     @SneakyThrows
-    @GetMapping(value = "/captcha")
+    @GetMapping("/captcha")
     public void getCode(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
         try (OutputStream os = response.getOutputStream()) {
             // 获取图片
             Object[] img = CaptchaUtil.CreateCode();
@@ -74,8 +75,6 @@ public class LoginController {
             response.setContentType("image/png");
             ImageIO.write(image, "png", os);
             os.flush();
-            // 用于验证的字符串存入session
-            HttpSession session = request.getSession();
             session.setAttribute(Const.SESSION_CODE,img[1]);
         } catch (IOException e) {
             log.error("验证码输出异常:{}", e.getMessage(),e);
@@ -94,7 +93,7 @@ public class LoginController {
     @ResponseBody
     public R login(HttpServletRequest request,@RequestBody LoginDto dto) throws Exception {
         String codeStr = (String) request.getSession().getAttribute(Const.SESSION_CODE);
-        if(!dto.getCode().equals(codeStr)){
+        if(!dto.getCode().equalsIgnoreCase(codeStr)){
             throw new ApiException(ApiResultEnum.SYSTEM_CODE_ERROR);
         }
         StpUtil.login(1);
@@ -106,8 +105,8 @@ public class LoginController {
      * @return
      */
     @PostMapping("/logout")
-    public R logout() throws Exception {
-        System.out.println("1111");
+    @ResponseBody
+    public R logout(){
         StpUtil.logout();
         return R.ok();
     }

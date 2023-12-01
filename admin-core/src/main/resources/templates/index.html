@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8"/>
@@ -7,16 +7,20 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>管理系统</title>
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+          th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" th:href="@{/static/bootstrap/css/font-awesome.min.css}" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          th:href="@{/static/bootstrap/css/font-awesome.min.css}" rel="stylesheet">
     <!-- Theme style -->
     <link href="adminlte/css/AdminLTE.lite.css" th:href="@{/static/adminlte/css/AdminLTE.lite.css}" rel="stylesheet"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
      folder instead of downloading all of them to reduce the load. -->
-    <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
+    <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}"
+          rel="stylesheet"/>
     <!-- element-ui 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+          th:href="@{/static/element-ui/index.css}">
 
     <style type="text/css">
         html {
@@ -55,12 +59,7 @@
             font-weight: bold;
         }
     </style>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/r29/html5.min.js" ></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -90,7 +89,7 @@
             </a>
             <div class="navbar-header">
                 <ul class="nav navbar-nav">
-<!--                    <li><a class="systitle">管理系统</a></li>-->
+                    <!--                    <li><a class="systitle">管理系统</a></li>-->
                 </ul>
             </div>
 
@@ -106,29 +105,31 @@
                         <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle" alt="User Image">
+                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle"
+                                     alt="User Image">
                             </li>
                             <!-- Menu Body -->
                             <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Followers</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Sales</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Followers</a>
                                     </div>
-                                </li>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Sales</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Friends</a>
+                                    </div>
+                                </div>
+                            </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
                                     <a href="#" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" @click="logout" class="btn btn-default btn-flat"><i class="fa fa-sign-out"></i>登出</a>
+                                    <a href="#" id="logout" class="btn btn-default btn-flat"><i
+                                            class="fa fa-sign-out"></i>登出</a>
                                 </div>
                             </li>
                         </ul>
@@ -166,7 +167,8 @@
             <!-- 用户头像 -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;" class="img-circle" alt="User Image">
+                    <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;"
+                         class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p th:text="${adminName}">Alexander Pierce</p>
@@ -253,6 +255,7 @@
         <div class="tab-content" id="ctrlbar-content">
         </div>
     </aside>
+
     <!-- /.control-sidebar -->
     <!-- Add the sidebar's background. This div must be placed
          immediately after the control sidebar -->
@@ -262,171 +265,162 @@
 <!-- jQuery -->
 <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js" th:src="@{/static/bootstrap/jquery.min.js}"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/static/bootstrap/bootstrap.min.js}"></script>
-<!-- Slimscroll -->
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
+        th:src="@{/static/bootstrap/bootstrap.min.js}"></script>
+<!--&lt;!&ndash; Slimscroll &ndash;&gt;-->
 <script src="adminlte/js/jquery.slimscroll.min.js" th:src="@{/static/adminlte/js/jquery.slimscroll.min.js}"></script>
-<!-- AdminLTE App -->
+<!--&lt;!&ndash; AdminLTE App &ndash;&gt;-->
 <script src="adminlte/js/adminlte.lite.js" th:src="@{/static/adminlte/js/adminlte.lite.js}"></script>
-<!-- AdminLTE for demo purposes -->
+<!--&lt;!&ndash; AdminLTE for demo purposes &ndash;&gt;-->
 <script src="adminlte/js/adminlte.skin.js" th:src="@{/static/adminlte/js/adminlte.skin.js}"></script>
 <script src="adminlte/js/jquery.blockUI.min.js" th:src="@{/static/adminlte/js/jquery.blockUI.min.js}"></script>
-<!--tabs-->
+<!--&lt;!&ndash;tabs&ndash;&gt;-->
 <script src="adminlte/js/app_iframe.js" th:src="@{/static/adminlte/js/app_iframe.js}"></script>
 <!-- element-ui -->
 <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
 
-<script type="text/javascript">
-    /**
-     * 本地搜索菜单
-     */
-    function search_menu() {
-        //要搜索的值
-        var text = $('input[name=q]').val();
-
-        var $ul = $('.sidebar-menu');
-        $ul.find("a.nav-link").each(function () {
-            var $a = $(this).css("border", "");
-
-            //判断是否含有要搜索的字符串
-            if ($a.children("span.menu-text").text().indexOf(text) >= 0) {
-
-                //如果a标签的父级是隐藏的就展开
-                $ul = $a.parents("ul");
-
-                if ($ul.is(":hidden")) {
-                    $a.parents("ul").prev().click();
-                }
-
-                //点击该菜单
-                $a.click().css("border", "1px solid");
-
-                //                return false;
-            }
-        });
-    }
-
-    $(function () {
-        //        console.log(window.location);
-        // addTabs({
-        //     id: '10008',
-        //     title: '欢迎页',
-        //     close: false,
-        //     url: 'about.html',
-        //     urlType: "relative"
-        // });
-        addTabs({
-            id: "168",
-            title: "欢迎页",
-            url: "/welcome",
-            targetType: "iframe-tab",
-            close:false
-        });
-
-        // App.fixIframeCotent();
-
-
-        var menus = [
-            {
-                id: "9000",
-                text: "header",
-                icon: "",
-                isHeader: true
-            },
-            {
-                id: "9001",
-                text: "系统配置",
-                icon: "fa fa-laptop",
-                children: [
-                    {
-                        id: "90011",
-                        text: "buttons",
-                        icon: "fa fa-circle-o",
-                        url: "UI/buttons_iframe.html",
-                        targetType: "iframe-tab"
-                    },
-                    {
-                        id: "90012",
-                        text: "icons",
-                        url: "UI/icons_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90013",
-                        text: "general",
-                        url: "UI/general_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90014",
-                        text: "modals",
-                        url: "UI/modals_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90015",
-                        text: "sliders",
-                        url: "UI/sliders_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
-                    },
-                    {
-                        id: "90016",
-                        text: "timeline",
-                        url: "UI/timeline_iframe.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-circle-o"
+<script type="text/javascript" th:inline="javascript">
+    let ctx = [[@{/}]];
+        /**
+         * 本地搜索菜单
+         */
+        function search_menu() {
+            //要搜索的值
+            var text = $('input[name=q]').val();
+            var $ul = $('.sidebar-menu');
+            $ul.find("a.nav-link").each(function () {
+                var $a = $(this).css("border", "");
+                //判断是否含有要搜索的字符串
+                if ($a.children("span.menu-text").text().indexOf(text) >= 0) {
+                    //如果a标签的父级是隐藏的就展开
+                    $ul = $a.parents("ul");
+                    if ($ul.is(":hidden")) {
+                        $a.parents("ul").prev().click();
                     }
-                ]
-            }
-        ];
-        $('.sidebar-menu').sidebarMenu({data: menus});
+                    //点击该菜单
+                    $a.click().css("border", "1px solid");
+                    //                return false;
+                }
+            });
+        }
 
-        // 动态创建菜单后，可以重新计算 SlimScroll
-        // $.AdminLTE.layout.fixSidebar();
+        $(function () {
 
-        /*if ($.AdminLTE.options.sidebarSlimScroll) {
-            if (typeof $.fn.slimScroll != 'undefined') {
-                //Destroy if it exists
-                var $sidebar = $(".sidebar");
-                $sidebar.slimScroll({destroy: true}).height("auto");
-                //Add slimscroll
-                $sidebar.slimscroll({
-                    height: ($(window).height() - $(".main-header").height()) + "px",
-                    color: "rgba(0,0,0,0.2)",
-                    size: "3px"
-                });
-            }
-        }*/
+            addTabs({
+                id: "168",
+                title: "欢迎页",
+                url: ctx + "welcome",
+                targetType: "iframe-tab",
+                close: false
+            });
+            App.fixIframeCotent();
 
-    });
 
-    function logout(){
-        alert("aaaa");
-        axios({
-            url: '/logout',
-            method: 'post',
-            header: {
-                'Content-Type': 'application/json'
-            }
-        }).then(r=>{
-            debugger
-            if(r.status===200 && r.data.code===200){
-                window.location.href="/index";
-            }else {
-                ELEMENT.Message({
-                    showClose: true,
-                    message: r.data.msg,
-                    type: 'error'
-                });
-                console.log("result=",r);
-            }
+            var menus = [
+                {
+                    id: "9000",
+                    text: "header",
+                    icon: "",
+                    isHeader: true
+                },
+                {
+                    id: "9001",
+                    text: "系统配置",
+                    icon: "fa fa-laptop",
+                    children: [
+                        {
+                            id: "90011",
+                            text: "用户列表",
+                            icon: "fa fa-circle-o",
+                            url: ctx+"system/user/list",
+                            targetType: "iframe-tab"
+                        },
+                        {
+                            id: "90012",
+                            text: "icons",
+                            url: "UI/icons_iframe.html",
+                            targetType: "iframe-tab",
+                            icon: "fa fa-circle-o"
+                        },
+                        {
+                            id: "90013",
+                            text: "general",
+                            url: "UI/general_iframe.html",
+                            targetType: "iframe-tab",
+                            icon: "fa fa-circle-o"
+                        },
+                        {
+                            id: "90014",
+                            text: "modals",
+                            url: "UI/modals_iframe.html",
+                            targetType: "iframe-tab",
+                            icon: "fa fa-circle-o"
+                        },
+                        {
+                            id: "90015",
+                            text: "sliders",
+                            url: "UI/sliders_iframe.html",
+                            targetType: "iframe-tab",
+                            icon: "fa fa-circle-o"
+                        },
+                        {
+                            id: "90016",
+                            text: "timeline",
+                            url: "UI/timeline_iframe.html",
+                            targetType: "iframe-tab",
+                            icon: "fa fa-circle-o"
+                        }
+                    ]
+                }
+            ];
+            $('.sidebar-menu').sidebarMenu({data: menus});
+
+            // 动态创建菜单后，可以重新计算 SlimScroll
+            // $.AdminLTE.layout.fixSidebar();
+
+            /*if ($.AdminLTE.options.sidebarSlimScroll) {
+                if (typeof $.fn.slimScroll != 'undefined') {
+                    //Destroy if it exists
+                    var $sidebar = $(".sidebar");
+                    $sidebar.slimScroll({destroy: true}).height("auto");
+                    //Add slimscroll
+                    $sidebar.slimscroll({
+                        height: ($(window).height() - $(".main-header").height()) + "px",
+                        color: "rgba(0,0,0,0.2)",
+                        size: "3px"
+                    });
+                }
+            }*/
+            $("#logout").click(function () {
+                axios.post(ctx + 'logout')
+                    .then(({status, data}) => {
+                        debugger
+                        if (status === 200 && data.code === 200) {
+                            window.location.href = ctx + 'index';
+                        } else {
+                            ELEMENT.Message({
+                                showClose: true,
+                                message: data.msg,
+                                type: 'error'
+                            });
+                            console.log("result=", data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("请求失败：", error);
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "请求失败，请稍后重试",
+                            type: 'error'
+                        });
+                    });
+            });
+
+
         });
-    }
+
 </script>
 
 </body>

@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8"/>
@@ -18,13 +17,8 @@
     <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
-    <!-- element-ui -->
-    <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
 
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/r29/html5.min.js" ></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -46,5 +40,8 @@
 <script src="adminlte/js/adminlte.skin.js" th:src="@{/static/adminlte/js/adminlte.skin.js}"></script>
 <script src="adminlte/js/jquery.blockUI.min.js" th:src="@{/static/adminlte/js/jquery.blockUI.min.js}"></script>
 <script src="adminlte/js/app_iframe.js" th:src="@{/static/adminlte/js/app_iframe.js}"></script>
+<!-- element-ui -->
+<script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
 </body>
 </html>
