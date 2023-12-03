@@ -26,14 +26,14 @@
         <sa-token.version>1.37.0</sa-token.version>
         <fastjson2.version>2.0.42</fastjson2.version>
         <mysql.version>8.0.33</mysql.version>
-        <hutool.version>5.8.16</hutool.version>
+
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.lrs.common</groupId>
             <artifactId>admin-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -122,11 +122,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

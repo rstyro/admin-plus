@@ -1,7 +1,7 @@
 package com.lrs.core.exception;
 
 import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.constant.R;
+import com.lrs.common.vo.R;
 import com.lrs.common.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -61,5 +61,5 @@ public class RestExceptionHandler {
 		log.error(ex.getMessage(),ex);
 		return R.error(ApiResultEnum.ERROR);
 	}
-	
+
 }

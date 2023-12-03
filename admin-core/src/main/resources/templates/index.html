@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8"/>
@@ -104,22 +105,17 @@
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
                             <!-- User image -->
-                            <li class="user-header">
+                            <li class="user-header" style="text-align: center; margin-bottom: 20px">
                                 <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle"
                                      alt="User Image">
                             </li>
                             <!-- Menu Body -->
                             <li class="user-body">
                                 <div class="row">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
+                                    <div class="text-center">
+                                        <a href="#" id="icon">ICON</a>
                                     </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>
+
                                 </div>
                             </li>
                             <!-- Menu Footer-->
@@ -317,64 +313,29 @@
             });
             App.fixIframeCotent();
 
-
-            var menus = [
-                {
-                    id: "9000",
-                    text: "header",
-                    icon: "",
-                    isHeader: true
-                },
-                {
-                    id: "9001",
-                    text: "系统配置",
-                    icon: "fa fa-laptop",
-                    children: [
-                        {
-                            id: "90011",
-                            text: "用户列表",
-                            icon: "fa fa-circle-o",
-                            url: ctx+"system/user/list",
-                            targetType: "iframe-tab"
-                        },
-                        {
-                            id: "90012",
-                            text: "icons",
-                            url: "UI/icons_iframe.html",
-                            targetType: "iframe-tab",
-                            icon: "fa fa-circle-o"
-                        },
-                        {
-                            id: "90013",
-                            text: "general",
-                            url: "UI/general_iframe.html",
-                            targetType: "iframe-tab",
-                            icon: "fa fa-circle-o"
-                        },
-                        {
-                            id: "90014",
-                            text: "modals",
-                            url: "UI/modals_iframe.html",
-                            targetType: "iframe-tab",
-                            icon: "fa fa-circle-o"
-                        },
-                        {
-                            id: "90015",
-                            text: "sliders",
-                            url: "UI/sliders_iframe.html",
-                            targetType: "iframe-tab",
-                            icon: "fa fa-circle-o"
-                        },
-                        {
-                            id: "90016",
-                            text: "timeline",
-                            url: "UI/timeline_iframe.html",
-                            targetType: "iframe-tab",
-                            icon: "fa fa-circle-o"
-                        }
-                    ]
-                }
-            ];
+            // var menus = [
+            //     {
+            //         id: "9000",
+            //         text: "header",
+            //         icon: "",
+            //         isHeader: true
+            //     },
+            //     {
+            //         id: "9001",
+            //         text: "系统配置",
+            //         icon: "fa fa-laptop",
+            //         children: [
+            //             {
+            //                 id: "90011",
+            //                 text: "用户列表",
+            //                 icon: "fa fa-circle-o",
+            //                 url: ctx+"system/user/list",
+            //                 targetType: "iframe-tab"
+            //             }
+            //         ]
+            //     }
+            // ];
+            let menus = [[${tabs}]];
             $('.sidebar-menu').sidebarMenu({data: menus});
 
             // 动态创建菜单后，可以重新计算 SlimScroll
@@ -396,7 +357,6 @@
             $("#logout").click(function () {
                 axios.post(ctx + 'logout')
                     .then(({status, data}) => {
-                        debugger
                         if (status === 200 && data.code === 200) {
                             window.location.href = ctx + 'index';
                         } else {
@@ -418,6 +378,15 @@
                     });
             });
 
+            $("#icon").click(function () {
+                addTabs({
+                    id: "188",
+                    title: "ICON",
+                    url: ctx + "icon",
+                    targetType: "iframe-tab",
+                    close: false
+                });
+            });
 
         });
 

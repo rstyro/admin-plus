@@ -95,3 +95,4 @@ security:
     - /toLogin
     - /login
     - /captcha
+    - /upload/**

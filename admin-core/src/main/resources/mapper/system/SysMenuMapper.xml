@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lrs.core.system.mapper.SysMenuMapper">
+
+    <select id="getRoleMenuList" resultType="com.lrs.core.system.vo.RoleMenuTreeVo">
+    SELECT DISTINCT
+        a.id,
+        a.parent_id,
+        a.menu_name,
+        b.id IS NOT NULL hasRoleFlag
+    FROM
+        sys_menu a
+        LEFT JOIN sys_role_menu b ON a.id = b.menu_id
+        AND b.role_id = #{roleId}
+    WHERE
+        a.parent_id =#{parentId}
+    ORDER BY
+        a.sort_num asc
+	</select>
+</mapper>

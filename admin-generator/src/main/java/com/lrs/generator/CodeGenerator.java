@@ -73,7 +73,7 @@ public class CodeGenerator {
 //        strategy.setSuperEntityClass("com.lrs.admin");
         strategy.setEntityLombokModel(true);
         strategy.setSuperControllerClass("com.lrs.core.base.BaseController");
-        strategy.setInclude(scanner("表名"));
+        strategy.setInclude(scanner("表名").split(","));
 //        strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);

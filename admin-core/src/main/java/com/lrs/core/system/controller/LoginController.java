@@ -1,17 +1,22 @@
-package com.lrs.core.framework.controller;
+package com.lrs.core.system.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
-import com.lrs.common.constant.R;
+import com.lrs.common.vo.R;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.CaptchaUtil;
-import com.lrs.core.framework.config.CommonConfig;
-import com.lrs.core.framework.dto.LoginDto;
+import com.lrs.common.vo.TabsVo;
+import com.lrs.core.system.config.CommonConfig;
+import com.lrs.core.system.dto.LoginDto;
+import com.lrs.core.system.entity.SysUser;
+import com.lrs.core.system.service.ISysUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 自定义错误页面
@@ -32,6 +39,9 @@ public class LoginController {
 
     @Resource
     private CommonConfig commonConfig;
+
+    @Resource
+    private ISysUserService sysUserService;
 
     /**
      * 登录页
@@ -50,6 +60,9 @@ public class LoginController {
     public String index(Model model){
         model.addAttribute("adminName",commonConfig.getName());
         model.addAttribute("systemName",commonConfig.getSystemName());
+        // tabs菜单
+        List<TabsVo> tabMenuList = sysUserService.getTabMenuList(StpUtil.getLoginId(0l));
+        model.addAttribute("tabs",tabMenuList);
         return "index";
     }
 
@@ -59,6 +72,14 @@ public class LoginController {
     @GetMapping("/welcome")
     public String welcome(){
         return "welcome";
+    }
+
+    /**
+     * icon
+     */
+    @GetMapping("/icon")
+    public String icon(){
+        return "icon";
     }
 
     /**
@@ -92,12 +113,7 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
     public R login(HttpServletRequest request,@RequestBody LoginDto dto) throws Exception {
-        String codeStr = (String) request.getSession().getAttribute(Const.SESSION_CODE);
-        if(!dto.getCode().equalsIgnoreCase(codeStr)){
-            throw new ApiException(ApiResultEnum.SYSTEM_CODE_ERROR);
-        }
-        StpUtil.login(1);
-        return R.ok();
+        return R.ok(sysUserService.login(request,dto));
     }
 
     /**

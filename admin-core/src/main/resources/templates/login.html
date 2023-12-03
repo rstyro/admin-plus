@@ -101,11 +101,11 @@
 <div class="box" id="app">
     <div class="left"></div>
     <div class="right">
-        <div class="login-box">
+        <div class="login-box" @keyup.enter="onSubmit"  >
             <h2>后台管理</h2>
             <el-input placeholder="请输入用户名" prefix-icon="el-icon-user" v-model="dto.username"></el-input>
             <br/><br/>
-            <el-input placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="dto.password"></el-input>
+            <el-input placeholder="请输入密码" show-password prefix-icon="el-icon-lock" v-model="dto.password"></el-input>
             <br/><br/>
             <el-row :gutter="1">
                 <el-col :span="14">
@@ -117,7 +117,7 @@
                 </el-col>
             </el-row>
             <br/><br/>
-            <el-button class="loginBtn" type="primary" @click="onSubmit">登录</el-button>
+            <el-button class="loginBtn" type="primary" @click="onSubmit" >登录</el-button>
         </div>
 
     </div>

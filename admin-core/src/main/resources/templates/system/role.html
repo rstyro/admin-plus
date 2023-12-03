@@ -6,7 +6,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>用户列表</title>
+    <title>角色列表</title>
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
     <style>
@@ -67,16 +67,9 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="菜单ID"></el-table-column>
-                <el-table-column prop="nickName" label="用户昵称"></el-table-column>
-                <el-table-column prop="username" label="用户名" sortable width="180"></el-table-column>
-                <el-table-column prop="picUrl" label="用户头像">
-                    <template slot-scope="scope">
-                        <el-avatar :size="35" :src="scope.row.picUrl"></el-avatar>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="status" label="用户状态"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                <el-table-column prop="id" label="ID"></el-table-column>
+                <el-table-column prop="roleName" label="角色名称"></el-table-column>
+                <el-table-column prop="remark" label="角色备注"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column
                         fixed="right"
@@ -117,28 +110,26 @@
             </el-form-item>
 
             <el-form-item label="昵称" :label-width="formLabelWidth">
-                <el-input v-model="itemData.nickName" autocomplete="off"></el-input>
+                <el-input v-model="itemData.roleName" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-                <el-input v-model="itemData.username" autocomplete="off"></el-input>
+            <el-form-item label="备注" :label-width="formLabelWidth">
+                <el-input v-model="itemData.remark" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="密码" :label-width="formLabelWidth">
-                <el-input v-model="itemData.password" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="头像" :label-width="formLabelWidth">
-                <el-input v-model="itemData.picUrl" autocomplete="off"></el-input>
-                <el-upload
-                        class="upload-demo"
-                        drag
-                        :limit="1"
-                        :before-upload="beforeAvatarUpload"
-                        :on-success="uploadSuccess"
-                        :action="uploadUrl"
-                        list-type="picture">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                </el-upload>
+
+            <el-form-item label="权限控制" :label-width="formLabelWidth">
+
+                <el-tree
+                        :data="roleMenuList"
+                        show-checkbox
+                        node-key="id"
+                        ref="roleMenuTree"
+                        :check-on-click-node="true"
+                        :default-expand-all="true"
+                        :check-strictly="checkStrictly"
+                        :props="defaultProps">
+                </el-tree>
+
+
             </el-form-item>
 
             <el-form-item label="创建时间" :label-width="formLabelWidth">
@@ -170,12 +161,12 @@
             el: '#app',
             data: function () {
                 return {
-                    listUrl: ctx + 'system/user/list',
-                    delUrl: ctx + 'system/user/del?id=',
-                    batchDelUrl: ctx + 'system/user/batchDel',
-                    addUrl: ctx + 'system/user/add',
-                    editUrl: ctx + 'system/user/edit',
-                    uploadUrl: ctx+ 'upload/image',
+                    listUrl: ctx + 'system/role/list',
+                    delUrl: ctx + 'system/role/del?id=',
+                    batchDelUrl: ctx + 'system/role/batchDel',
+                    addUrl: ctx + 'system/role/add',
+                    editUrl: ctx + 'system/role/edit',
+                    roleMenuUrl: ctx + 'system/menu/getRoleMenuList?roleId=',
                     dialogUrl:'',
                     tableData: [],
                     multipleSelection: [],
@@ -192,7 +183,9 @@
                         pagerCount: 9, //页码按钮的数量
                     },
                     addDialogVisible: false,
-                    itemData: {},
+                    itemData: {
+                        menuIdList:[],
+                    },
                     dialogTitle: '新增',
                     formLabelWidth: '100px',
                     pickerOptions: {
@@ -219,7 +212,13 @@
                                 picker.$emit('pick', date);
                             }
                         }]
-                    }
+                    },
+                    defaultProps: {
+                        children: 'child',
+                        label: 'menuName'
+                    },
+                    roleMenuList:[],
+                    checkStrictly:false // 默认false,回显时设置成true
 
                 }
             },
@@ -273,14 +272,20 @@
                     this.addDialogVisible = true;
                     this.dialogTitle = '新增';
                     this.dialogUrl=this.addUrl;
+                    // 请求角色的菜单
+                    this.requestRoleMenuList(0);
                 },
                 edit(row) {
                     this.addDialogVisible = true;
                     this.dialogTitle = '编辑';
                     this.itemData = row;
                     this.dialogUrl=this.editUrl;
+                    this.requestRoleMenuList(row.id);
                 },
                 saveOrUpdate(){
+                    this.checkStrictly=false;
+                    let roleMenuIdList = this.$refs.roleMenuTree.getCheckedNodes(false,true).map(i=>i.id);
+                    this.itemData.menuIdList=roleMenuIdList;
                     requestPost(this.dialogUrl, this.itemData);
                 },
                 batchDel() {
@@ -344,6 +349,43 @@
                         ELEMENT.Message.error('上传头像图片大小不能超过 2MB!');
                     }
                     return isJPG && isLt2M;
+                },
+                requestRoleMenuList: function (roleId) {
+                    this.checkStrictly=true;// 回显时设置为true
+                    axios.get(this.roleMenuUrl + roleId).then(r => {
+                        console.log("r:", r);
+                        if (r.data.code === 200) {
+                            this.roleMenuList = r.data.data;
+                            // 设置树形菜单选中
+                            let list = this.getTreeDefaultCheck(this.roleMenuList);
+                            console.log("checkList:",list);
+                            this.$refs.roleMenuTree.setCheckedKeys(list,false);
+                            // 回显成功后，设置为false
+                            setTimeout(()=>{
+                                this.checkStrictly=false;
+                            },1000);
+                        }
+                    }).catch(error => {
+                        console.error("请求失败：", error);
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "请求失败，请稍后重试",
+                            type: 'error'
+                        });
+                    })
+                },
+                getTreeDefaultCheck: function (data) {
+                    let checkedList = new Array();
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].hasRoleFlag) {
+                            checkedList.push(data[i].id);
+                        }
+                        if (data[i].child.length > 0) {
+                            let childIdList = this.getTreeDefaultCheck(data[i].child);
+                            checkedList=checkedList.concat(childIdList);
+                        }
+                    }
+                    return checkedList;
                 }
             }, created() {
                 this.searchList();

@@ -1,5 +1,6 @@
-package com.lrs.common.constant;
+package com.lrs.common.vo;
 
+import com.lrs.common.constant.ApiResultEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,10 +38,6 @@ public class R<T> implements Serializable {
 
     public static <T> R<T> ok(T data) {
         return restResult(data, SUCCESS, "操作成功");
-    }
-
-    public static <T> R<T> ok(String msg) {
-        return restResult(null, SUCCESS, msg);
     }
 
     public static <T> R<T> ok(String msg, T data) {
