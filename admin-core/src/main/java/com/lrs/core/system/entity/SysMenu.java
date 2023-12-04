@@ -38,7 +38,7 @@ public class SysMenu implements Serializable {
      */
     private Long parentId;
     /**
-     * 1=菜单，2=按钮
+     * 0=目录，1=菜单，2-按钮
      */
     private Integer menuType;
 

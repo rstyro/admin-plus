@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,6 +29,7 @@ public class SysRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     private String roleName;
@@ -47,5 +50,11 @@ public class SysRole implements Serializable {
     @TableField(exist = false)
     private List<Long> menuIdList;
 
+
+    /**
+     * 用户是否拥有角色
+     */
+    @TableField(exist = false)
+    private Boolean hasRole;
 
 }

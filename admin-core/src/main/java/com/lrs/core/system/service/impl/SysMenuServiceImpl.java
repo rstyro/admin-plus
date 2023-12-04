@@ -3,6 +3,7 @@ package com.lrs.core.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lrs.core.system.SystemConst;
 import com.lrs.core.system.dto.MenuDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.mapper.SysMenuMapper;
@@ -50,6 +51,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return roleMenuList;
     }
 
+    /**
+     * 分页获取菜单列表
+     * @param page 分页
+     * @param menuDto 参数
+     * @return 分页列表
+     */
     @Override
     public Page<SysMenu> getMenuPage(Page page, MenuDto menuDto) {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<SysMenu>()
@@ -66,7 +73,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public boolean add(SysMenu sysMenu) {
         boolean save = save(sysMenu);
-        if (sysMenu.isAddBtn()) {
+        if (sysMenu.isAddBtn() && sysMenu.getMenuType().equals(SystemConst.MenuType.MENU)) {
             //todo 添加该菜单的公用按钮权限
 
         }
@@ -80,12 +87,22 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public boolean del(Long id) {
-        return removeById(id);
+        boolean suc = removeById(id);
+        if(suc){
+            // 删除子级菜单
+            remove(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getParentId,id));
+        }
+        return suc;
     }
 
     @Override
     public boolean batchDel(List<Long> ids) {
-        return removeBatchByIds(ids);
+        boolean suc = removeBatchByIds(ids);
+        if(suc){
+            // 删除子级菜单
+            remove(new LambdaQueryWrapper<SysMenu>().in(SysMenu::getParentId,ids));
+        }
+        return suc;
     }
 
     private List<SysMenu> buildMenuTree(List<SysMenu> list) {

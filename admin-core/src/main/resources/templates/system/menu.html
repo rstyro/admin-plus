@@ -86,12 +86,18 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.menuType!=2" @click="addSub(scope.row)" type="success"
+                        <el-tooltip class="item" effect="dark" content="添加子菜单" placement="top-start">
+                            <el-button v-if="scope.row.menuType!=2" @click="addSub(scope.row)" type="success"
                                    icon="el-icon-plus" size="mini" circle></el-button>
-                        <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="编辑菜单" placement="top-start">
+                            <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
                                    circle></el-button>
-                        <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除菜单" placement="top-start">
+                            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
                                    circle></el-button>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>

@@ -1,17 +1,16 @@
 package com.lrs.core.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.core.system.dto.SysRoleDto;
 import com.lrs.core.system.dto.SysUserDto;
-import com.lrs.core.system.entity.SysMenu;
-import com.lrs.core.system.entity.SysRole;
-import com.lrs.core.system.entity.SysRoleMenu;
-import com.lrs.core.system.entity.SysUser;
+import com.lrs.core.system.entity.*;
 import com.lrs.core.system.mapper.SysRoleMapper;
 import com.lrs.core.system.service.ISysRoleMenuService;
 import com.lrs.core.system.service.ISysRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lrs.core.system.service.ISysUserRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +34,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private ISysRoleMenuService sysRoleMenuService;
+
+    @Resource
+    private ISysUserRoleService sysUserRoleService;
 
     @Override
     public Page<SysRole> getRolePage(Page page, SysRoleDto dto) {
@@ -84,5 +86,36 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean batchDel(List<Long> ids) {
         return removeBatchByIds(ids);
+    }
+
+    @Override
+    public List<SysRole> getUserRoleList(Long userId) {
+        List<SysRole> list = list();
+        List<Integer> hasRoleIdList = sysUserRoleService.list(new LambdaUpdateWrapper<SysUserRole>()
+                .eq(SysUserRole::getUserId, userId))
+                .stream()
+                .map(SysUserRole::getRoleId)
+                .collect(Collectors.toList());
+        for (SysRole sysRole : list) {
+            sysRole.setHasRole(hasRoleIdList.contains(sysRole.getId()));
+        }
+        return list;
+    }
+
+    @Override
+    public boolean editUserRole(SysRoleDto dto) {
+        // 清空角色后添加
+        sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,dto.getUserId()));
+        List<Integer> roleIdList = Optional.ofNullable(dto.getRoleIdList()).orElse(new ArrayList<>());
+        List<SysUserRole> addList = roleIdList.stream().map(i -> {
+            SysUserRole item = new SysUserRole();
+            item.setRoleId(i);
+            item.setUserId(dto.getUserId());
+            return item;
+        }).collect(Collectors.toList());
+        if(addList.size()>0){
+            sysUserRoleService.saveBatch(addList);
+        }
+        return false;
     }
 }

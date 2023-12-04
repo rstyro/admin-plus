@@ -91,6 +91,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //获取所有树形菜单
         List<SysMenu> allMenuTreeList = sysMenuService.getAllMenuList();
         List<String> userRoleList = getUserRoleList(userId);
+        // 得到用户有权限的菜单
         List<Long> menuList = Optional.ofNullable(userRoleList)
                 .filter(i -> !i.isEmpty())
                 .map(list -> sysMenuRoleService.list(new LambdaQueryWrapper<SysRoleMenu>()
@@ -99,7 +100,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                         .map(SysRoleMenu::getMenuId)
                         .collect(Collectors.toList()))
                 .orElse(new ArrayList<>());
-        // 遍历全菜单，过滤用户有权限的菜单
+        // 遍历全菜单，过滤用户有权限的菜单，设置hasPermit字段
         checkPermit(allMenuTreeList, menuList, userId);
         return allMenuTreeList;
     }
@@ -114,6 +115,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
+    /**
+     * 只返回用户拥有权限的菜单
+     * @param userId
+     * @return
+     */
     @Override
     public List<TabsVo> getTabMenuList(Long userId) {
         List<SysMenu> userMenuList = getUserMenuList(StpUtil.getLoginId(0l));

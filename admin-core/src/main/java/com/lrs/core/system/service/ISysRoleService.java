@@ -24,4 +24,6 @@ public interface ISysRoleService extends IService<SysRole> {
     boolean edit(SysRole item);
     boolean del(Long id);
     boolean batchDel(List<Long> ids);
+    List<SysRole> getUserRoleList(Long userId);
+    boolean editUserRole(SysRoleDto dto);
 }

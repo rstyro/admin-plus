@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -8,17 +9,18 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>用户列表</title>
     <!-- element-ui 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+          th:href="@{/static/element-ui/index.css}">
     <style>
-        .container{
+        .container {
             padding: 5px;
         }
 
-        .container .search-box{
+        .container .search-box {
             margin-bottom: 20px;
         }
 
-        .container .content-header{
+        .container .content-header {
             margin-bottom: 10px;
         }
 
@@ -50,7 +52,8 @@
                 </el-col>
                 <el-col :span="11" :offset="2">
                     <div class="content-header-right">
-                        <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
+                        <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search"
+                                   circle></el-button>
                     </div>
                 </el-col>
             </el-row>
@@ -83,10 +86,17 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
+                        <el-tooltip class="item" effect="dark" content="编辑用户" placement="top-start">
+                            <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini" circle></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="给用户赋予角色" placement="top-start">
+                            <el-button @click="showRoleDialog(scope.row)" type="success" icon="el-icon-s-custom" size="mini" circle></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除用户" placement="top-start">
+                            <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger"
+                                   icon="el-icon-delete" size="mini"
                                    circle></el-button>
-                        <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
-                                   circle></el-button>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>
@@ -157,6 +167,31 @@
         </div>
     </el-dialog>
 
+
+    <!-- 授权模态框 -->
+    <el-dialog title="授权" :visible.sync="roleDialogVisible">
+        <el-form :model="userRoleData">
+            <el-form-item label="ID" :label-width="formLabelWidth" style="display: none">
+                <el-input v-model="userRoleData.userId" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="可选角色:" :label-width="formLabelWidth">
+                <el-checkbox-group v-model="userRoleData.roleIdList">
+                    <ul>
+                        <li v-for="role in roleData">
+                            <el-tooltip class="item" effect="dark" :content="role.remark" placement="top-start">
+                                <el-checkbox :label="role.id" :key="role.id">{{role.roleName}}</el-checkbox>
+                            </el-tooltip>
+                        </li>
+                    </ul>
+                </el-checkbox-group>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="grantPermission">授权</el-button>
+        </div>
+    </el-dialog>
+
 </div>
 
 <!-- element-ui -->
@@ -175,8 +210,10 @@
                     batchDelUrl: ctx + 'system/user/batchDel',
                     addUrl: ctx + 'system/user/add',
                     editUrl: ctx + 'system/user/edit',
-                    uploadUrl: ctx+ 'upload/image',
-                    dialogUrl:'',
+                    uploadUrl: ctx + 'upload/image',
+                    useRoleUrl: ctx + 'system/role/getUserRole?userId=',
+                    grantPermissionUrl: ctx + 'system/role/editUserRole',
+                    dialogUrl: '',
                     tableData: [],
                     multipleSelection: [],
                     formDto: {
@@ -192,6 +229,7 @@
                         pagerCount: 9, //页码按钮的数量
                     },
                     addDialogVisible: false,
+                    roleDialogVisible: false,
                     itemData: {},
                     dialogTitle: '新增',
                     formLabelWidth: '100px',
@@ -219,8 +257,16 @@
                                 picker.$emit('pick', date);
                             }
                         }]
-                    }
-
+                    },
+                    roleData: [{
+                        id: 1,
+                        roleName: "t1",
+                        remark: ''
+                    }],
+                    userRoleData: {
+                        userId: 0,
+                        roleIdList: []
+                    },
                 }
             },
             methods: {
@@ -254,12 +300,12 @@
                 },
                 handleSizeChange(val) {
                     console.log(`每页 ${val} 条`);
-                    this.pageDto.pageSize=val;
+                    this.pageDto.pageSize = val;
                     this.searchList();
                 },
                 handleCurrentChange(val) {
                     console.log(`当前页: ${val}`);
-                    this.pageDto.currentPage=val;
+                    this.pageDto.currentPage = val;
                     this.searchList();
                 },
                 handleSelectionChange(val) {
@@ -272,15 +318,15 @@
                 add() {
                     this.addDialogVisible = true;
                     this.dialogTitle = '新增';
-                    this.dialogUrl=this.addUrl;
+                    this.dialogUrl = this.addUrl;
                 },
                 edit(row) {
                     this.addDialogVisible = true;
                     this.dialogTitle = '编辑';
                     this.itemData = row;
-                    this.dialogUrl=this.editUrl;
+                    this.dialogUrl = this.editUrl;
                 },
-                saveOrUpdate(){
+                saveOrUpdate() {
                     requestPost(this.dialogUrl, this.itemData);
                 },
                 batchDel() {
@@ -322,10 +368,10 @@
                     });
                 },
                 uploadSuccess(res, file, fileList) {
-                    console.log("res:",res);
-                    if(res.code === 200){
-                        this.itemData.picUrl=res.data;
-                    }else {
+                    console.log("res:", res);
+                    if (res.code === 200) {
+                        this.itemData.picUrl = res.data;
+                    } else {
                         ELEMENT.Message({
                             showClose: true,
                             message: "上传失败，请稍后重试",
@@ -334,9 +380,9 @@
                     }
                 },
                 beforeAvatarUpload(file) {
+                    debugger
                     const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png');
                     const isLt2M = file.size / 1024 / 1024 < 10;
-
                     if (!isJPG) {
                         ELEMENT.Message.error('上传头像图片只能是 JPG/PNG 格式!');
                     }
@@ -344,9 +390,32 @@
                         ELEMENT.Message.error('上传头像图片大小不能超过 2MB!');
                     }
                     return isJPG && isLt2M;
+                }, showRoleDialog(row) {
+                    //赋予用户角色权限
+                    axios.get(this.useRoleUrl + row.id).then(r => {
+                        if (r.data.code === 200) {
+                            this.roleData = r.data.data;
+                            let selectList = this.roleData.filter(i => i.hasRole).map(i => i.id);
+                            this.userRoleData.roleIdList = selectList;
+                        }
+                    }).catch(error => {
+                        console.error("请求失败：", error);
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "请求失败，请稍后重试",
+                            type: 'error'
+                        });
+                    })
+                    this.userRoleData.userId = row.id;
+                    this.roleDialogVisible = true;
+                },
+                grantPermission() {
+                    //赋予用户角色权限
+                    requestPost(this.grantPermissionUrl, this.userRoleData);
                 }
             }, created() {
                 this.searchList();
+
             }
         });
 

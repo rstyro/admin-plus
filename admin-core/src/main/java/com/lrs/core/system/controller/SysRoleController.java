@@ -86,4 +86,21 @@ public class SysRoleController extends BaseController {
     public R batchDel(@RequestBody List<Long> ids) {
         return R.ok(sysRoleService.batchDel(ids));
     }
+
+    /**
+     * 获取用户角色
+     */
+    @GetMapping("/getUserRole")
+    @ResponseBody
+    public R getUserRole(Long userId) {
+        return R.ok(sysRoleService.getUserRoleList(userId));
+    }
+    /**
+     * 编辑用户角色
+     */
+    @PostMapping("/editUserRole")
+    @ResponseBody
+    public R editUserRole(@RequestBody SysRoleDto dto) {
+        return R.ok(sysRoleService.editUserRole(dto));
+    }
 }
