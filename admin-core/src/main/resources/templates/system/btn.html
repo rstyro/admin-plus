@@ -1,16 +1,4 @@
-<#macro gemTH  name>
-	<@compress single_line=true>
-		${r"${item."}${name} }
-	</@compress> 
-</#macro>
-
-<#macro notTran  name>
-	<@compress single_line=true>
-		${r"${"}${name} }
-	</@compress> 
-</#macro>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 
 <head>
@@ -79,13 +67,10 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <#list table.fields as column>
-                    <#if column.comment == ''>
-                        <el-table-column prop="${column.propertyName}" label="${column.propertyName}"></el-table-column>
-                    <#else>
-                        <el-table-column prop="${column.propertyName}" label="${column.comment}"></el-table-column>
-                    </#if>
-                </#list>
+                <el-table-column prop="id" label="ID"></el-table-column>
+                <el-table-column prop="btnKey" label="按钮Key"></el-table-column>
+                <el-table-column prop="remark" label="按钮说明"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
@@ -93,11 +78,11 @@
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑角色" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
-                                       circle></el-button>
+                                   circle></el-button>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" content="删除角色" placement="top-start">
                             <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
-                                       circle></el-button>
+                                   circle></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -124,35 +109,27 @@
 
     <el-dialog :title="dialogTitle" :visible.sync="addDialogVisible">
         <el-form :model="itemData">
+            <el-form-item label="ID" :label-width="formLabelWidth" style="display: none">
+                <el-input v-model="itemData.id" autocomplete="off"></el-input>
+            </el-form-item>
 
-            <#list table.fields as column>
-                <#if column.keyFlag >
-                    <el-form-item label="${column.propertyName}" :label-width="formLabelWidth" style="display: none">
-                        <el-input v-model="itemData.${column.propertyName}" autocomplete="off"></el-input>
-                    </el-form-item>
-                </#if>
-            </#list>
-            <#list table.fields as column>
-                <#if column.propertyName != 'isDeleted' && !column.keyFlag>
+            <el-form-item label="按钮Key" :label-width="formLabelWidth">
+                <el-input v-model="itemData.btnKey" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth">
+                <el-input v-model="itemData.remark" type="textarea" :rows="2" autocomplete="off"></el-input>
+            </el-form-item>
 
-                    <#if column.propertyName?contains('Time')>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" :label-width="formLabelWidth">
-                            <el-date-picker
-                                    v-model="itemData.${column.propertyName}"
-                                    align="right"
-                                    type="datetime"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
-                                    placeholder="选择日期"
-                                    :picker-options="pickerOptions">
-                            </el-date-picker>
-                        </el-form-item>
-                    <#else>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.${column.propertyName}" autocomplete="off" placeholder="请输入<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" ></el-input>
-                        </el-form-item>
-                    </#if>
-                </#if>
-            </#list>
+            <el-form-item label="创建时间" :label-width="formLabelWidth">
+                <el-date-picker
+                        v-model="itemData.createTime"
+                        align="right"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="saveOrUpdate">{{dialogTitle}}</el-button>
@@ -160,6 +137,7 @@
     </el-dialog>
 
 </div>
+
 <!-- element-ui -->
 <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
@@ -171,11 +149,11 @@
             el: '#app',
             data: function () {
                 return {
-                    listUrl: ctx + '${package.ModuleName}/${table.entityPath}/list',
-                    delUrl: ctx + '${package.ModuleName}/${table.entityPath}/del?id=',
-                    batchDelUrl: ctx + '${package.ModuleName}/${table.entityPath}/batchDel',
-                    addUrl: ctx + '${package.ModuleName}/${table.entityPath}/add',
-                    editUrl: ctx + '${package.ModuleName}/${table.entityPath}/edit',
+                    listUrl: ctx + 'system/btn/list',
+                    delUrl: ctx + 'system/btn/del?id=',
+                    batchDelUrl: ctx + 'system/btn/batchDel',
+                    addUrl: ctx + 'system/btn/add',
+                    editUrl: ctx + 'system/btn/edit',
                     dialogUrl:'',
                     tableData: [],
                     multipleSelection: [],

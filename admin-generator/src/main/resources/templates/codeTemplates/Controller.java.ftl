@@ -1,17 +1,16 @@
 package com.lrs.core.${package.ModuleName}.controller;
-import com.lrs.common.annotation.Permission;
-import com.lrs.common.annotation.PermissionType;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lrs.common.vo.ContextUtil;
+import com.lrs.common.vo.R;
+import com.lrs.core.base.BaseController;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.${package.ModuleName}.entity.${table.entityName};
 import com.lrs.core.${package.ModuleName}.service.${table.serviceName};
-import com.lrs.common.dto.PageDTO;
-import com.lrs.core.base.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -26,46 +25,63 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/${package.ModuleName}/${table.entityPath}")
 public class ${table.controllerName} extends BaseController {
 
-    private final static String qxurl = "${package.ModuleName}/${table.entityPath}/list";
-
-    @Autowired
+    @Resource
     private ${table.serviceName} ${table.entityPath}Service;
 
-    @GetMapping("/list")
-    public String list(Model model, PageDTO dto) throws Exception {
-        System.out.println(dto);
-        model.addAttribute("list",${table.entityPath}Service.getList(dto));
-        model.addAttribute("keyword",dto.getKeyword());
+
+    /**
+    * 页面跳转
+    */
+    @GetMapping("/page")
+    public String page() {
         return "page/${package.ModuleName}/${table.entityPath}_list";
     }
 
-    @PostMapping(value="/add")
+    /**
+    * 列表页
+    */
+    @PostMapping("/list")
     @ResponseBody
-    @Permission(url = qxurl,type = PermissionType.ADD)
-    public Object add(${table.entityName} item) throws Exception {
-        item.setId(null);
-        return ${table.entityPath}Service.add(item,this.getAdminUser());
+    public R list(@RequestBody BaseDto dto) {
+    Page<${table.entityName}> menuPage = ${table.entityPath}Service.getPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
+        return R.ok(menuPage);
     }
 
-    @PostMapping(value="/edit")
+    /**
+    * 添加
+    */
+    @PostMapping("/add")
     @ResponseBody
-    @Permission(url = qxurl,type = PermissionType.EDIT)
-    public Object edit(${table.entityName} item) throws Exception {
-        return ${table.entityPath}Service.edit(item,this.getAdminUser());
+    public R add(@RequestBody ${table.entityName} item) {
+        return R.ok(${table.entityPath}Service.add(item));
     }
 
-    @PostMapping(value="/del")
+
+    /**
+    * 编辑
+    */
+    @PostMapping("/edit")
     @ResponseBody
-    @Permission(url = qxurl,type = PermissionType.DEL)
-    public Object del(Long id) throws Exception {
-        return ${table.entityPath}Service.del(id,this.getAdminUser());
+    public R edit(@RequestBody ${table.entityName} item) {
+        return R.ok(${table.entityPath}Service.edit(item));
     }
 
-    @GetMapping(value="/query")
+    /**
+    * 删除
+    */
+    @GetMapping("/del")
     @ResponseBody
-    @Permission(url = qxurl,type = PermissionType.QUERY)
-    public Object query(Long id) throws Exception {
-        return ${table.entityPath}Service.getDetail(id);
+    public R del(Long id) {
+        return R.ok(${table.entityPath}Service.del(id));
+    }
+
+    /**
+    * 批量删除
+    */
+    @PostMapping("/batchDel")
+    @ResponseBody
+    public R batchDel(@RequestBody List<Long> ids) {
+        return R.ok(${table.entityPath}Service.batchDel(ids));
     }
 
 }

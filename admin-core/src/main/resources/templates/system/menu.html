@@ -130,33 +130,34 @@
                 <el-input v-model="itemData.parentId" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="菜单名称" :label-width="formLabelWidth">
-                <el-input v-model="itemData.menuName" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="菜单地址" :label-width="formLabelWidth">
-                <el-input v-model="itemData.menuUrl" autocomplete="off"></el-input>
-            </el-form-item>
             <el-form-item label="菜单类型" :label-width="formLabelWidth">
-<!--                <el-select v-model="itemData.menuType" placeholder="请选择">-->
-<!--                    <el-option label="菜单" :value="1"></el-option>-->
-<!--                    <el-option label="按钮" :value="2"></el-option>-->
-<!--                </el-select>-->
-
                 <el-radio-group v-model="itemData.menuType">
                     <el-radio :label="0">目录</el-radio>
                     <el-radio :label="1">菜单</el-radio>
                     <el-radio :label="2">按钮</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="权限KEY" :label-width="formLabelWidth">
+
+            <el-form-item label="菜单名称" :label-width="formLabelWidth">
+                <el-input v-model="itemData.menuName" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item v-show="itemData.menuType!=0" label="菜单地址" :label-width="formLabelWidth">
+                <el-input v-model="itemData.menuUrl" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item v-show="itemData.menuType!=0" label="权限KEY" :label-width="formLabelWidth">
                 <el-input v-model="itemData.permit" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="排序" :label-width="formLabelWidth">
+
+            <el-form-item v-show="itemData.menuType==1" label="排序" :label-width="formLabelWidth">
                 <el-input v-model="itemData.sortNum" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="菜单icon" :label-width="formLabelWidth">
+
+            <el-form-item v-show="itemData.menuType!=2" label="菜单icon" :label-width="formLabelWidth">
                 <el-input v-model="itemData.icon" autocomplete="off"></el-input>
             </el-form-item>
+
             <el-form-item label="创建时间" :label-width="formLabelWidth">
                 <el-date-picker
                         v-model="itemData.createTime"
@@ -167,7 +168,8 @@
                         :picker-options="pickerOptions">
                 </el-date-picker>
             </el-form-item>
-            <el-form-item label="添加按钮权限" :label-width="formLabelWidth">
+
+            <el-form-item v-if="itemData.menuType==1" label="添加按钮权限" :label-width="formLabelWidth">
                 <el-radio-group v-model="itemData.addBtn">
                     <el-radio :label="0">不添加按钮</el-radio>
                     <el-radio :label="1">添加按钮权限</el-radio>
@@ -295,11 +297,13 @@
                 this.addDialogVisible = true;
                 this.dialogTitle = '新增';
                 this.dialogUrl=this.addUrl;
+                this.itemData={};
             },
             addSub(row){
                 this.addDialogVisible = true;
                 this.dialogTitle = '新增';
                 this.dialogUrl=this.addUrl;
+                this.itemData={};
                 this.itemData.parentId=row.id;
             },
             edit(row) {

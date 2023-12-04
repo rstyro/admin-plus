@@ -1,19 +1,17 @@
 package ${package.ServiceImpl};
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lrs.common.constant.Result;
-import com.lrs.common.dto.PageDTO;
-import org.springframework.util.StringUtils;
-import com.lrs.core.admin.entity.User;
-import java.time.LocalDateTime;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lrs.core.system.dto.BaseDto;
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
-import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 
 /**
@@ -27,53 +25,35 @@ import org.springframework.stereotype.Service;
 @Service
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName}{
 
+
     @Override
-    public Result getList(PageDTO dto) throws Exception {
-        IPage<${entity}> page = new Page<>();
-        if(dto.getPageNo() != null){
-            page.setCurrent(dto.getPageNo());
+    public Page<${entity}> getPage(Page page, BaseDto dto) {
+        LambdaQueryWrapper<${entity}> queryWrapper = new LambdaQueryWrapper<>();
+        if (!ObjectUtils.isEmpty(dto.getKeyword())) {
+            queryWrapper.like(${entity}::getRemark, dto.getKeyword());
         }
-        if(dto.getPageSize() != null){
-            page.setSize(dto.getPageSize());
+        queryWrapper.orderByAsc(${entity}::getId);
+            return page(page, queryWrapper);
         }
-        QueryWrapper<${entity}> queryWrapper = new QueryWrapper();
-    //        if(!StringUtils.isEmpty(dto.getKeyword())){
-    //            queryWrapper.lambda()
-    //                    .like(${entity}::getAuther,dto.getKeyword())
-    //                    .like(${entity}::getContent,dto.getKeyword())
-    //                    .like(${entity}::getTitle,dto.getKeyword());
-    //        }
-        IPage<${entity}> iPage = this.page(page, queryWrapper);
-        return Result.ok(iPage);
-    }
 
-    @Override
-    public Result add(${entity} item, User adminUser) throws Exception {
-        if(item.getCreateTime() == null){
-            item.setCreateBy(adminUser.getUserId());
-            item.setCreateTime(LocalDateTime.now());
+        @Override
+        public boolean add(${entity} item) {
+            return save(item);
         }
-        this.save(item);
-        return Result.ok();
-    }
 
-    @Override
-    public Result edit(${entity} item, User adminUser) throws Exception {
-        item.setModifyBy(adminUser.getUserId());
-        item.setModifyTime(LocalDateTime.now());
-        this.updateById(item);
-       return Result.ok();
-    }
+        @Override
+        public boolean edit(${entity} item) {
+            return updateById(item);
+        }
 
-    @Override
-    public Result del(Long id, User adminUser) throws Exception {
-        this.removeById(id);
-        return Result.ok();
-    }
+        @Override
+        public boolean del(Long id) {
+            return removeById(id);
+        }
 
-    @Override
-    public Result getDetail(Long id) throws Exception {
-    ${entity} item = this.getOne(new QueryWrapper<${entity}>().lambda().eq(${entity}::getId,id));
-         return Result.ok(item);
-    }
+        @Override
+        public boolean batchDel(List<Long> ids) {
+            return removeBatchByIds(ids);
+         }
+
 }
