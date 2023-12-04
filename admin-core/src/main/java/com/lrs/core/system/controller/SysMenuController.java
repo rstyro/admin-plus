@@ -1,6 +1,7 @@
 package com.lrs.core.system.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
@@ -33,6 +34,7 @@ public class SysMenuController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission("system:menu:list")
     @GetMapping("/page")
     public String page(){
         return "system/menu";
@@ -41,6 +43,7 @@ public class SysMenuController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission("system:menu:list")
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody MenuDto dto){
@@ -60,6 +63,7 @@ public class SysMenuController extends BaseController {
     /**
      * 添加
      */
+    @SaCheckPermission("system:menu:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody SysMenu sysMenu){
@@ -68,6 +72,7 @@ public class SysMenuController extends BaseController {
     /**
      * 编辑
      */
+    @SaCheckPermission("system:menu:list:edit")
     @PostMapping("/edit")
     @ResponseBody
     public R edit(@RequestBody SysMenu sysMenu){
@@ -76,6 +81,7 @@ public class SysMenuController extends BaseController {
     /**
      * 删除
      */
+    @SaCheckPermission("system:menu:list:del")
     @GetMapping("/del")
     @ResponseBody
     public R del(Long id){
@@ -85,6 +91,7 @@ public class SysMenuController extends BaseController {
     /**
      * 批量删除
      */
+    @SaCheckPermission("system:menu:list:del")
     @PostMapping("/batchDel")
     @ResponseBody
     public R batchDel(@RequestBody List<Long> ids){

@@ -1,5 +1,6 @@
 package com.lrs.core.system.service.impl;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -22,14 +23,12 @@ import com.lrs.core.system.service.ISysMenuService;
 import com.lrs.core.system.service.ISysUserRoleService;
 import com.lrs.core.system.service.ISysUserService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,12 +59,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public List<String> getUserPermissionList(Long userId) {
-        List<String> permissionList = getUserMenuList(userId)
-                .stream()
-                .map(SysMenu::getPermit)
-                .collect(Collectors.toList());
-        return permissionList;
+        return buildPermit(getUserMenuList(userId));
     }
+
+    public List<String> buildPermit(List<SysMenu> sysMenus){
+        Set<String> allPermission = new HashSet<>();
+        for (SysMenu sysMenu : sysMenus) {
+            if(sysMenu.isHasPermit()){
+                allPermission.add(sysMenu.getPermit());
+                if(!CollectionUtils.isEmpty(sysMenu.getChild()) && sysMenu.isHasPermit()){
+                    allPermission.addAll(buildPermit(sysMenu.getChild()));
+                }
+            }
+        }
+        return new ArrayList<>(allPermission);
+    }
+
+
 
     /**
      * 获取用户的角色ID列表
@@ -133,7 +143,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Page<SysUser> getUserPage(Page page, SysUserDto dto) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         // 排除密码字段和盐字段
-        queryWrapper.select(SysUser.class,i->!i.getColumn().equals("password") || i.getColumn().equals("salt"));
+        queryWrapper.select(SysUser.class,i->!i.getColumn().equals("password") && !i.getColumn().equals("salt"));
         if (!ObjectUtils.isEmpty(dto.getKeyword())) {
             queryWrapper.like(SysUser::getNickName, dto.getKeyword());
             queryWrapper.or().like(SysUser::getUsername, dto.getKeyword());
@@ -179,20 +189,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!dto.getCode().equalsIgnoreCase(codeStr)) {
             throw new ApiException(ApiResultEnum.SYSTEM_CODE_ERROR);
         }
-        SysUser one = this.getOne(new LambdaQueryWrapper<SysUser>()
+        SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, dto.getUsername()));
-        Optional.ofNullable(one).orElseThrow(() -> new ApiException(ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND));
-        String salt = one.getSalt();
+        Optional.ofNullable(sysUser).orElseThrow(() -> new ApiException(ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND));
+        String salt = sysUser.getSalt();
         String pwd = SecureUtil.md5(dto.getPassword() + salt);
-        if (!pwd.equals(one.getPassword())) {
+        if (!pwd.equals(sysUser.getPassword())) {
             throw new ApiException(ApiResultEnum.SYSTEM_PASSWORD_ERROR);
         }
         // 登录成功
-        StpUtil.login(one.getId());
+        StpUtil.login(sysUser.getId());
+        SaSession session = StpUtil.getSession();
+        session.set(Const.SESSION_USER,sysUser);
         // 数据脱敏
-        one.setPassword("****");
-        one.setSalt("****");
-        return one;
+        sysUser.setPassword("****");
+        sysUser.setSalt("****");
+        return sysUser;
     }
 
     /**

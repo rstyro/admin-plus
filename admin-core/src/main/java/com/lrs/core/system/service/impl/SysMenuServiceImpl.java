@@ -5,13 +5,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.core.system.SystemConst;
 import com.lrs.core.system.dto.MenuDto;
+import com.lrs.core.system.entity.SysBtn;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.mapper.SysMenuMapper;
+import com.lrs.core.system.service.ISysBtnService;
 import com.lrs.core.system.service.ISysMenuService;
 import com.lrs.core.system.vo.RoleMenuTreeVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +29,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
+
+    @Resource
+    private ISysBtnService sysBtnService;
 
     @Override
     public List<SysMenu> getMenuListByParentId(Long parentId) {
@@ -73,16 +80,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public boolean add(SysMenu sysMenu) {
         boolean save = save(sysMenu);
-        if (sysMenu.isAddBtn() && sysMenu.getMenuType().equals(SystemConst.MenuType.MENU)) {
-            //todo 添加该菜单的公用按钮权限
-
-        }
+        addMenuBtn(sysMenu);
         return save;
     }
 
     @Override
     public boolean edit(SysMenu sysMenu) {
+        addMenuBtn(sysMenu);
         return updateById(sysMenu);
+    }
+
+    public void addMenuBtn(SysMenu sysMenu){
+        if (sysMenu.isAddBtn() && sysMenu.getMenuType().equals(SystemConst.MenuType.MENU)) {
+            //todo 添加该菜单的公用按钮权限
+            List<SysBtn> list = sysBtnService.list();
+            List<String> btnNameList = this.list(new LambdaQueryWrapper<SysMenu>()
+                    .eq(SysMenu::getParentId, sysMenu.getId()))
+                    .stream()
+                    .map(SysMenu::getMenuName)
+                    .collect(Collectors.toList());
+
+            List<SysBtn> notExistList = list.stream().filter(i -> !btnNameList.contains(i.getBtnKey())).collect(Collectors.toList());
+            List<SysMenu> addList = notExistList.stream().map(i -> {
+                SysMenu btnMenu = new SysMenu();
+                btnMenu.setMenuName(i.getBtnName());
+                btnMenu.setMenuType(SystemConst.MenuType.BTN);
+                btnMenu.setParentId(sysMenu.getId());
+                btnMenu.setPermit(sysMenu.getPermit() + ":" + i.getBtnKey());
+                return btnMenu;
+            }).collect(Collectors.toList());
+            if(addList.size()>0){
+                this.saveBatch(addList);
+            }
+        }
     }
 
     @Override

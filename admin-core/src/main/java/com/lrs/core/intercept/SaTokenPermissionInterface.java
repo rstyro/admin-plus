@@ -18,7 +18,13 @@ public class SaTokenPermissionInterface implements StpInterface {
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return sysUserService.getUserPermissionList((Long) loginId);
+        Long userId = Long.parseLong((String) loginId);
+        List<String> userPermissionList = sysUserService.getUserPermissionList(userId);
+        // 如果userId=1代表admin用户，给他添加admin权限
+        if(userId==1){
+            userPermissionList.add("admin");
+        }
+        return userPermissionList;
     }
 
     @Override

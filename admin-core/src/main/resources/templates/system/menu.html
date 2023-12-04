@@ -50,14 +50,12 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="system:menu:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
+                    <el-button sa:hasPermissionOr="system:menu:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
                 </el-col>
-                <el-col :span="11" :offset="2">
                     <div class="content-header-right">
                         <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
                     </div>
-                </el-col>
             </el-row>
 
         </section>
@@ -73,7 +71,7 @@
                     :tree-props="{children: 'child'}"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="菜单ID"></el-table-column>
+                <el-table-column prop="id" label="菜单ID" ></el-table-column>
                 <el-table-column prop="menuName" label="菜单名称"></el-table-column>
                 <el-table-column prop="menuUrl" label="菜单地址" sortable width="180"></el-table-column>
                 <el-table-column prop="menuType" label="菜单类型"></el-table-column>
@@ -86,15 +84,15 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="添加子菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:add,admin" class="item" effect="dark" content="添加子菜单" placement="top-start">
                             <el-button v-if="scope.row.menuType!=2" @click="addSub(scope.row)" type="success"
                                    icon="el-icon-plus" size="mini" circle></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="编辑菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:edit,admin" class="item" effect="dark" content="编辑菜单" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
                                    circle></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:del,admin" class="item" effect="dark" content="删除菜单" placement="top-start">
                             <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
                                    circle></el-button>
                         </el-tooltip>
@@ -142,7 +140,7 @@
                 <el-input v-model="itemData.menuName" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item v-show="itemData.menuType!=0" label="菜单地址" :label-width="formLabelWidth">
+            <el-form-item v-show="itemData.menuType==1" label="菜单地址" :label-width="formLabelWidth">
                 <el-input v-model="itemData.menuUrl" autocomplete="off"></el-input>
             </el-form-item>
 

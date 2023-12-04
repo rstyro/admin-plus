@@ -1,6 +1,7 @@
 package com.lrs.core.system.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
@@ -58,7 +59,9 @@ public class LoginController {
     @SuppressWarnings("unchecked")
     @RequestMapping("/index")
     public String index(Model model){
-        model.addAttribute("adminName",commonConfig.getName());
+        SysUser sysUser = Convert.convert(SysUser.class,StpUtil.getSession().get(Const.SESSION_USER));
+        model.addAttribute("adminName",
+                Optional.ofNullable(sysUser).map(sysUser1 -> sysUser1.getNickName()).orElse(commonConfig.getName()));
         model.addAttribute("systemName",commonConfig.getSystemName());
         // tabs菜单
         List<TabsVo> tabMenuList = sysUserService.getTabMenuList(StpUtil.getLoginId(0l));

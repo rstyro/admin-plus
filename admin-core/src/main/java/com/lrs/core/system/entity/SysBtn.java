@@ -37,6 +37,11 @@ public class SysBtn implements Serializable {
     private String btnKey;
 
     /**
+     * 按钮名称
+     */
+    private String btnName;
+
+    /**
      * 备注
      */
     private String remark;
