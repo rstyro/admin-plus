@@ -69,7 +69,7 @@
         <h3>您所用的浏览器未启用脚本，系统无法正常工作！</h3>
     </div>
 </noscript>
-<div class="wrapper">
+<div class="wrapper" id="app">
 
     <header class="main-header">
         <!-- Logo -->
@@ -105,23 +105,23 @@
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
                             <!-- User image -->
-                            <li class="user-header" style="text-align: center; margin-bottom: 20px">
-                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle"
-                                     alt="User Image">
-                            </li>
+<!--                            <li class="user-header" style="text-align: center; margin-bottom: 20px">-->
+<!--                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle"-->
+<!--                                     alt="User Image">-->
+<!--                            </li>-->
                             <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="text-center">
-                                        <a href="#" id="icon">ICON</a>
-                                    </div>
+<!--                            <li class="user-body">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-center">-->
+<!--                                        <a href="#" id="icon">ICON</a>-->
+<!--                                    </div>-->
 
-                                </div>
-                            </li>
+<!--                                </div>-->
+<!--                            </li>-->
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
+                                    <a href="#" @click="addDialogVisible = true" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="#" id="logout" class="btn btn-default btn-flat"><i
@@ -163,7 +163,7 @@
             <!-- 用户头像 -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;"
+                    <img th:src="${avatar}" src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;"
                          class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
@@ -256,7 +256,26 @@
     <!-- Add the sidebar's background. This div must be placed
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
+
+    <el-dialog title="修改密码" :visible.sync="addDialogVisible">
+        <el-form :model="itemData">
+            <el-form-item label="ID" :label-width="formLabelWidth" style="display: none">
+                <el-input v-model="itemData.id" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="新密码" :label-width="formLabelWidth">
+                <el-input show-password v-model="itemData.password" autocomplete="off"></el-input>
+            </el-form-item>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="editPwd">修改</el-button>
+        </div>
+    </el-dialog>
+
 </div>
+
+
 
 <!-- jQuery -->
 <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js" th:src="@{/static/bootstrap/jquery.min.js}"></script>
@@ -276,6 +295,7 @@
 <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
+<script th:src="@{/static/vue/api.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
     let ctx = [[@{/}]];
@@ -391,7 +411,29 @@
         });
 
 </script>
-
+<script type="text/javascript" th:inline="javascript">
+    let userId=[[userId]];
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                editUrl: ctx + 'system/user/edit',
+                itemData:{
+                    id:[[${userId}]]
+                },
+                addDialogVisible:false,
+                formLabelWidth:"100px"
+            }
+        },
+        methods: {
+            editPwd(){
+                requestPost(this.editUrl, this.itemData);
+            }
+        },
+        created(){
+        }
+    });
+</script>
 </body>
 
 </html>

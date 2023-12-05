@@ -163,14 +163,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public boolean edit(SysUser item) {
-        item.setPassword(null);
+        SysUser sysUser = Optional.ofNullable(getById(item.getId()))
+                .orElseThrow(()->new ApiException(ApiResultEnum.SYSTEM_USER_NOT_FOUD));
         // 密码盐从初始化后，不可更改
         item.setSalt(null);
         if (!ObjectUtils.isEmpty(item.getPassword())) {
-            item.setPassword(SecureUtil.md5(item.getPassword() + item.getSalt()));
+            item.setPassword(SecureUtil.md5(item.getPassword() + sysUser.getSalt()));
         }
-
-        return updateById(item);
+        boolean update = updateById(item);
+        if(update){
+            // 刷新用户session
+            StpUtil.getSession().set(Const.SESSION_USER,getById(item.getId()));
+        }
+        return update;
     }
 
     @Override

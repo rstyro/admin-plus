@@ -131,7 +131,7 @@
                 <el-input v-model="itemData.username" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth">
-                <el-input v-model="itemData.password" autocomplete="off"></el-input>
+                <el-input show-password v-model="itemData.password" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="头像" :label-width="formLabelWidth">
                 <el-input v-model="itemData.picUrl" autocomplete="off"></el-input>
@@ -378,7 +378,6 @@
                     }
                 },
                 beforeAvatarUpload(file) {
-                    debugger
                     const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png');
                     const isLt2M = file.size / 1024 / 1024 < 10;
                     if (!isJPG) {

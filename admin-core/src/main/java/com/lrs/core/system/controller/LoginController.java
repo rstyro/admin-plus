@@ -63,6 +63,8 @@ public class LoginController {
         model.addAttribute("adminName",
                 Optional.ofNullable(sysUser).map(sysUser1 -> sysUser1.getNickName()).orElse(commonConfig.getName()));
         model.addAttribute("systemName",commonConfig.getSystemName());
+        model.addAttribute("avatar",sysUser.getPicUrl());
+        model.addAttribute("userId",sysUser.getId());
         // tabs菜单
         List<TabsVo> tabMenuList = sysUserService.getTabMenuList(StpUtil.getLoginId(0l));
         model.addAttribute("tabs",tabMenuList);

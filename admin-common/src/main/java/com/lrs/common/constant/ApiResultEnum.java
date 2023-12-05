@@ -14,6 +14,7 @@ public enum ApiResultEnum {
 	SYSTEM_CODE_ERROR(1000,"验证码错误"),
 	SYSTEM_ACCOUNT_NOT_FOUND(1001,"账号或密码错误"),
 	SYSTEM_PASSWORD_ERROR(1002,"账号或密码错误"),
+	SYSTEM_USER_NOT_FOUD(1003,"用户找不到"),
 
 	;
 
