@@ -11,15 +11,15 @@ import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.vo.TabsVo;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.dto.LoginDto;
-import com.lrs.core.system.dto.SysUserDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.entity.SysRoleMenu;
 import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.entity.SysUserRole;
 import com.lrs.core.system.mapper.SysUserMapper;
-import com.lrs.core.system.service.ISysRoleMenuService;
 import com.lrs.core.system.service.ISysMenuService;
+import com.lrs.core.system.service.ISysRoleMenuService;
 import com.lrs.core.system.service.ISysUserRoleService;
 import com.lrs.core.system.service.ISysUserService;
 import org.springframework.stereotype.Service;
@@ -140,7 +140,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Page<SysUser> getUserPage(Page page, SysUserDto dto) {
+    public Page<SysUser> getUserPage(Page page, BaseDto dto) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         // 排除密码字段和盐字段
         queryWrapper.select(SysUser.class,i->!i.getColumn().equals("password") && !i.getColumn().equals("salt"));
@@ -164,7 +164,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public boolean edit(SysUser item) {
         SysUser sysUser = Optional.ofNullable(getById(item.getId()))
-                .orElseThrow(()->new ApiException(ApiResultEnum.SYSTEM_USER_NOT_FOUD));
+                .orElseThrow(()->new ApiException(ApiResultEnum.SYSTEM_USER_NOT_FOUND));
         // 密码盐从初始化后，不可更改
         item.setSalt(null);
         if (!ObjectUtils.isEmpty(item.getPassword())) {
@@ -203,7 +203,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new ApiException(ApiResultEnum.SYSTEM_PASSWORD_ERROR);
         }
         // 登录成功
-        StpUtil.login(sysUser.getId());
+        StpUtil.login(sysUser.getId(),dto.isRememberMe());
         SaSession session = StpUtil.getSession();
         session.set(Const.SESSION_USER,sysUser);
         // 数据脱敏

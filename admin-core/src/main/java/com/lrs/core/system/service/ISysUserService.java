@@ -3,8 +3,8 @@ package com.lrs.core.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lrs.common.vo.TabsVo;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.dto.LoginDto;
-import com.lrs.core.system.dto.SysUserDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.entity.SysUser;
 
@@ -31,7 +31,7 @@ public interface ISysUserService extends IService<SysUser> {
     List<TabsVo> getTabMenuList(Long userId);
 
     // 分页获取用户列表
-    Page<SysUser> getUserPage(Page page, SysUserDto menuDto);
+    Page<SysUser> getUserPage(Page page, BaseDto menuDto);
     boolean add(SysUser item);
     boolean edit(SysUser item);
     boolean del(Long id);

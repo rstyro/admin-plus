@@ -57,14 +57,12 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
+                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
                 </el-col>
-                <el-col :span="11" :offset="2">
-                    <div class="content-header-right">
-                        <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
-                    </div>
-                </el-col>
+                <div class="content-header-right">
+                    <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
+                </div>
             </el-row>
 
         </section>
@@ -91,11 +89,11 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="编辑角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
                                        circle></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
                             <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
                                        circle></el-button>
                         </el-tooltip>

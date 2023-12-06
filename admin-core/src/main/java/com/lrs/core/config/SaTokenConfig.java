@@ -1,4 +1,4 @@
-package com.lrs.core.intercept;
+package com.lrs.core.config;
 
 import cn.dev33.satoken.thymeleaf.dialect.SaTokenDialect;
 import org.springframework.context.annotation.Bean;

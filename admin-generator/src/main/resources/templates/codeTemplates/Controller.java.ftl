@@ -1,5 +1,7 @@
 package com.lrs.core.${package.ModuleName}.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
@@ -32,6 +34,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 页面跳转
     */
+    @SaCheckPermission(value = {"${package.ModuleName}:${table.entityPath}:list","${package.ModuleName}:${table.entityPath}:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page() {
         return "page/${package.ModuleName}/${table.entityPath}_list";
@@ -40,6 +43,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 列表页
     */
+    @SaCheckPermission(value = {"${package.ModuleName}:${table.entityPath}:list","${package.ModuleName}:${table.entityPath}:list:view"},mode = SaMode.OR)
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody BaseDto dto) {
@@ -50,6 +54,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 添加
     */
+    @SaCheckPermission("${package.ModuleName}:${table.entityPath}:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody ${table.entityName} item) {
@@ -60,6 +65,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 编辑
     */
+    @SaCheckPermission("${package.ModuleName}:${table.entityPath}:list:edit")
     @PostMapping("/edit")
     @ResponseBody
     public R edit(@RequestBody ${table.entityName} item) {
@@ -69,6 +75,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 删除
     */
+    @SaCheckPermission("${package.ModuleName}:${table.entityPath}:list:del")
     @GetMapping("/del")
     @ResponseBody
     public R del(Long id) {
@@ -78,6 +85,7 @@ public class ${table.controllerName} extends BaseController {
     /**
     * 批量删除
     */
+    @SaCheckPermission("${package.ModuleName}:${table.entityPath}:list:del")
     @PostMapping("/batchDel")
     @ResponseBody
     public R batchDel(@RequestBody List<Long> ids) {

@@ -1,5 +1,6 @@
 package com.lrs.core.exception;
 
+import cn.dev33.satoken.exception.NotPermissionException;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.vo.R;
 import com.lrs.common.exception.ApiException;
@@ -40,7 +41,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public R HttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
 		log.error(ex.getMessage(),ex);
-		return R.error(ApiResultEnum.ERROR_MOTHODNOTSUPPORT);
+		return R.error(ApiResultEnum.ERROR_REQUEST_ERR);
 	}
 
 
@@ -53,7 +54,13 @@ public class RestExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	public R RuntimeException(RuntimeException ex){
 		log.error(ex.getMessage(),ex);
-		return R.error(ApiResultEnum.ERROR_RUNTION);
+		return R.error(ApiResultEnum.ERROR_RUN);
+	}
+
+	@ExceptionHandler(NotPermissionException.class)
+	public R notPermission(NotPermissionException ex){
+		log.error(ex.getMessage(),ex);
+		return R.error(ApiResultEnum.NO_AUTH);
 	}
 
 	@ExceptionHandler(Exception.class)

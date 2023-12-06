@@ -27,37 +27,54 @@
         html {
             overflow: hidden;
         }
-
-        .systitle {
-            font-size: 1.4em;
-            font-weight: bold;
-            cursor: default;
-        }
-
-        .systitle:hover {
-            cursor: default;
-            background-color: transparent;
-        }
-
         .subsystitle {
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
         }
-
         .menu_tab {
             padding: 0 10px !important;
         }
-
         .page_tab_title {
             padding-right: 3px;
             font-size: 1.1em;
         }
-
         .page_tab_close {
             cursor: pointer;
             font-size: 1.3em;
             font-weight: bold;
+        }
+
+        /**
+            头像动画
+         */
+        .image {
+            animation:myRotate 3s infinite linear ;
+            -webkit-animation:myRotate 3s infinite linear ;
+        }
+
+        @-webkit-keyframes myRotate {
+            0%{
+                transform: rotate(0deg);
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+            }
+            50%{
+                transform: rotate(180deg);
+                -webkit-transform: rotate(180deg);
+                -moz-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+            }
+            100%{
+                transform: rotate(360deg);
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+            }
         }
     </style>
 
@@ -101,7 +118,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user-circle user-image"></i>
-                            <span class="hidden-xs" th:text="${adminName}">系统管理员</span>
+                            <span class="hidden-xs" th:text="${user.nickName}">系统管理员</span>
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
                             <!-- User image -->
@@ -140,17 +157,17 @@
             <div class="navbar navbar-custom-menu" style="padding-right:20px;">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a class="subsystitle">子系统1</a>
+                        <a class="subsystitle" id="icon">菜单ICON</a>
                     </li>
-                    <li>
-                        <a class="subsystitle">子系统2</a>
-                    </li>
-                    <li>
-                        <a class="subsystitle">子系统3</a>
-                    </li>
-                    <li>
-                        <a class="subsystitle">子系统4</a>
-                    </li>
+<!--                    <li>-->
+<!--                        <a class="subsystitle">子系统2</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a class="subsystitle">子系统3</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a class="subsystitle">子系统4</a>-->
+<!--                    </li>-->
                 </ul>
             </div>
         </nav>
@@ -163,11 +180,10 @@
             <!-- 用户头像 -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img th:src="${avatar}" src="http://rstyro.gitee.io/blog/images/avatar.jpg" style="height: 45px !important;"
-                         class="img-circle" alt="User Image">
+                    <img th:src="${user.picUrl}" src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p th:text="${adminName}">Alexander Pierce</p>
+                    <p th:text="${user.nickName}">Alexander Pierce</p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>

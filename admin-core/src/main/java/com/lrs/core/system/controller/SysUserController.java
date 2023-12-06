@@ -1,13 +1,13 @@
 package com.lrs.core.system.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
-import com.lrs.core.system.dto.MenuDto;
-import com.lrs.core.system.dto.SysUserDto;
-import com.lrs.core.system.entity.SysMenu;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.service.ISysUserService;
 import org.springframework.stereotype.Controller;
@@ -34,6 +34,7 @@ public class SysUserController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission(value = {"system:user:list","system:user:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page() {
         return "system/user";
@@ -42,9 +43,10 @@ public class SysUserController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission(value = {"system:user:list","system:user:list:view"},mode = SaMode.OR)
     @PostMapping("/list")
     @ResponseBody
-    public R list(@RequestBody SysUserDto dto) {
+    public R list(@RequestBody BaseDto dto) {
         Page<SysUser> menuPage = sysUserService.getUserPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
         return R.ok(menuPage);
     }
@@ -52,6 +54,7 @@ public class SysUserController extends BaseController {
     /**
      * 添加
      */
+    @SaCheckPermission("system:user:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody SysUser item) {
@@ -61,6 +64,7 @@ public class SysUserController extends BaseController {
     /**
      * 编辑
      */
+    @SaCheckPermission("system:user:list:edit")
     @PostMapping("/edit")
     @ResponseBody
     public R edit(@RequestBody SysUser item) {
@@ -70,6 +74,7 @@ public class SysUserController extends BaseController {
     /**
      * 删除
      */
+    @SaCheckPermission("system:user:list:del")
     @GetMapping("/del")
     @ResponseBody
     public R del(Long id) {
@@ -80,6 +85,7 @@ public class SysUserController extends BaseController {
     /**
      * 批量删除
      */
+    @SaCheckPermission("system:user:list:del")
     @PostMapping("/batchDel")
     @ResponseBody
     public R batchDel(@RequestBody List<Long> ids) {

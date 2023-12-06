@@ -16,4 +16,6 @@ public class LoginDto {
      */
     private String code;
 
+    private boolean rememberMe;
+
 }

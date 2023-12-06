@@ -60,9 +60,9 @@ public class LoginController {
     @RequestMapping("/index")
     public String index(Model model){
         SysUser sysUser = Convert.convert(SysUser.class,StpUtil.getSession().get(Const.SESSION_USER));
-        model.addAttribute("adminName",
-                Optional.ofNullable(sysUser).map(sysUser1 -> sysUser1.getNickName()).orElse(commonConfig.getName()));
         model.addAttribute("systemName",commonConfig.getSystemName());
+        model.addAttribute("user",sysUser);
+        model.addAttribute("adminName",sysUser.getNickName());
         model.addAttribute("avatar",sysUser.getPicUrl());
         model.addAttribute("userId",sysUser.getId());
         // tabs菜单

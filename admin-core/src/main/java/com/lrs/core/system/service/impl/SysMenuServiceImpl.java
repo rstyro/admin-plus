@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.core.system.SystemConst;
-import com.lrs.core.system.dto.MenuDto;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysBtn;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.mapper.SysMenuMapper;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return 分页列表
      */
     @Override
-    public Page<SysMenu> getMenuPage(Page page, MenuDto menuDto) {
+    public Page<SysMenu> getMenuPage(Page page, BaseDto menuDto) {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentId, 0);
         if (!ObjectUtils.isEmpty(menuDto.getKeyword())) {

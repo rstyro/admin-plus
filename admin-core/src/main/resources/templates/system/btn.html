@@ -214,6 +214,12 @@
                             this.pageDto.total = data.total;
                             this.pageDto.pageCount = data.pages;
                             this.tableData = data.records;
+                        }else {
+                            ELEMENT.Message({
+                                showClose: true,
+                                message: "获取列表页数据失败，错误："+r.data.msg,
+                                type: 'error'
+                            });
                         }
                     }).catch(error => {
                         console.error("请求失败：", error);

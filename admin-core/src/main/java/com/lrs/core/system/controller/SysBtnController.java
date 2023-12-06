@@ -1,4 +1,6 @@
 package com.lrs.core.system.controller;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
@@ -30,6 +32,7 @@ public class SysBtnController extends BaseController {
     /**
      * 页面跳转
      */
+    @SaCheckPermission(value = {"system:btn:list","system:btn:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page() {
         return "system/btn";
@@ -38,6 +41,7 @@ public class SysBtnController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission(value = {"system:btn:list","system:btn:list:view"},mode = SaMode.OR)
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody BaseDto dto) {
@@ -48,6 +52,7 @@ public class SysBtnController extends BaseController {
     /**
      * 添加
      */
+    @SaCheckPermission("system:btn:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody SysBtn item) {
@@ -58,6 +63,7 @@ public class SysBtnController extends BaseController {
      * 编辑
      */
     @PostMapping("/edit")
+    @SaCheckPermission("system:btn:list:edit")
     @ResponseBody
     public R edit(@RequestBody SysBtn item) {
         return R.ok(sysBtnService.edit(item));
@@ -67,6 +73,7 @@ public class SysBtnController extends BaseController {
      * 删除
      */
     @GetMapping("/del")
+    @SaCheckPermission("system:btn:list:del")
     @ResponseBody
     public R del(Long id) {
         return R.ok(sysBtnService.del(id));
@@ -76,6 +83,7 @@ public class SysBtnController extends BaseController {
      * 批量删除
      */
     @PostMapping("/batchDel")
+    @SaCheckPermission("system:btn:list:del")
     @ResponseBody
     public R batchDel(@RequestBody List<Long> ids) {
         return R.ok(sysBtnService.batchDel(ids));

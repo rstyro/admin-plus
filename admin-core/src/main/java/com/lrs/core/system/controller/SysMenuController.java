@@ -2,15 +2,15 @@ package com.lrs.core.system.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
-import com.lrs.core.system.dto.MenuDto;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.service.ISysMenuService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,7 +34,7 @@ public class SysMenuController extends BaseController {
     /**
      * 列表页
      */
-    @SaCheckPermission("system:menu:list")
+    @SaCheckPermission(value = {"system:menu:list","system:menu:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page(){
         return "system/menu";
@@ -43,10 +43,10 @@ public class SysMenuController extends BaseController {
     /**
      * 列表页
      */
-    @SaCheckPermission("system:menu:list")
+    @SaCheckPermission(value = {"system:menu:list","system:menu:list:view"},mode = SaMode.OR)
     @PostMapping("/list")
     @ResponseBody
-    public R list(@RequestBody MenuDto dto){
+    public R list(@RequestBody BaseDto dto){
         Page<SysMenu> menuPage = menuService.getMenuPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
         return R.ok(menuPage);
     }

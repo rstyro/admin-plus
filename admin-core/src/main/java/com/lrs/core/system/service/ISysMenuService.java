@@ -2,7 +2,7 @@ package com.lrs.core.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lrs.core.system.dto.MenuDto;
+import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.vo.RoleMenuTreeVo;
 
@@ -20,7 +20,7 @@ public interface ISysMenuService extends IService<SysMenu> {
     List<SysMenu> getMenuListByParentId(Long parentId);
     List<SysMenu> getAllMenuList();
     List<RoleMenuTreeVo> getAllRoleMenuList(Long roleId);
-    Page<SysMenu> getMenuPage(Page page, MenuDto menuDto);
+    Page<SysMenu> getMenuPage(Page page, BaseDto menuDto);
     boolean add(SysMenu sysMenu);
     boolean edit(SysMenu sysMenu);
     boolean del(Long id);

@@ -1,14 +1,14 @@
 package com.lrs.core.system.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.system.dto.SysRoleDto;
-import com.lrs.core.system.dto.SysUserDto;
 import com.lrs.core.system.entity.SysRole;
-import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.service.ISysRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +35,7 @@ public class SysRoleController extends BaseController {
     /**
      * 页面跳转
      */
+    @SaCheckPermission(value = {"system:role:list","system:role:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page() {
         return "system/role";
@@ -43,6 +44,7 @@ public class SysRoleController extends BaseController {
     /**
      * 列表页
      */
+    @SaCheckPermission(value = {"system:role:list","system:role:list:view"},mode = SaMode.OR)
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody SysRoleDto dto) {
@@ -53,6 +55,7 @@ public class SysRoleController extends BaseController {
     /**
      * 添加
      */
+    @SaCheckPermission("system:role:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody SysRole item) {
@@ -62,6 +65,7 @@ public class SysRoleController extends BaseController {
     /**
      * 编辑
      */
+    @SaCheckPermission("system:role:list:edit")
     @PostMapping("/edit")
     @ResponseBody
     public R edit(@RequestBody SysRole item) {
@@ -71,6 +75,7 @@ public class SysRoleController extends BaseController {
     /**
      * 删除
      */
+    @SaCheckPermission("system:role:list:del")
     @GetMapping("/del")
     @ResponseBody
     public R del(Long id) {
@@ -81,6 +86,7 @@ public class SysRoleController extends BaseController {
     /**
      * 批量删除
      */
+    @SaCheckPermission("system:role:list:del")
     @PostMapping("/batchDel")
     @ResponseBody
     public R batchDel(@RequestBody List<Long> ids) {
@@ -95,6 +101,7 @@ public class SysRoleController extends BaseController {
     public R getUserRole(Long userId) {
         return R.ok(sysRoleService.getUserRoleList(userId));
     }
+
     /**
      * 编辑用户角色
      */
