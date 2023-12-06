@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * saToken权限
+ * saToken权限，自己实现一下用户的权限
  */
 @Component
 public class SaTokenPermissionInterface implements StpInterface {

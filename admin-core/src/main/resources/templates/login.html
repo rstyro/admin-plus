@@ -85,11 +85,12 @@
             margin-top: 50px;
         }
         .box .right h2 {
-            color: rgb(144, 129, 241);
+            color: #409EFF;
             font-size: 3rem;
             margin-top: 5rem;
             text-align: center;
             margin-bottom: 25px;
+            letter-spacing: 0.3em;
         }
 
         .loginBtn{
@@ -102,7 +103,7 @@
     <div class="left"></div>
     <div class="right">
         <div class="login-box" @keyup.enter="onSubmit"  >
-            <h2>后台管理</h2>
+            <h2>欢迎登录</h2>
             <el-input placeholder="请输入用户名" prefix-icon="el-icon-user" v-model="dto.username"></el-input>
             <br/><br/>
             <el-input placeholder="请输入密码" show-password prefix-icon="el-icon-lock" v-model="dto.password"></el-input>

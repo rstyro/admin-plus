@@ -2,12 +2,9 @@ package com.lrs.core.system.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
-import com.lrs.common.vo.R;
-import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.CaptchaUtil;
+import com.lrs.common.vo.R;
 import com.lrs.common.vo.TabsVo;
 import com.lrs.core.system.config.CommonConfig;
 import com.lrs.core.system.dto.LoginDto;
@@ -17,7 +14,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,10 +25,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * 自定义错误页面
+ * 登录页相关
  */
 @Slf4j
 @Controller
@@ -62,9 +57,6 @@ public class LoginController {
         SysUser sysUser = Convert.convert(SysUser.class,StpUtil.getSession().get(Const.SESSION_USER));
         model.addAttribute("systemName",commonConfig.getSystemName());
         model.addAttribute("user",sysUser);
-        model.addAttribute("adminName",sysUser.getNickName());
-        model.addAttribute("avatar",sysUser.getPicUrl());
-        model.addAttribute("userId",sysUser.getId());
         // tabs菜单
         List<TabsVo> tabMenuList = sysUserService.getTabMenuList(StpUtil.getLoginId(0l));
         model.addAttribute("tabs",tabMenuList);

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.Resource;
 
 /**
- * 登录拦截
+ * 接口拦截
  */
 @Slf4j
 @Configuration
