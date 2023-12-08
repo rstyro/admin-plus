@@ -80,6 +80,82 @@ public class CaptchaUtil {
         return new Object[]{img, result};
     }
 
+
+    /**
+     * 生成验证码图片
+     * @return obj[0]: 图片; obj[1]:字符串
+     */
+    public static Object[] CreateCode(int imgW,int imgH) {
+//        int imgW = 120;
+//        int imgH = 42;
+        String result = "";
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        BufferedImage img = new BufferedImage(imgW, imgH, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = img.createGraphics();
+        graphics.setFont(new Font("MicroSoft YaHei", Font.PLAIN, 30));
+
+        // 绘制背景色
+        graphics.setColor(generateRandomColor(230,20));
+        graphics.fillRect(0, 0, imgW, imgH);
+
+        int startX = (int) (imgW * 0.18);
+        int halfX = (int) (imgW * 0.5);
+        int endX = (int) (imgW * 0.9);
+
+        int endY = (int) (imgH * 0.8);
+        // 绘制背景干扰线条
+        for (int i = 0; i < 3; i++) {
+            graphics.setColor(generateRandomColor(200,50));
+            graphics.setStroke(new BasicStroke(2.0f));
+//            graphics.drawLine(random.nextInt(20), random.nextInt(imgH), random.nextInt(20) + 80, random.nextInt(imgH));
+            graphics.drawLine(random.nextInt(endX - startX) + startX, random.nextInt(imgH), random.nextInt(endX - startX) + startX + halfX, random.nextInt(imgH));
+        }
+
+        if (random.nextInt(100) >= 50) {
+            // 绘制字符串验证码
+            for (int i = 0; i < 4; i++) {
+                String str = CODE[random.nextInt(CODE.length)];
+                graphics.setColor(generateRandomColor(180,50));
+//                graphics.drawString(str, (i * 20) + 20, random.nextInt(4) + 30);
+                graphics.drawString(str, (i * startX) + startX, endY);
+                result += str;
+            }
+        } else {
+            // 绘制计算题验证码
+            int is = random.nextInt(100);
+            int num1 = random.nextInt(9) + 1;
+            int num2 = random.nextInt(9) + 1;
+            String operator = (is >= 50) ? "+" : "×";
+            int answer = (operator.equals("+")) ? (num1 + num2) : (num1 * num2);
+
+            // 绘制第一个值
+            graphics.setColor(generateRandomColor(180, 50));
+            graphics.drawString(String.valueOf(num1), startX, endY);
+
+            // 符号
+            graphics.setColor(generateRandomColor(180, 50));
+            graphics.drawString(operator, startX*2, endY);
+
+            // 第二个
+            graphics.setColor(generateRandomColor(180, 50));
+            graphics.drawString(String.valueOf(num2), startX*3, endY);
+
+            // 等于
+            graphics.setColor(generateRandomColor(180, 50));
+            graphics.drawString("=", startX*4, endY);
+
+            result = String.valueOf(answer);
+        }
+
+        // 绘制前景干扰线条
+        for (int i = 0; i < 3; i++) {
+            graphics.setColor(generateRandomColor(200,50));
+            graphics.setStroke(new BasicStroke(1.0f));
+            graphics.drawLine(0, random.nextInt(imgH), imgW, random.nextInt(imgH));
+        }
+        return new Object[]{img, result};
+    }
+
     /**
      * 生成随机RGB颜色
      * @param baseNum 基础颜色值
