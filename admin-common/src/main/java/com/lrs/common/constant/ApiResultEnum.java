@@ -16,6 +16,7 @@ public enum ApiResultEnum {
 	SYSTEM_ACCOUNT_NOT_FOUND(1001,"账号或密码错误"),
 	SYSTEM_PASSWORD_ERROR(1002,"账号或密码错误"),
 	SYSTEM_USER_NOT_FOUND(1003,"用户找不到"),
+	SYSTEM_USER_EXIST(1004,"用户名已存在"),
 
 	;
 

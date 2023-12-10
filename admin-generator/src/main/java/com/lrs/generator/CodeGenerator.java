@@ -17,8 +17,11 @@ import java.util.*;
  */
 public class CodeGenerator {
 
+    // 模块目录
+    private static String modelFold = "/admin-controller";
+
     //页面生成根目录
-    public static String projectPageRelativePath="/admin-core/src/main/resources/templates/page/";
+    public static String projectPageRelativePath=modelFold+"/src/main/resources/templates/page/";
     //自定义 页面模板路径
     public static String pageTemplatesPath="templates/pageTemplates/list.ftl";
 
@@ -43,8 +46,8 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/admin-core/src/main/java");
+        String projectPath = System.getProperty("user.dir")+modelFold;
+        gc.setOutputDir(projectPath +"/src/main/java");
         gc.setAuthor("rstyro");
         gc.setOpen(false);
         mpg.setGlobalConfig(gc);
@@ -86,12 +89,12 @@ public class CodeGenerator {
         List<FileOutConfig> focList = new ArrayList<>();
         focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             public String outputFile(TableInfo tableInfo) {
-                return projectPath + "/admin-core/src/main/resources/mapper/" + pc.getModuleName()+ "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()+ "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
 
         //项目相对路径
-        String projectRelative ="/admin-core/src/main/java/com/lrs/core/"+modelName;
+        String projectRelative ="/src/main/java/com/lrs/core/"+modelName;
         if("1".equals(isGeneratorPage)){
             strategy.setRestControllerStyle(false);
             focList.add(new FileOutConfig(pageTemplatesPath) {

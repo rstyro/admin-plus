@@ -1,14 +1,3 @@
-<#macro gemTH  name>
-	<@compress single_line=true>
-		${r"${item."}${name} }
-	</@compress>
-</#macro>
-
-<#macro notTran  name>
-	<@compress single_line=true>
-		${r"${"}${name} }
-	</@compress>
-</#macro>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
@@ -57,8 +46,8 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="system:sysOperLog:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
+                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
                 </el-col>
                 <div class="content-header-right">
                     <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
@@ -77,19 +66,33 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <#list table.fields as column>
-                    <el-table-column prop="${column.propertyName}" label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" width="<#if column.propertyName?contains('Time')>160<#else>100</#if>" ></el-table-column>
-                </#list>
+                    <el-table-column prop="id" label="日志主键" width="100" ></el-table-column>
+                    <el-table-column prop="title" label="模块标题" width="100" ></el-table-column>
+                    <el-table-column prop="businessType" label="业务类型（0其它 1新增 2修改 3删除）" width="100" ></el-table-column>
+                    <el-table-column prop="method" label="方法名称" width="100" ></el-table-column>
+                    <el-table-column prop="requestMethod" label="请求方式" width="100" ></el-table-column>
+                    <el-table-column prop="operatorType" label="操作类别（0其它 1后台用户 2手机端用户）" width="100" ></el-table-column>
+                    <el-table-column prop="operName" label="操作人员" width="100" ></el-table-column>
+                    <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>
+                    <el-table-column prop="operUrl" label="请求URL" width="100" ></el-table-column>
+                    <el-table-column prop="operIp" label="主机地址" width="100" ></el-table-column>
+                    <el-table-column prop="operLocation" label="操作地点" width="100" ></el-table-column>
+                    <el-table-column prop="operParam" label="请求参数" width="100" ></el-table-column>
+                    <el-table-column prop="jsonResult" label="返回参数" width="100" ></el-table-column>
+                    <el-table-column prop="status" label="操作状态（0正常 1异常）" width="100" ></el-table-column>
+                    <el-table-column prop="errorMsg" label="错误消息" width="100" ></el-table-column>
+                    <el-table-column prop="operTime" label="操作时间" width="160" ></el-table-column>
+                    <el-table-column prop="costTime" label="消耗时间" width="160" ></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
                                        circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
                             <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
                                        circle></el-button>
                         </el-tooltip>
@@ -119,20 +122,69 @@
     <el-dialog :title="dialogTitle" :visible.sync="addDialogVisible">
         <el-form :model="itemData" :rules="rules" ref="itemData">
 
-            <#list table.fields as column>
-                <#if column.keyFlag >
-                    <el-form-item label="${column.propertyName}" prop="${column.propertyName}" :label-width="formLabelWidth" style="display: none">
-                        <el-input v-model="itemData.${column.propertyName}" autocomplete="off"></el-input>
+                    <el-form-item label="operId" prop="operId" :label-width="formLabelWidth" style="display: none">
+                        <el-input v-model="itemData.id" autocomplete="off"></el-input>
                     </el-form-item>
-                </#if>
-            </#list>
-            <#list table.fields as column>
-                <#if column.propertyName != 'isDeleted' && !column.keyFlag>
 
-                    <#if column.propertyName?contains('Time')>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" prop="${column.propertyName}" :label-width="formLabelWidth">
+                        <el-form-item label="模块标题" prop="title" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.title" autocomplete="off" placeholder="请输入模块标题" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="业务类型（0其它 1新增 2修改 3删除）" prop="businessType" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.businessType" autocomplete="off" placeholder="请输入业务类型（0其它 1新增 2修改 3删除）" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="方法名称" prop="method" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.method" autocomplete="off" placeholder="请输入方法名称" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="请求方式" prop="requestMethod" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.requestMethod" autocomplete="off" placeholder="请输入请求方式" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="操作类别（0其它 1后台用户 2手机端用户）" prop="operatorType" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operatorType" autocomplete="off" placeholder="请输入操作类别（0其它 1后台用户 2手机端用户）" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="操作人员" prop="operName" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operName" autocomplete="off" placeholder="请输入操作人员" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="部门名称" prop="deptName" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.deptName" autocomplete="off" placeholder="请输入部门名称" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="请求URL" prop="operUrl" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operUrl" autocomplete="off" placeholder="请输入请求URL" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="主机地址" prop="operIp" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operIp" autocomplete="off" placeholder="请输入主机地址" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="操作地点" prop="operLocation" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operLocation" autocomplete="off" placeholder="请输入操作地点" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="请求参数" prop="operParam" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.operParam" autocomplete="off" placeholder="请输入请求参数" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="返回参数" prop="jsonResult" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.jsonResult" autocomplete="off" placeholder="请输入返回参数" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="操作状态（0正常 1异常）" prop="status" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.status" autocomplete="off" placeholder="请输入操作状态（0正常 1异常）" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="错误消息" prop="errorMsg" :label-width="formLabelWidth">
+                            <el-input v-model="itemData.errorMsg" autocomplete="off" placeholder="请输入错误消息" ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="操作时间" prop="operTime" :label-width="formLabelWidth">
                             <el-date-picker
-                                    v-model="itemData.${column.propertyName}"
+                                    v-model="itemData.operTime"
                                     align="right"
                                     type="datetime"
                                     value-format="yyyy-MM-dd HH:mm:ss"
@@ -140,13 +192,17 @@
                                     :picker-options="pickerOptions">
                             </el-date-picker>
                         </el-form-item>
-                    <#else>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" prop="${column.propertyName}" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.${column.propertyName}" autocomplete="off" placeholder="请输入<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" ></el-input>
+
+                        <el-form-item label="消耗时间" prop="costTime" :label-width="formLabelWidth">
+                            <el-date-picker
+                                    v-model="itemData.costTime"
+                                    align="right"
+                                    type="datetime"
+                                    value-format="yyyy-MM-dd HH:mm:ss"
+                                    placeholder="选择日期"
+                                    :picker-options="pickerOptions">
+                            </el-date-picker>
                         </el-form-item>
-                    </#if>
-                </#if>
-            </#list>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="saveOrUpdate">{{dialogTitle}}</el-button>
@@ -165,11 +221,11 @@
             el: '#app',
             data: function () {
                 return {
-                    listUrl: ctx + '${package.ModuleName}/${table.entityPath}/list',
-                    delUrl: ctx + '${package.ModuleName}/${table.entityPath}/del?id=',
-                    batchDelUrl: ctx + '${package.ModuleName}/${table.entityPath}/batchDel',
-                    addUrl: ctx + '${package.ModuleName}/${table.entityPath}/add',
-                    editUrl: ctx + '${package.ModuleName}/${table.entityPath}/edit',
+                    listUrl: ctx + 'system/sysOperLog/list',
+                    delUrl: ctx + 'system/sysOperLog/del?id=',
+                    batchDelUrl: ctx + 'system/sysOperLog/batchDel',
+                    addUrl: ctx + 'system/sysOperLog/add',
+                    editUrl: ctx + 'system/sysOperLog/edit',
                     dialogUrl:'',
                     tableData: [],
                     multipleSelection: [],
@@ -218,17 +274,50 @@
                         }]
                     },
                     rules: {
-                        <#list table.fields as column>
-                            <#if column.propertyName != 'isDeleted' && !column.keyFlag>
-                                <#if column.propertyName?contains('Time')>
-
-                                <#else>
-                                    ${column.propertyName}: [
-                                        { required: true, message: '请输入<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>', trigger: 'blur' },
+                                    title: [
+                                        { required: true, message: '请输入模块标题', trigger: 'blur' },
                                     ],
-                                </#if>
-                            </#if>
-                        </#list>
+                                    businessType: [
+                                        { required: true, message: '请输入业务类型（0其它 1新增 2修改 3删除）', trigger: 'blur' },
+                                    ],
+                                    method: [
+                                        { required: true, message: '请输入方法名称', trigger: 'blur' },
+                                    ],
+                                    requestMethod: [
+                                        { required: true, message: '请输入请求方式', trigger: 'blur' },
+                                    ],
+                                    operatorType: [
+                                        { required: true, message: '请输入操作类别（0其它 1后台用户 2手机端用户）', trigger: 'blur' },
+                                    ],
+                                    operName: [
+                                        { required: true, message: '请输入操作人员', trigger: 'blur' },
+                                    ],
+                                    deptName: [
+                                        { required: true, message: '请输入部门名称', trigger: 'blur' },
+                                    ],
+                                    operUrl: [
+                                        { required: true, message: '请输入请求URL', trigger: 'blur' },
+                                    ],
+                                    operIp: [
+                                        { required: true, message: '请输入主机地址', trigger: 'blur' },
+                                    ],
+                                    operLocation: [
+                                        { required: true, message: '请输入操作地点', trigger: 'blur' },
+                                    ],
+                                    operParam: [
+                                        { required: true, message: '请输入请求参数', trigger: 'blur' },
+                                    ],
+                                    jsonResult: [
+                                        { required: true, message: '请输入返回参数', trigger: 'blur' },
+                                    ],
+                                    status: [
+                                        { required: true, message: '请输入操作状态（0正常 1异常）', trigger: 'blur' },
+                                    ],
+                                    errorMsg: [
+                                        { required: true, message: '请输入错误消息', trigger: 'blur' },
+                                    ],
+
+
                     }
 
                 }

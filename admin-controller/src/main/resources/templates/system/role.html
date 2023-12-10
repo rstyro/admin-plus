@@ -1,16 +1,4 @@
-<#macro gemTH  name>
-	<@compress single_line=true>
-		${r"${item."}${name} }
-	</@compress>
-</#macro>
-
-<#macro notTran  name>
-	<@compress single_line=true>
-		${r"${"}${name} }
-	</@compress>
-</#macro>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 
 <head>
@@ -18,7 +6,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>菜单按钮</title>
+    <title>角色列表</title>
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
     <style>
@@ -57,12 +45,12 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="system:role:list:add,amdin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
+                    <el-button sa:hasPermissionOr="system:role:list:del,amdin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
                 </el-col>
-                <div class="content-header-right">
-                    <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
-                </div>
+                    <div class="content-header-right">
+                        <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
+                    </div>
             </el-row>
 
         </section>
@@ -77,21 +65,22 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <#list table.fields as column>
-                    <el-table-column prop="${column.propertyName}" label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" width="<#if column.propertyName?contains('Time')>160<#else>100</#if>" ></el-table-column>
-                </#list>
+                <el-table-column prop="id" label="ID"></el-table-column>
+                <el-table-column prop="roleName" label="角色名称"></el-table-column>
+                <el-table-column prop="remark" label="角色备注"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:role:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
-                                       circle></el-button>
+                                   circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:role:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
                             <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
-                                       circle></el-button>
+                                   circle></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -118,35 +107,42 @@
 
     <el-dialog :title="dialogTitle" :visible.sync="addDialogVisible">
         <el-form :model="itemData" :rules="rules" ref="itemData">
+            <el-form-item label="ID" :label-width="formLabelWidth" style="display: none">
+                <el-input v-model="itemData.id" autocomplete="off"></el-input>
+            </el-form-item>
 
-            <#list table.fields as column>
-                <#if column.keyFlag >
-                    <el-form-item label="${column.propertyName}" prop="${column.propertyName}" :label-width="formLabelWidth" style="display: none">
-                        <el-input v-model="itemData.${column.propertyName}" autocomplete="off"></el-input>
-                    </el-form-item>
-                </#if>
-            </#list>
-            <#list table.fields as column>
-                <#if column.propertyName != 'isDeleted' && !column.keyFlag>
+            <el-form-item label="昵称" prop="roleName" :label-width="formLabelWidth">
+                <el-input v-model="itemData.roleName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="remark" :label-width="formLabelWidth">
+                <el-input v-model="itemData.remark" type="textarea" :rows="2" autocomplete="off"></el-input>
+            </el-form-item>
 
-                    <#if column.propertyName?contains('Time')>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" prop="${column.propertyName}" :label-width="formLabelWidth">
-                            <el-date-picker
-                                    v-model="itemData.${column.propertyName}"
-                                    align="right"
-                                    type="datetime"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
-                                    placeholder="选择日期"
-                                    :picker-options="pickerOptions">
-                            </el-date-picker>
-                        </el-form-item>
-                    <#else>
-                        <el-form-item label="<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" prop="${column.propertyName}" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.${column.propertyName}" autocomplete="off" placeholder="请输入<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>" ></el-input>
-                        </el-form-item>
-                    </#if>
-                </#if>
-            </#list>
+            <el-form-item label="权限控制" :label-width="formLabelWidth">
+
+                <el-tree
+                        :data="roleMenuList"
+                        show-checkbox
+                        node-key="id"
+                        ref="roleMenuTree"
+                        :check-on-click-node="true"
+                        :check-strictly="checkStrictly"
+                        :props="defaultProps">
+                </el-tree>
+
+
+            </el-form-item>
+
+            <el-form-item label="创建时间" :label-width="formLabelWidth">
+                <el-date-picker
+                        v-model="itemData.createTime"
+                        align="right"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="saveOrUpdate">{{dialogTitle}}</el-button>
@@ -154,6 +150,7 @@
     </el-dialog>
 
 </div>
+
 <!-- element-ui -->
 <script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
@@ -165,11 +162,12 @@
             el: '#app',
             data: function () {
                 return {
-                    listUrl: ctx + '${package.ModuleName}/${table.entityPath}/list',
-                    delUrl: ctx + '${package.ModuleName}/${table.entityPath}/del?id=',
-                    batchDelUrl: ctx + '${package.ModuleName}/${table.entityPath}/batchDel',
-                    addUrl: ctx + '${package.ModuleName}/${table.entityPath}/add',
-                    editUrl: ctx + '${package.ModuleName}/${table.entityPath}/edit',
+                    listUrl: ctx + 'system/role/list',
+                    delUrl: ctx + 'system/role/del?id=',
+                    batchDelUrl: ctx + 'system/role/batchDel',
+                    addUrl: ctx + 'system/role/add',
+                    editUrl: ctx + 'system/role/edit',
+                    roleMenuUrl: ctx + 'system/menu/getRoleMenuList?roleId=',
                     dialogUrl:'',
                     tableData: [],
                     multipleSelection: [],
@@ -191,7 +189,6 @@
                     },
                     dialogTitle: '新增',
                     formLabelWidth: '100px',
-                    formTimeLabelWidth: '120px',
                     pickerOptions: {
                         disabledDate(time) {
                             return time.getTime() > Date.now();
@@ -217,18 +214,16 @@
                             }
                         }]
                     },
+                    defaultProps: {
+                        children: 'child',
+                        label: 'menuName'
+                    },
+                    roleMenuList:[],
+                    checkStrictly:false, // 默认false,回显时设置成true
                     rules: {
-                        <#list table.fields as column>
-                            <#if column.propertyName != 'isDeleted' && !column.keyFlag>
-                                <#if column.propertyName?contains('Time')>
-
-                                <#else>
-                                    ${column.propertyName}: [
-                                        { required: true, message: '请输入<#if column.comment == ''>${column.propertyName}<#else>${column.comment}</#if>', trigger: 'blur' },
-                                    ],
-                                </#if>
-                            </#if>
-                        </#list>
+                        roleName: [
+                            { required: true, message: '请输入角色名称', trigger: 'blur' },
+                        ]
                     }
 
                 }
@@ -243,6 +238,7 @@
                             this.pageDto.total = data.total;
                             this.pageDto.pageCount = data.pages;
                             this.tableData = data.records;
+                            console.log("page:", this.pageDto);
                         }
                     }).catch(error => {
                         console.error("请求失败：", error);
@@ -262,10 +258,12 @@
                     this.searchList();
                 },
                 handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
                     this.pageDto.pageSize=val;
                     this.searchList();
                 },
                 handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
                     this.pageDto.currentPage=val;
                     this.searchList();
                 },
@@ -280,19 +278,25 @@
                     this.addDialogVisible = true;
                     this.dialogTitle = '新增';
                     this.dialogUrl=this.addUrl;
-                    this.itemData = {};
+                    // 请求角色的菜单
+                    this.requestRoleMenuList(0);
                 },
                 edit(row) {
                     this.addDialogVisible = true;
                     this.dialogTitle = '编辑';
                     this.itemData = row;
                     this.dialogUrl=this.editUrl;
+                    this.requestRoleMenuList(row.id);
                 },
                 saveOrUpdate(){
                     this.$refs['itemData'].validate((valid) => {
                         if (valid) {
+                            this.checkStrictly=false;
+                            let roleMenuIdList = this.$refs.roleMenuTree.getCheckedNodes(false,true).map(i=>i.id);
+                            this.itemData.menuIdList=roleMenuIdList;
                             requestPost(this.dialogUrl, this.itemData);
                         } else {
+                            console.log('error submit!!');
                             return false;
                         }
                     });
@@ -334,11 +338,75 @@
                             message: '已取消删除'
                         });
                     });
+                },
+                uploadSuccess(res, file, fileList) {
+                    console.log("res:",res);
+                    if(res.code === 200){
+                        this.itemData.picUrl=res.data;
+                    }else {
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "上传失败，请稍后重试",
+                            type: 'warning'
+                        });
+                    }
+                },
+                beforeAvatarUpload(file) {
+                    const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png');
+                    const isLt2M = file.size / 1024 / 1024 < 10;
+
+                    if (!isJPG) {
+                        ELEMENT.Message.error('上传头像图片只能是 JPG/PNG 格式!');
+                    }
+                    if (!isLt2M) {
+                        ELEMENT.Message.error('上传头像图片大小不能超过 2MB!');
+                    }
+                    return isJPG && isLt2M;
+                },
+                requestRoleMenuList: function (roleId) {
+                    this.checkStrictly=true;// 回显时设置为true，防止父级选中时，子级全部选中
+                    axios.get(this.roleMenuUrl + roleId).then(r => {
+                        console.log("r:", r);
+                        if (r.data.code === 200) {
+                            this.roleMenuList = r.data.data;
+                            // 设置树形菜单选中
+                            let list = this.getTreeDefaultCheck(this.roleMenuList);
+                            console.log("checkList:",list);
+                            this.$refs.roleMenuTree.setCheckedKeys(list,false);
+                            // 回显成功后，设置为false，子级选中时，父级为半选中
+                            setTimeout(()=>{
+                                this.checkStrictly=false;
+                            },1000);
+                        }
+                    }).catch(error => {
+                        console.error("请求失败：", error);
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "请求失败，请稍后重试",
+                            type: 'error'
+                        });
+                    })
+                },
+                getTreeDefaultCheck: function (data) {
+                    let checkedList = new Array();
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].hasRoleFlag) {
+                            checkedList.push(data[i].id);
+                        }
+                        if (data[i].child.length > 0) {
+                            let childIdList = this.getTreeDefaultCheck(data[i].child);
+                            checkedList=checkedList.concat(childIdList);
+                        }
+                    }
+                    return checkedList;
                 }
             }, created() {
                 this.searchList();
             }
         });
+
+
+    console.log(ELEMENT);
 </script>
 
 </body>

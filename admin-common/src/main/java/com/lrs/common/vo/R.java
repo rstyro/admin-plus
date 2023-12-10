@@ -44,23 +44,19 @@ public class R<T> implements Serializable {
         return restResult(data, SUCCESS, msg);
     }
 
-    public static <T> R<T> fail() {
+    public static <T> R<T> error() {
         return restResult(null, FAIL, "操作失败");
     }
 
-    public static <T> R<T> fail(String msg) {
+    public static <T> R<T> error(String msg) {
         return restResult(null, FAIL, msg);
     }
 
-    public static <T> R<T> fail(T data) {
-        return restResult(data, FAIL, "操作失败");
-    }
-
-    public static <T> R<T> fail(String msg, T data) {
+    public static <T> R<T> error(String msg, T data) {
         return restResult(data, FAIL, msg);
     }
 
-    public static <T> R<T> fail(int code, String msg) {
+    public static <T> R<T> error(int code, String msg) {
         return restResult(null, code, msg);
     }
 
