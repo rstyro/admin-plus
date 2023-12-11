@@ -4,6 +4,9 @@ package com.lrs.core.system.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lrs.common.annotation.Log;
+import com.lrs.common.constant.BusinessType;
+import com.lrs.common.constant.OperatorType;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
@@ -63,24 +66,29 @@ public class SysMenuController extends BaseController {
     /**
      * 添加
      */
+    @Log(title = "菜单管理",businessType = BusinessType.INSERT)
     @SaCheckPermission("system:menu:list:add")
     @PostMapping("/add")
     @ResponseBody
     public R add(@RequestBody SysMenu sysMenu){
         return R.ok(menuService.add(sysMenu));
     }
+
     /**
      * 编辑
      */
+    @Log(title = "菜单管理",businessType = BusinessType.UPDATE)
     @SaCheckPermission("system:menu:list:edit")
     @PostMapping("/edit")
     @ResponseBody
     public R edit(@RequestBody SysMenu sysMenu){
         return R.ok(menuService.edit(sysMenu));
     }
+
     /**
      * 删除
      */
+    @Log(title = "菜单管理",businessType = BusinessType.DELETE)
     @SaCheckPermission("system:menu:list:del")
     @GetMapping("/del")
     @ResponseBody
@@ -88,9 +96,11 @@ public class SysMenuController extends BaseController {
         System.out.println(id);
         return R.ok(menuService.del(id));
     }
+
     /**
      * 批量删除
      */
+    @Log(title = "菜单管理",businessType = BusinessType.DELETE)
     @SaCheckPermission("system:menu:list:del")
     @PostMapping("/batchDel")
     @ResponseBody

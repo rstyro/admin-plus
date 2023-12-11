@@ -46,8 +46,8 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button sa:hasPermissionOr="system:sysOperLog:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+<!--                    <el-button sa:hasPermissionOr="system:sysOperLog:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>-->
+<!--                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>-->
                 </el-col>
                 <div class="content-header-right">
                     <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
@@ -66,20 +66,31 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column prop="id" label="日志主键" width="100" ></el-table-column>
+<!--                    <el-table-column prop="id" label="日志主键" width="100" ></el-table-column>-->
                     <el-table-column prop="title" label="模块标题" width="100" ></el-table-column>
-                    <el-table-column prop="businessType" label="业务类型（0其它 1新增 2修改 3删除）" width="100" ></el-table-column>
-                    <el-table-column prop="method" label="方法名称" width="100" ></el-table-column>
+                    <el-table-column prop="businessType" label="业务类型" width="100" >
+                        <template slot-scope="scope">
+                            <el-tag type="info" v-if="scope.row.businessType==0">其它</el-tag>
+                            <el-tag type="success" v-if="scope.row.businessType==1">新增</el-tag>
+                            <el-tag type="primary" v-if="scope.row.businessType==2">修改</el-tag>
+                            <el-tag type="danger" v-if="scope.row.businessType==3">删除</el-tag>
+                        </template>
+                    </el-table-column>
+<!--                    <el-table-column prop="method" label="方法名称" width="100" ></el-table-column>-->
                     <el-table-column prop="requestMethod" label="请求方式" width="100" ></el-table-column>
-                    <el-table-column prop="operatorType" label="操作类别（0其它 1后台用户 2手机端用户）" width="100" ></el-table-column>
                     <el-table-column prop="operName" label="操作人员" width="100" ></el-table-column>
                     <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>
                     <el-table-column prop="operUrl" label="请求URL" width="100" ></el-table-column>
                     <el-table-column prop="operIp" label="主机地址" width="100" ></el-table-column>
                     <el-table-column prop="operLocation" label="操作地点" width="100" ></el-table-column>
-                    <el-table-column prop="operParam" label="请求参数" width="100" ></el-table-column>
-                    <el-table-column prop="jsonResult" label="返回参数" width="100" ></el-table-column>
-                    <el-table-column prop="status" label="操作状态（0正常 1异常）" width="100" ></el-table-column>
+<!--                    <el-table-column prop="operParam" label="请求参数" width="100" ></el-table-column>-->
+<!--                    <el-table-column prop="jsonResult" label="返回参数" width="100" ></el-table-column>-->
+                    <el-table-column prop="status" label="操作状态" width="100" >
+                        <template slot-scope="scope">
+                            <el-tag type="success" v-if="scope.row.status==0">正常</el-tag>
+                            <el-tag type="danger" v-if="scope.row.status==1">异常</el-tag>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="errorMsg" label="错误消息" width="100" ></el-table-column>
                     <el-table-column prop="operTime" label="操作时间" width="160" ></el-table-column>
                     <el-table-column prop="costTime" label="消耗时间" width="160" ></el-table-column>
@@ -88,14 +99,10 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
-                            <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
-                                       circle></el-button>
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:view,admin" class="item" effect="dark" content="查看详情" placement="top-start">
+                            <el-button @click="view(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
-                            <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
-                                       circle></el-button>
-                        </el-tooltip>
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -370,6 +377,12 @@
                     this.dialogTitle = '新增';
                     this.dialogUrl=this.addUrl;
                     this.itemData = {};
+                },
+                view(row) {
+                    this.addDialogVisible = true;
+                    this.dialogTitle = '编辑';
+                    this.itemData = row;
+                    this.dialogUrl=this.editUrl;
                 },
                 edit(row) {
                     this.addDialogVisible = true;

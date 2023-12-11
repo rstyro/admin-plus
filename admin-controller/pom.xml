@@ -3,38 +3,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lrs.admin</groupId>
-    <artifactId>admin-controller</artifactId>
-    <version>1.0.0</version>
-    <packaging>war</packaging>
-
-    <name>admin-controller</name>
-    <description>Demo project for Spring Boot</description>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.14</version>
-        <relativePath/>
+        <groupId>com.lrs</groupId>
+        <artifactId>admin-plus</artifactId>
+        <version>${revision}</version>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
-        <druid.version>1.2.20</druid.version>
-        <sa-token.version>1.37.0</sa-token.version>
-        <fastjson2.version>2.0.42</fastjson2.version>
-        <mysql.version>8.0.33</mysql.version>
-
-    </properties>
+    <artifactId>admin-controller</artifactId>
+    <packaging>war</packaging>
+    <name>admin-controller</name>
+    <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.lrs.common</groupId>
+            <groupId>com.lrs</groupId>
             <artifactId>admin-common</artifactId>
-            <version>1.0.0</version>
+            <version>${revision}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -57,63 +43,31 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter-test</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
         <!--  阿里巴巴数据库连接池     -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid.version}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
-            <version>${fastjson2.version}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>${sa-token.version}</version>
         </dependency>
         <!-- 在 thymeleaf 标签中使用 Sa-Token -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-dialect-thymeleaf</artifactId>
-            <version>${sa-token.version}</version>
-        </dependency>
-
-        <!-- 上传图片 -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.3</version>
-
-        </dependency>
-        <!-- 上传图片结束 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -127,10 +81,16 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
-        <finalName>admin-plus</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

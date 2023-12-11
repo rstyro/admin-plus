@@ -3,52 +3,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.lrs.generator</groupId>
-	<artifactId>admin-generator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<parent>
+		<groupId>com.lrs</groupId>
+		<artifactId>admin-plus</artifactId>
+		<version>${revision}</version>
+	</parent>
 
+	<artifactId>admin-generator</artifactId>
+	<packaging>jar</packaging>
 	<name>admin-generator</name>
 	<description>Demo project for Spring Boot</description>
-
-
-<!--
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<warSourceExcludes>src/main/resources/**</warSourceExcludes>
-					<warName></warName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-	</properties>
--->
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>com.lrs.common</groupId>
+			<groupId>com.lrs</groupId>
 			<artifactId>admin-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<dependency>
@@ -59,6 +30,7 @@
 		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<!-- 这里的代码生成器，使用旧版的 -->
 			<version>3.0.1</version>
 		</dependency>
 
@@ -70,14 +42,11 @@
 		<dependency>
 			<groupId>freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.8</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.47</version>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
 		</dependency>
 
 		<dependency>

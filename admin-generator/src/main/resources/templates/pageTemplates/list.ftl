@@ -85,11 +85,11 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:edit,admin" class="item" effect="dark" content="编辑角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:edit,admin" class="item" effect="dark" content="编辑" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
                                        circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" class="item" effect="dark" content="删除角色" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="${package.ModuleName}:${table.entityPath}:list:del,admin" class="item" effect="dark" content="删除" placement="top-start">
                             <el-button v-if="scope.row.username != 'admin'" @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
                                        circle></el-button>
                         </el-tooltip>

@@ -4,7 +4,7 @@ public enum ApiResultEnum {
 	SUCCESS(200,"ok"),
 	FAILED(400,"请求失败"),
 	NO_AUTH(403,"您无权限访问"),
-	ERROR(500,"不知名错误"),
+	ERROR(500,"系统错误，请稍后重试"),
 	ERROR_NULL(501,"空指针异常"),
 	ERROR_CLASS_CAST(502,"类型转换异常"),
 	ERROR_RUN(503,"运行时异常"),

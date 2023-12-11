@@ -5,6 +5,8 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.lrs.common.annotation.Log;
@@ -18,33 +20,33 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.StringJoiner;
 
 /**
- * 操作日志记录处理
+ * 操作日志记录处理，复制自若依修改
  *
- * @author Lion Li
+ * @author ruoyi
  */
 @Slf4j
 @Aspect
-@AutoConfiguration
+@Component
 public class LogAspect {
 
     /**
      * 排除敏感属性字段
      */
-    public static final String[] EXCLUDE_PROPERTIES = { "password", "oldPassword", "newPassword", "confirmPassword" };
+    public static final String[] EXCLUDE_PROPERTIES = {"password", "oldPassword", "newPassword", "confirmPassword"};
 
 
     /**
@@ -85,19 +87,17 @@ public class LogAspect {
 
     protected void handleLog(final JoinPoint joinPoint, Log controllerLog, final Exception e, Object jsonResult) {
         try {
-
             // *========数据库日志=========*//
             OperLogEvent operLog = new OperLogEvent();
             operLog.setStatus(SystemConst.OperLogStatus.SUCCESS);
             // 请求的地址
             operLog.setOperIp(NetUtil.getLocalhostStr());
-            operLog.setOperUrl(StringUtils.substring(BaseController.getRequest().getRequestURI(), 0, 255));
+            operLog.setOperUrl(StrUtil.sub(BaseController.getRequest().getRequestURI(), 0, 255));
             SysUser loginSysUser = BaseController.getLoginSysUser();
             operLog.setOperName(loginSysUser.getUsername());
-
             if (e != null) {
                 operLog.setStatus(SystemConst.OperLogStatus.FAIL);
-                operLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
+                operLog.setErrorMsg(StrUtil.sub(e.getMessage(), 0, 2000));
             }
             // 设置方法名称
             String className = joinPoint.getTarget().getClass().getName();
@@ -111,8 +111,9 @@ public class LogAspect {
             StopWatch stopWatch = TIME_THREADLOCAL.get();
             stopWatch.stop();
             operLog.setCostTime(stopWatch.getTotalTimeMillis());
+            operLog.setOperTime(LocalDateTime.now());
             // 发布事件保存数据库
-//            SpringUtils.context().publishEvent(operLog);
+            SpringUtil.getApplicationContext().publishEvent(operLog);
         } catch (Exception exp) {
             // 记录本地异常日志
             log.error("异常信息:{}", exp.getMessage());
@@ -142,9 +143,9 @@ public class LogAspect {
             setRequestValue(joinPoint, operLog, log.excludeParamNames());
         }
         // 是否需要保存response，参数和值
-//        if (log.isSaveResponseData() && ObjectUtil.isNotNull(jsonResult)) {
-//            operLog.setJsonResult(StringUtils.substring(JsonUtils.toJsonString(jsonResult), 0, 2000));
-//        }
+        if (log.isSaveResponseData() && ObjectUtil.isNotNull(jsonResult)) {
+            operLog.setJsonResult(StrUtil.sub(JSON.toJSONString(jsonResult), 0, 2000));
+        }
     }
 
     /**
@@ -159,11 +160,11 @@ public class LogAspect {
         if (MapUtil.isEmpty(paramsMap)
                 && HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod)) {
             String params = argsArrayToString(joinPoint.getArgs(), excludeParamNames);
-            operLog.setOperParam(StringUtils.substring(params, 0, 2000));
+            operLog.setOperParam(StrUtil.sub(params, 0, 2000));
         } else {
             MapUtil.removeAny(paramsMap, EXCLUDE_PROPERTIES);
             MapUtil.removeAny(paramsMap, excludeParamNames);
-            operLog.setOperParam(StringUtils.substring(JSON.toJSONString(paramsMap), 0, 2000));
+            operLog.setOperParam(StrUtil.sub(JSON.toJSONString(paramsMap), 0, 2000));
         }
     }
 
@@ -178,7 +179,7 @@ public class LogAspect {
         for (Object o : paramsArray) {
             if (ObjectUtil.isNotNull(o) && !isFilterObject(o)) {
                 String str = JSON.toJSONString(o);
-                Dict dict = JSON.parseObject(str,Dict.class);
+                Dict dict = JSON.parseObject(str, Dict.class);
                 if (MapUtil.isNotEmpty(dict)) {
                     MapUtil.removeAny(dict, EXCLUDE_PROPERTIES);
                     MapUtil.removeAny(dict, excludeParamNames);
@@ -213,6 +214,6 @@ public class LogAspect {
             }
         }
         return o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse
-               || o instanceof BindingResult;
+                || o instanceof BindingResult;
     }
 }

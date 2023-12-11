@@ -2,6 +2,8 @@ package com.lrs.core.system.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lrs.common.annotation.Log;
+import com.lrs.common.constant.BusinessType;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
@@ -52,6 +54,7 @@ public class SysBtnController extends BaseController {
     /**
      * 添加
      */
+    @Log(title = "按钮管理",businessType = BusinessType.INSERT)
     @SaCheckPermission("system:btn:list:add")
     @PostMapping("/add")
     @ResponseBody
@@ -62,6 +65,7 @@ public class SysBtnController extends BaseController {
     /**
      * 编辑
      */
+    @Log(title = "按钮管理",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @SaCheckPermission("system:btn:list:edit")
     @ResponseBody
@@ -72,6 +76,7 @@ public class SysBtnController extends BaseController {
     /**
      * 删除
      */
+    @Log(title = "按钮管理",businessType = BusinessType.DELETE)
     @GetMapping("/del")
     @SaCheckPermission("system:btn:list:del")
     @ResponseBody
@@ -82,6 +87,7 @@ public class SysBtnController extends BaseController {
     /**
      * 批量删除
      */
+    @Log(title = "按钮管理",businessType = BusinessType.DELETE)
     @PostMapping("/batchDel")
     @SaCheckPermission("system:btn:list:del")
     @ResponseBody
