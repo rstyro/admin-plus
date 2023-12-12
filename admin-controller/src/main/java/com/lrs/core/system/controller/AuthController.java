@@ -1,20 +1,18 @@
 package com.lrs.core.system.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.convert.Convert;
 import com.lrs.common.constant.Const;
 import com.lrs.common.utils.CaptchaUtil;
 import com.lrs.common.vo.R;
-import com.lrs.common.vo.TabsVo;
-import com.lrs.core.system.config.CommonConfig;
 import com.lrs.core.system.dto.LoginDto;
-import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.service.ISysUserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -24,60 +22,17 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 /**
  * 登录页相关
  */
 @Slf4j
 @Controller
-public class LoginController {
+public class AuthController {
 
-    @Resource
-    private CommonConfig commonConfig;
 
     @Resource
     private ISysUserService sysUserService;
-
-    /**
-     * 登录页
-     */
-    @GetMapping(value = {"/","/toLogin"})
-    public String index(){
-        return "login";
-    }
-
-    /**
-     * 首页
-     * @param model model
-     */
-    @SuppressWarnings("unchecked")
-    @RequestMapping("/index")
-    public String index(Model model){
-        SysUser sysUser = Convert.convert(SysUser.class,StpUtil.getSession().get(Const.SESSION_USER));
-        model.addAttribute("systemName",commonConfig.getSystemName());
-        model.addAttribute("user",sysUser);
-        // tabs菜单
-        List<TabsVo> tabMenuList = sysUserService.getTabMenuList(StpUtil.getLoginId(0l));
-        model.addAttribute("tabs",tabMenuList);
-        return "index";
-    }
-
-    /**
-     * 欢迎页
-     */
-    @GetMapping("/welcome")
-    public String welcome(){
-        return "welcome";
-    }
-
-    /**
-     * icon
-     */
-    @GetMapping("/icon")
-    public String icon(){
-        return "icon";
-    }
 
     /**
      * 验证码

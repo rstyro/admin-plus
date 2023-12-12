@@ -1,5 +1,6 @@
 package com.lrs.core.base;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
 import com.lrs.common.constant.Const;
@@ -154,7 +155,8 @@ public class BaseController {
 
     public static SysUser getLoginSysUser() {
         try {
-            return Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SESSION_USER));
+            SaSession session = StpUtil.getSession();
+            return Convert.convert(SysUser.class, session.get(Const.SESSION_USER));
         } catch (Exception e) {
             return null;
         }

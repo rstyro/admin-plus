@@ -51,4 +51,23 @@ public class SysOperLogController extends BaseController {
         return R.ok(menuPage);
     }
 
+    /**
+     * 删除
+     */
+    @SaCheckPermission("system:sysOperLog:list:del")
+    @GetMapping("/del")
+    @ResponseBody
+    public R del(Long id) {
+        return R.ok(sysOperLogService.del(id));
+    }
+
+    /**
+     * 批量删除
+     */
+    @SaCheckPermission("system:sysOperLog:list:del")
+    @PostMapping("/batchDel")
+    @ResponseBody
+    public R batchDel(@RequestBody List<Long> ids) {
+        return R.ok(sysOperLogService.batchDel(ids));
+    }
 }

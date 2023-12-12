@@ -9,7 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.lrs.common.annotation.Log;
+import com.lrs.common.annotation.OperateLog;
 import com.lrs.common.constant.SystemConst;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.system.entity.SysUser;
@@ -58,7 +58,7 @@ public class LogAspect {
      * 处理请求前执行
      */
     @Before(value = "@annotation(controllerLog)")
-    public void boBefore(JoinPoint joinPoint, Log controllerLog) {
+    public void boBefore(JoinPoint joinPoint, OperateLog controllerLog) {
         StopWatch stopWatch = new StopWatch();
         TIME_THREADLOCAL.set(stopWatch);
         stopWatch.start();
@@ -70,7 +70,7 @@ public class LogAspect {
      * @param joinPoint 切点
      */
     @AfterReturning(pointcut = "@annotation(controllerLog)", returning = "jsonResult")
-    public void doAfterReturning(JoinPoint joinPoint, Log controllerLog, Object jsonResult) {
+    public void doAfterReturning(JoinPoint joinPoint, OperateLog controllerLog, Object jsonResult) {
         handleLog(joinPoint, controllerLog, null, jsonResult);
     }
 
@@ -81,11 +81,11 @@ public class LogAspect {
      * @param e         异常
      */
     @AfterThrowing(value = "@annotation(controllerLog)", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, Log controllerLog, Exception e) {
+    public void doAfterThrowing(JoinPoint joinPoint, OperateLog controllerLog, Exception e) {
         handleLog(joinPoint, controllerLog, e, null);
     }
 
-    protected void handleLog(final JoinPoint joinPoint, Log controllerLog, final Exception e, Object jsonResult) {
+    protected void handleLog(final JoinPoint joinPoint, OperateLog controllerLog, final Exception e, Object jsonResult) {
         try {
             // *========数据库日志=========*//
             OperLogEvent operLog = new OperLogEvent();
@@ -130,7 +130,7 @@ public class LogAspect {
      * @param operLog 操作日志
      * @throws Exception
      */
-    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, OperLogEvent operLog, Object jsonResult) throws Exception {
+    public void getControllerMethodDescription(JoinPoint joinPoint, OperateLog log, OperLogEvent operLog, Object jsonResult) throws Exception {
         // 设置action动作
         operLog.setBusinessType(log.businessType().ordinal());
         // 设置标题

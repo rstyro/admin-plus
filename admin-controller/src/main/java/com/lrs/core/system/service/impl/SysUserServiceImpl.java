@@ -188,7 +188,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             item.setPassword(SecureUtil.md5(item.getPassword() + sysUser.getSalt()));
         }
         boolean update = updateById(item);
-        if (update) {
+        if (update && sysUser.getId().equals(StpUtil.getLoginIdAsLong())) {
             // 刷新用户session
             StpUtil.getSession().set(Const.SESSION_USER, getById(item.getId()));
         }

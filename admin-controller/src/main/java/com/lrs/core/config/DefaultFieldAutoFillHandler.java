@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Component
-public class MyMetaObjectHandler implements MetaObjectHandler {
+public class DefaultFieldAutoFillHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createBy", () -> StpUtil.getLoginId(-1l), Long.class);

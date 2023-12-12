@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 /**
  * <p>
  * 操作日志记录 服务实现类
@@ -56,8 +58,18 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogMapper, SysOper
         if (!ObjectUtils.isEmpty(dto.getKeyword())) {
             queryWrapper.like(SysOperLog::getOperName, dto.getKeyword());
         }
-        queryWrapper.orderByAsc(SysOperLog::getId);
+        queryWrapper.orderByDesc(SysOperLog::getId);
         return page(page, queryWrapper);
+    }
+
+    @Override
+    public boolean del(Long id) {
+        return removeById(id);
+    }
+
+    @Override
+    public boolean batchDel(List<Long> ids) {
+        return removeBatchByIds(ids);
     }
 
 }

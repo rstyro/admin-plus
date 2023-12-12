@@ -4,7 +4,7 @@ package com.lrs.core.system.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lrs.common.annotation.Log;
+import com.lrs.common.annotation.OperateLog;
 import com.lrs.common.constant.BusinessType;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.R;
@@ -57,7 +57,7 @@ public class SysRoleController extends BaseController {
     /**
      * 添加
      */
-    @Log(title = "角色管理",businessType = BusinessType.INSERT)
+    @OperateLog(title = "角色管理",businessType = BusinessType.INSERT)
     @SaCheckPermission("system:role:list:add")
     @PostMapping("/add")
     @ResponseBody
@@ -68,7 +68,7 @@ public class SysRoleController extends BaseController {
     /**
      * 编辑
      */
-    @Log(title = "角色管理",businessType = BusinessType.UPDATE)
+    @OperateLog(title = "角色管理",businessType = BusinessType.UPDATE)
     @SaCheckPermission("system:role:list:edit")
     @PostMapping("/edit")
     @ResponseBody
@@ -79,7 +79,7 @@ public class SysRoleController extends BaseController {
     /**
      * 删除
      */
-    @Log(title = "角色管理",businessType = BusinessType.DELETE)
+    @OperateLog(title = "角色管理",businessType = BusinessType.DELETE)
     @SaCheckPermission("system:role:list:del")
     @GetMapping("/del")
     @ResponseBody
@@ -91,7 +91,7 @@ public class SysRoleController extends BaseController {
     /**
      * 批量删除
      */
-    @Log(title = "角色管理",businessType = BusinessType.DELETE)
+    @OperateLog(title = "角色管理",businessType = BusinessType.DELETE)
     @SaCheckPermission("system:role:list:del")
     @PostMapping("/batchDel")
     @ResponseBody

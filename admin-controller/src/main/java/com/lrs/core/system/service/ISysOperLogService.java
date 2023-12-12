@@ -23,4 +23,7 @@ public interface ISysOperLogService extends IService<SysOperLog> {
     void recordOper(OperLogEvent operLogEvent);
 
     Page<SysOperLog> getPage(Page page, BaseDto dto);
+
+    boolean del(Long id);
+    boolean batchDel(List<Long> ids);
 }

@@ -26,6 +26,14 @@
         .container .content-header .content-header-right {
             text-align: right;
         }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            max-height: 200px;
+            max-width: 350px;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
@@ -46,8 +54,7 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-<!--                    <el-button sa:hasPermissionOr="system:sysOperLog:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>-->
-<!--                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>-->
+                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
                 </el-col>
                 <div class="content-header-right">
                     <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
@@ -76,33 +83,30 @@
                             <el-tag type="danger" v-if="scope.row.businessType==3">删除</el-tag>
                         </template>
                     </el-table-column>
-<!--                    <el-table-column prop="method" label="方法名称" width="100" ></el-table-column>-->
                     <el-table-column prop="requestMethod" label="请求方式" width="100" ></el-table-column>
-                    <el-table-column prop="operName" label="操作人员" width="100" ></el-table-column>
-                    <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>
-                    <el-table-column prop="operUrl" label="请求URL" width="100" ></el-table-column>
-                    <el-table-column prop="operIp" label="主机地址" width="100" ></el-table-column>
-                    <el-table-column prop="operLocation" label="操作地点" width="100" ></el-table-column>
-<!--                    <el-table-column prop="operParam" label="请求参数" width="100" ></el-table-column>-->
-<!--                    <el-table-column prop="jsonResult" label="返回参数" width="100" ></el-table-column>-->
                     <el-table-column prop="status" label="操作状态" width="100" >
                         <template slot-scope="scope">
                             <el-tag type="success" v-if="scope.row.status==0">正常</el-tag>
                             <el-tag type="danger" v-if="scope.row.status==1">异常</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="errorMsg" label="错误消息" width="100" ></el-table-column>
+                    <el-table-column prop="operName" label="操作人员" width="100" ></el-table-column>
+<!--                    <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>-->
+                    <el-table-column prop="operIp" label="主机地址" width="100" ></el-table-column>
+                    <el-table-column prop="operLocation" label="操作地点" width="100" ></el-table-column>
                     <el-table-column prop="operTime" label="操作时间" width="160" ></el-table-column>
                     <el-table-column prop="costTime" label="消耗时间" width="160" ></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
-                        width="140">
+                        min-width="140">
                     <template slot-scope="scope">
                         <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:view,admin" class="item" effect="dark" content="查看详情" placement="top-start">
                             <el-button @click="view(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button>
                         </el-tooltip>
-
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:del,admin" class="item" effect="dark" content="删除" placement="top-start">
+                            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>
@@ -126,94 +130,14 @@
     </el-card>
 
 
-    <el-dialog :title="dialogTitle" :visible.sync="addDialogVisible">
-        <el-form :model="itemData" :rules="rules" ref="itemData">
-
-                    <el-form-item label="operId" prop="operId" :label-width="formLabelWidth" style="display: none">
-                        <el-input v-model="itemData.id" autocomplete="off"></el-input>
-                    </el-form-item>
-
-                        <el-form-item label="模块标题" prop="title" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.title" autocomplete="off" placeholder="请输入模块标题" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="业务类型（0其它 1新增 2修改 3删除）" prop="businessType" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.businessType" autocomplete="off" placeholder="请输入业务类型（0其它 1新增 2修改 3删除）" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="方法名称" prop="method" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.method" autocomplete="off" placeholder="请输入方法名称" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="请求方式" prop="requestMethod" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.requestMethod" autocomplete="off" placeholder="请输入请求方式" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="操作类别（0其它 1后台用户 2手机端用户）" prop="operatorType" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operatorType" autocomplete="off" placeholder="请输入操作类别（0其它 1后台用户 2手机端用户）" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="操作人员" prop="operName" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operName" autocomplete="off" placeholder="请输入操作人员" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="部门名称" prop="deptName" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.deptName" autocomplete="off" placeholder="请输入部门名称" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="请求URL" prop="operUrl" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operUrl" autocomplete="off" placeholder="请输入请求URL" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="主机地址" prop="operIp" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operIp" autocomplete="off" placeholder="请输入主机地址" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="操作地点" prop="operLocation" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operLocation" autocomplete="off" placeholder="请输入操作地点" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="请求参数" prop="operParam" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.operParam" autocomplete="off" placeholder="请输入请求参数" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="返回参数" prop="jsonResult" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.jsonResult" autocomplete="off" placeholder="请输入返回参数" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="操作状态（0正常 1异常）" prop="status" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.status" autocomplete="off" placeholder="请输入操作状态（0正常 1异常）" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="错误消息" prop="errorMsg" :label-width="formLabelWidth">
-                            <el-input v-model="itemData.errorMsg" autocomplete="off" placeholder="请输入错误消息" ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="操作时间" prop="operTime" :label-width="formLabelWidth">
-                            <el-date-picker
-                                    v-model="itemData.operTime"
-                                    align="right"
-                                    type="datetime"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
-                                    placeholder="选择日期"
-                                    :picker-options="pickerOptions">
-                            </el-date-picker>
-                        </el-form-item>
-
-                        <el-form-item label="消耗时间" prop="costTime" :label-width="formLabelWidth">
-                            <el-date-picker
-                                    v-model="itemData.costTime"
-                                    align="right"
-                                    type="datetime"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
-                                    placeholder="选择日期"
-                                    :picker-options="pickerOptions">
-                            </el-date-picker>
-                        </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="saveOrUpdate">{{dialogTitle}}</el-button>
-        </div>
+    <el-dialog :title="dialogTitle"  :visible.sync="addDialogVisible">
+        <el-descriptions title="" :column="1">
+            <el-descriptions-item label="请求地址">{{itemData.operUrl}}</el-descriptions-item>
+            <el-descriptions-item label="请求方法">{{itemData.method}}</el-descriptions-item>
+            <el-descriptions-item label="请求参数"><pre>{{formatJSON(itemData.operParam)}}</pre></el-descriptions-item>
+            <el-descriptions-item label="返回参数"><pre>{{formatJSON(itemData.jsonResult)}}</pre></el-descriptions-item>
+            <el-descriptions-item v-if="itemData.errorMsg != ''" label="错误消息"><pre>{{itemData.errorMsg}}</pre></el-descriptions-item>
+        </el-descriptions>
     </el-dialog>
 
 </div>
@@ -255,31 +179,6 @@
                     dialogTitle: '新增',
                     formLabelWidth: '100px',
                     formTimeLabelWidth: '120px',
-                    pickerOptions: {
-                        disabledDate(time) {
-                            return time.getTime() > Date.now();
-                        },
-                        shortcuts: [{
-                            text: '今天',
-                            onClick(picker) {
-                                picker.$emit('pick', new Date());
-                            }
-                        }, {
-                            text: '昨天',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                                picker.$emit('pick', date);
-                            }
-                        }, {
-                            text: '一周前',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                                picker.$emit('pick', date);
-                            }
-                        }]
-                    },
                     rules: {
                                     title: [
                                         { required: true, message: '请输入模块标题', trigger: 'blur' },
@@ -372,33 +271,13 @@
                 showSearchBox() {
                     this.showSearch = !this.showSearch;
                 },
-                add() {
-                    this.addDialogVisible = true;
-                    this.dialogTitle = '新增';
-                    this.dialogUrl=this.addUrl;
-                    this.itemData = {};
-                },
+
                 view(row) {
                     this.addDialogVisible = true;
-                    this.dialogTitle = '编辑';
+                    this.dialogTitle = '查看';
                     this.itemData = row;
-                    this.dialogUrl=this.editUrl;
                 },
-                edit(row) {
-                    this.addDialogVisible = true;
-                    this.dialogTitle = '编辑';
-                    this.itemData = row;
-                    this.dialogUrl=this.editUrl;
-                },
-                saveOrUpdate(){
-                    this.$refs['itemData'].validate((valid) => {
-                        if (valid) {
-                            requestPost(this.dialogUrl, this.itemData);
-                        } else {
-                            return false;
-                        }
-                    });
-                },
+
                 batchDel() {
                     let ids = this.multipleSelection.map(i => i.id);
                     if (!ids.length) {
@@ -436,11 +315,22 @@
                             message: '已取消删除'
                         });
                     });
+                },
+                formatJSON(jsonString) {
+                    try {
+                        const parsedJson = JSON.parse(jsonString);
+                        return JSON.stringify(parsedJson, null, 2);
+                    } catch (error) {
+                        console.error('Invalid JSON string:', error);
+                        return jsonString;
+                    }
                 }
             }, created() {
                 this.searchList();
             }
         });
+
+
 </script>
 
 </body>
