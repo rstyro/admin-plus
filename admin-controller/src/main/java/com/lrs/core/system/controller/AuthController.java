@@ -95,8 +95,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     @ResponseBody
-    public R logout(){
-        StpUtil.logout();
-        return R.ok();
+    public R logout(HttpServletRequest request){
+        return R.ok(sysUserService.logout(request));
     }
 }

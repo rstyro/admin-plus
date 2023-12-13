@@ -2,14 +2,17 @@ package com.lrs.core.system.service.impl;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
+import com.lrs.common.constant.SystemConst;
 import com.lrs.common.exception.ApiException;
 import com.lrs.common.vo.TabsVo;
 import com.lrs.core.system.dto.BaseDto;
@@ -18,6 +21,7 @@ import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.entity.SysRoleMenu;
 import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.entity.SysUserRole;
+import com.lrs.core.system.event.LoginInfoEvent;
 import com.lrs.core.system.mapper.SysUserMapper;
 import com.lrs.core.system.service.ISysMenuService;
 import com.lrs.core.system.service.ISysRoleMenuService;
@@ -209,18 +213,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser login(HttpServletRequest request, LoginDto dto) {
         String codeStr = (String) request.getSession().getAttribute(Const.SESSION_CODE);
         if (!dto.getCode().equalsIgnoreCase(codeStr)) {
+            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_CODE_ERROR.getMessage());
             throw new ApiException(ApiResultEnum.SYSTEM_CODE_ERROR);
         }
-        SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getUsername, dto.getUsername()));
-        Optional.ofNullable(sysUser).orElseThrow(() -> new ApiException(ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND));
+        SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, dto.getUsername()));
+        if(sysUser==null){
+            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND.getMessage());
+            throw new ApiException(ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND);
+        }
         String salt = sysUser.getSalt();
         String pwd = SecureUtil.md5(dto.getPassword() + salt);
         if (!pwd.equals(sysUser.getPassword())) {
+            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_PASSWORD_ERROR.getMessage());
             throw new ApiException(ApiResultEnum.SYSTEM_PASSWORD_ERROR);
         }
         // 登录成功
         StpUtil.login(sysUser.getId(), dto.isRememberMe());
+        recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.SUCCESS,"登录成功");
         // 更新最后登录时间
         updateUserRecord(sysUser);
         SaSession session = StpUtil.getSession();
@@ -229,6 +238,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setPassword("****");
         sysUser.setSalt("****");
         return sysUser;
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest request) {
+        SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SESSION_USER));
+        recordLoginInfo(request,sysUser.getUsername(), SystemConst.LoginInfoStatus.SUCCESS,"退出登录");
+        StpUtil.logout();
+        return true;
+    }
+
+    /**
+     * 记录登录信息
+     * @param request request
+     * @param username 用户名
+     * @param status   状态
+     * @param message  消息内容
+     */
+    public void recordLoginInfo(HttpServletRequest request,String username, String status, String message) {
+        LoginInfoEvent loginInfoEvent = new LoginInfoEvent();
+        loginInfoEvent.setLoginName(username);
+        loginInfoEvent.setStatus(status);
+        loginInfoEvent.setMsg(message);
+        loginInfoEvent.setCreateTime(LocalDateTime.now());
+        loginInfoEvent.setInfo(request);
+        SpringUtil.getApplicationContext().publishEvent(loginInfoEvent);
     }
 
     public void updateUserRecord(SysUser sysUser){
@@ -253,7 +287,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<TabsVo> child = Optional.ofNullable(menu.getChild())
                 .orElse(Collections.emptyList()).stream()
                 .filter(SysMenu::isHasPermit)
-                .filter(i -> i.getMenuType().equals(1))
+                .filter(i -> i.getMenuType().equals(1) || i.getMenuType().equals(0))
                 .map(this::convertToTabsVo)
                 .collect(Collectors.toList());
         tabsVo.setChildren(child);

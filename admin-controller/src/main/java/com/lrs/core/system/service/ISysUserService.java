@@ -39,4 +39,5 @@ public interface ISysUserService extends IService<SysUser> {
 
     // 登录
     SysUser login(HttpServletRequest request,LoginDto dto);
+    boolean logout(HttpServletRequest request);
 }

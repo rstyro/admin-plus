@@ -21,7 +21,7 @@ public class CodeGenerator {
     private static String modelFold = "/admin-controller";
 
     //页面生成根目录
-    public static String projectPageRelativePath=modelFold+"/src/main/resources/templates/page/";
+    public static String projectPageRelativePath="/src/main/resources/templates/page/";
     //自定义 页面模板路径
     public static String pageTemplatesPath="templates/pageTemplates/list.ftl";
 

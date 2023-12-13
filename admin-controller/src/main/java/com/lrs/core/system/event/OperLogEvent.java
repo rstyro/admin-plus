@@ -15,11 +15,6 @@ public class OperLogEvent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 日志主键
-     */
-    private Long id;
-
-    /**
      * 模块标题
      */
     private String title;

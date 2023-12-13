@@ -89,14 +89,14 @@ public class LogAspect {
         try {
             // *========数据库日志=========*//
             OperLogEvent operLog = new OperLogEvent();
-            operLog.setStatus(SystemConst.OperLogStatus.SUCCESS);
+            operLog.setStatus(SystemConst.OperateLogStatus.SUCCESS);
             // 请求的地址
             operLog.setOperIp(NetUtil.getLocalhostStr());
             operLog.setOperUrl(StrUtil.sub(BaseController.getRequest().getRequestURI(), 0, 255));
             SysUser loginSysUser = BaseController.getLoginSysUser();
             operLog.setOperName(loginSysUser.getUsername());
             if (e != null) {
-                operLog.setStatus(SystemConst.OperLogStatus.FAIL);
+                operLog.setStatus(SystemConst.OperateLogStatus.FAIL);
                 operLog.setErrorMsg(StrUtil.sub(e.getMessage(), 0, 2000));
             }
             // 设置方法名称

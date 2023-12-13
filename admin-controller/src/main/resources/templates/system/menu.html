@@ -241,8 +241,7 @@
                             picker.$emit('pick', date);
                         }
                     }]
-                }
-
+                },
             }
         },
         methods: {
@@ -352,8 +351,16 @@
                     });
                 });
             }
+
         }, created() {
             this.searchList();
+            setTimeout(()=>{
+                this.allMenuTreeList=this.tableData;
+                this.selectOptions=this.formatData();
+                console.log("allMenuTreeList:",this.allMenuTreeList);
+                console.log("selectOptions:",this.selectOptions);
+            },300)
+
         }
     });
 

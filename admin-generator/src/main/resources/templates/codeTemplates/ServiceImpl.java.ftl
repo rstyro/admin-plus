@@ -30,9 +30,9 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     public Page<${entity}> getPage(Page page, BaseDto dto) {
         LambdaQueryWrapper<${entity}> queryWrapper = new LambdaQueryWrapper<>();
         if (!ObjectUtils.isEmpty(dto.getKeyword())) {
-            queryWrapper.like(${entity}::getRemark, dto.getKeyword());
+            // queryWrapper.like(${entity}::getRemark, dto.getKeyword());
         }
-        queryWrapper.orderByAsc(${entity}::getId);
+        queryWrapper.orderByDesc(${entity}::getId);
             return page(page, queryWrapper);
         }
 

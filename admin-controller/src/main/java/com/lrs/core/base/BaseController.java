@@ -3,6 +3,7 @@ package com.lrs.core.base;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.http.HtmlUtil;
 import com.lrs.common.constant.Const;
 import com.lrs.core.system.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -139,7 +141,10 @@ public class BaseController {
      * @return
      */
     public static String getIpAddr() {
-        HttpServletRequest request = getRequest();
+        return getRemoteIP(getRequest());
+    }
+
+    public static String getRemoteIP(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -150,7 +155,18 @@ public class BaseController {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return ip;
+
+        // 处理多个代理服务器的情况，只取第一个非unknown的IP地址
+        if (ip != null && ip.contains(",")) {
+            String[] ips = ip.split(",");
+            for (String ipAddress : ips) {
+                if (!"unknown".equalsIgnoreCase(ipAddress.trim())) {
+                    ip = ipAddress.trim();
+                    break;
+                }
+            }
+        }
+        return StringUtils.contains(ip, "0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
     public static SysUser getLoginSysUser() {

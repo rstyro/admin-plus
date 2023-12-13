@@ -2,8 +2,13 @@ package com.lrs.common.constant;
 
 public interface SystemConst {
 
-    public interface OperLogStatus{
-        int SUCCESS=0;
-        int FAIL=1;
+    interface OperateLogStatus {
+        int SUCCESS = 0;
+        int FAIL = 1;
+    }
+
+    interface LoginInfoStatus {
+        String SUCCESS = "0";
+        String FAIL = "1";
     }
 }
