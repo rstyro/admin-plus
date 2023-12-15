@@ -86,7 +86,7 @@
         <h3>您所用的浏览器未启用脚本，系统无法正常工作！</h3>
     </div>
 </noscript>
-<div class="wrapper" id="app">
+<div class="wrapper" >
 
     <header class="main-header">
         <!-- Logo -->
@@ -278,7 +278,7 @@
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
 
-    <el-dialog title="修改密码" :visible.sync="addDialogVisible">
+    <el-dialog id="app" title="修改密码" :visible.sync="addDialogVisible">
         <el-form :model="itemData">
             <el-form-item label="ID" :label-width="formLabelWidth" style="display: none">
                 <el-input v-model="itemData.id" autocomplete="off"></el-input>
@@ -440,7 +440,7 @@ function openWelcome(){
 }
 </script>
 <script type="text/javascript" th:inline="javascript">
-    let userId=[[userId]];
+    let userId=[[${userId}]];
     new Vue({
         el: '#app',
         data: function () {
