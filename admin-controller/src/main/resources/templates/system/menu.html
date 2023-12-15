@@ -30,6 +30,17 @@
         .page-box {
             margin-top: 20px;
         }
+
+        .selectClass{
+            width: 100%;
+        }
+        .setstyle {
+            min-height: 200px;
+            padding: 0 !important;
+            margin: 0;
+            overflow: auto;
+            cursor: default !important;
+        }
     </style>
 </head>
 <body>
@@ -50,12 +61,17 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button sa:hasPermissionOr="system:menu:list:add,admin" @click="add" type="success" size="mini" icon="el-icon-plus">新增</el-button>
-                    <el-button sa:hasPermissionOr="system:menu:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="system:menu:list:add,admin" @click="add" type="success" size="mini"
+                               icon="el-icon-plus">新增
+                    </el-button>
+                    <el-button sa:hasPermissionOr="system:menu:list:del,admin" @click="batchDel" type="danger"
+                               size="mini" icon="el-icon-delete">删除
+                    </el-button>
                 </el-col>
-                    <div class="content-header-right">
-                        <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
-                    </div>
+                <div class="content-header-right">
+                    <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search"
+                               circle></el-button>
+                </div>
             </el-row>
 
         </section>
@@ -71,7 +87,7 @@
                     :tree-props="{children: 'child'}"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="菜单ID" ></el-table-column>
+                <el-table-column prop="id" label="菜单ID"></el-table-column>
                 <el-table-column prop="menuName" label="菜单名称"></el-table-column>
                 <el-table-column prop="menuUrl" label="菜单地址" sortable width="180"></el-table-column>
                 <el-table-column prop="menuType" label="菜单类型"></el-table-column>
@@ -84,17 +100,20 @@
                         label="操作"
                         width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="system:menu:list:add,admin" class="item" effect="dark" content="添加子菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:add,admin" class="item" effect="dark"
+                                    content="添加子菜单" placement="top-start">
                             <el-button v-if="scope.row.menuType!=2" @click="addSub(scope.row)" type="success"
-                                   icon="el-icon-plus" size="mini" circle></el-button>
+                                       icon="el-icon-plus" size="mini" circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="system:menu:list:edit,admin" class="item" effect="dark" content="编辑菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:edit,admin" class="item" effect="dark"
+                                    content="编辑菜单" placement="top-start">
                             <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini"
-                                   circle></el-button>
+                                       circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="system:menu:list:del,admin" class="item" effect="dark" content="删除菜单" placement="top-start">
+                        <el-tooltip sa:hasPermissionOr="system:menu:list:del,admin" class="item" effect="dark"
+                                    content="删除菜单" placement="top-start">
                             <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
-                                   circle></el-button>
+                                       circle></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -126,6 +145,15 @@
             </el-form-item>
             <el-form-item label="父级ID" :label-width="formLabelWidth" style="display: none">
                 <el-input v-model="itemData.parentId" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="父级菜单" :label-width="formLabelWidth">
+                <el-select v-model="labelData" placeholder="请选择" :popper-append-to-body="false" class="selectClass">
+                    <el-option :value="selectTree" class="setstyle" disabled>
+                        <el-tree :data="allMenuList" :props="defaultProps" ref="tree" :highlight-current="true"
+                                 @node-click="handleNodeClick" default-expand-all></el-tree>
+                    </el-option>
+                </el-select>
             </el-form-item>
 
             <el-form-item label="菜单类型" :label-width="formLabelWidth">
@@ -189,72 +217,229 @@
 <script th:src="@{/static/vue/api.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     let ctx = [[@{/}]];
-    new Vue({
-        el: '#app',
-        data: function () {
-            return {
-                listUrl: ctx + 'system/menu/list',
-                delUrl: ctx + 'system/menu/del?id=',
-                batchDelUrl: ctx + 'system/menu/batchDel',
-                addUrl: ctx + 'system/menu/add',
-                editUrl: ctx + 'system/menu/edit',
-                dialogUrl:'',
-                tableData: [],
-                multipleSelection: [],
-                formDto: {
-                    keyword: '',
-                    region: ''
-                },
-                showSearch: false,
-                pageDto: {
-                    currentPage: 1,
-                    pageSize: 10,
-                    total: 110,
-                    pageCount: 1, //总页数
-                    pagerCount: 9, //页码按钮的数量
-                },
-                addDialogVisible: false,
-                itemData: {},
-                dialogTitle: '新增',
-                formLabelWidth: '100px',
-                pickerOptions: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    listUrl: ctx + 'system/menu/list',
+                    delUrl: ctx + 'system/menu/del?id=',
+                    batchDelUrl: ctx + 'system/menu/batchDel',
+                    addUrl: ctx + 'system/menu/add',
+                    editUrl: ctx + 'system/menu/edit',
+                    dialogUrl: '',
+                    tableData: [],
+                    multipleSelection: [],
+                    formDto: {
+                        keyword: '',
+                        region: ''
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
+                    showSearch: false,
+                    pageDto: {
+                        currentPage: 1,
+                        pageSize: 10,
+                        total: 110,
+                        pageCount: 1, //总页数
+                        pagerCount: 9, //页码按钮的数量
+                    },
+                    addDialogVisible: false,
+                    itemData: {},
+                    dialogTitle: '新增',
+                    formLabelWidth: '100px',
+                    pickerOptions: {
+                        disabledDate(time) {
+                            return time.getTime() > Date.now();
+                        },
+                        shortcuts: [{
+                            text: '今天',
+                            onClick(picker) {
+                                picker.$emit('pick', new Date());
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                const date = new Date();
+                                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                                picker.$emit('pick', date);
+                            }
+                        }, {
+                            text: '一周前',
+                            onClick(picker) {
+                                const date = new Date();
+                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                                picker.$emit('pick', date);
+                            }
+                        }]
+                    },
+                    labelData: "",
+                    selectTree: [],
+                    defaultProps: {
+                        children: 'child',
+                        label: 'menuName'
+                    },
+                    allMenuList: [],
+                }
+            },
+            methods: {
+                searchList: function () {
+                    // 列表检索
+                    let url = this.listUrl + '?pageNum=' + this.pageDto.currentPage + '&pageSize=' + this.pageDto.pageSize;
+                    axios.post(url, this.formDto).then(r => {
+                        if (r.data.code === 200) {
+                            let data = r.data.data;
+                            this.pageDto.total = data.total;
+                            this.pageDto.pageCount = data.pages;
+                            this.tableData = data.records;
+                            console.log("page:", this.pageDto);
                         }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
+                    }).catch(error => {
+                        console.error("请求失败：", error);
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "请求失败，请稍后重试",
+                            type: 'error'
+                        });
+                    })
                 },
-            }
-        },
-        methods: {
-            searchList: function () {
+                prePage() {
+                    this.pageDto.currentPage -= 1;
+                    this.searchList();
+                },
+                nextPage() {
+                    this.pageDto.currentPage += 1;
+                    this.searchList();
+                },
+                handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
+                    this.pageDto.pageSize = val;
+                    this.searchList();
+                },
+                handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
+                    this.pageDto.currentPage = val;
+                    this.searchList();
+                },
+                handleSelectionChange(val) {
+                    //当选择项发生变化时会触发该事件
+                    this.multipleSelection = val;
+                },
+                showSearchBox() {
+                    this.showSearch = !this.showSearch;
+                },
+                add() {
+                    this.addDialogVisible = true;
+                    this.dialogTitle = '新增';
+                    this.dialogUrl = this.addUrl;
+                    this.itemData = {};
+                },
+                addSub(row) {
+                    this.addDialogVisible = true;
+                    this.dialogTitle = '新增';
+                    this.dialogUrl = this.addUrl;
+                    this.itemData = {};
+                    this.itemData.parentId = row.id;
+                    this.labelData = this.getMenuNameById(this.itemData.parentId);
+                },
+                edit(row) {
+                    this.addDialogVisible = true;
+                    this.dialogTitle = '编辑';
+                    this.itemData = row;
+                    this.dialogUrl = this.editUrl;
+                    // 父级菜单回显
+                    console.log("parentId:",this.itemData.parentId);
+                    console.log("selectTree:",this.selectTree);
+                    console.log("selectTree:",JSON.stringify(this.selectTree));
+                    this.labelData = this.getMenuNameById(this.itemData.parentId);
+                },
+                saveOrUpdate() {
+                    this.itemData.child = [];
+                    requestPost(this.dialogUrl, this.itemData);
+                },
+                batchDel() {
+                    let ids = this.multipleSelection.map(i => i.id);
+                    if (!ids.length) {
+                        // 数组为空
+                        ELEMENT.Message({
+                            showClose: true,
+                            message: "您未选中任何内容",
+                            type: 'warning'
+                        });
+                        return false;
+                    }
+                    ELEMENT.MessageBox.confirm('确定删除选中的列表数据?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        requestPost(this.batchDelUrl, ids);
+                    }).catch(() => {
+                        ELEMENT.Message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                del(id) {
+                    ELEMENT.MessageBox.confirm('确定删除该数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        requestGet(this.delUrl + id);
+                    }).catch(() => {
+                        ELEMENT.Message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                flatten(arr) {
+                    // 多级菜单平铺成一层
+                    const result = [];
+                    function flattenHelper(arr) {
+                        for (let i = 0; i < arr.length; i++) {
+                            const { child, ...rest } = arr[i];
+                            result.push(rest);
+                            if (child && child.length > 0) {
+                                flattenHelper(child);
+                            }
+                        }
+                    }
+                    flattenHelper(arr);
+                    return result;
+                },
+                filterMenuList(menuList) {
+                    return menuList.filter(menu => menu.menuType === 1 || menu.menuType === 0)
+                        .map(this.convertToTabsVo);
+                },
+                convertToTabsVo(menu) {
+                    const { id, menuType, menuName, child } = menu;
+                    let tabsVo = { id: String(id), menuType, menuName };
+                    tabsVo.child = (child || [])
+                        .filter(child => child.menuType === 1 || child.menuType === 0)
+                        .map(this.convertToTabsVo);
+                    return tabsVo;
+                },
+                getMenuNameById(id) {
+                    const menu = this.selectTree.find(menu => menu.id == id);
+                    console.log("getMenuNameById:",menu);
+                    return menu ? menu.menuName : null;
+                },
+                handleNodeClick(data, self, child) {
+                    this.labelData = data.menuName;//展示部分
+                    this.itemData.parentId = data.id;//传参---id
+                }
+
+            }, created() {
+                this.searchList();
+            }, mounted() {
+                // 生命周期 - 挂载完成（可以访问DOM元素）
                 // 列表检索
-                let url = this.listUrl + '?pageNum=' + this.pageDto.currentPage + '&pageSize=' + this.pageDto.pageSize;
-                axios.post(url, this.formDto).then(r => {
+                let url = this.listUrl + '?pageNum=1&pageSize=1000';
+                axios.post(url, {}).then(r => {
                     if (r.data.code === 200) {
                         let data = r.data.data;
-                        this.pageDto.total = data.total;
-                        this.pageDto.pageCount = data.pages;
-                        this.tableData = data.records;
-                        console.log("page:", this.pageDto);
+                        this.allMenuList = this.filterMenuList(data.records);
+                        this.selectTree= this.flatten(this.allMenuList);
                     }
                 }).catch(error => {
                     console.error("请求失败：", error);
@@ -264,105 +449,8 @@
                         type: 'error'
                     });
                 })
-            },
-            prePage() {
-                this.pageDto.currentPage -= 1;
-                this.searchList();
-            },
-            nextPage() {
-                this.pageDto.currentPage += 1;
-                this.searchList();
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pageDto.pageSize=val;
-                this.searchList();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.pageDto.currentPage=val;
-                this.searchList();
-            },
-            handleSelectionChange(val) {
-                //当选择项发生变化时会触发该事件
-                this.multipleSelection = val;
-            },
-            showSearchBox() {
-                this.showSearch = !this.showSearch;
-            },
-            add() {
-                this.addDialogVisible = true;
-                this.dialogTitle = '新增';
-                this.dialogUrl=this.addUrl;
-                this.itemData={};
-            },
-            addSub(row){
-                this.addDialogVisible = true;
-                this.dialogTitle = '新增';
-                this.dialogUrl=this.addUrl;
-                this.itemData={};
-                this.itemData.parentId=row.id;
-            },
-            edit(row) {
-                this.addDialogVisible = true;
-                this.dialogTitle = '编辑';
-                this.itemData = row;
-                this.itemData.child = {};
-                this.dialogUrl=this.editUrl;
-            },
-            saveOrUpdate(){
-                requestPost(this.dialogUrl, this.itemData);
-            },
-            batchDel() {
-                let ids = this.multipleSelection.map(i => i.id);
-                if (!ids.length) {
-                    // 数组为空
-                    ELEMENT.Message({
-                        showClose: true,
-                        message: "您未选中任何内容",
-                        type: 'warning'
-                    });
-                    return false;
-                }
-                ELEMENT.MessageBox.confirm('确定删除选中的列表数据?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    requestPost(this.batchDelUrl, ids);
-                }).catch(() => {
-                    ELEMENT.Message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
-            del(id) {
-                ELEMENT.MessageBox.confirm('确定删除该数据吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    requestGet(this.delUrl + id);
-                }).catch(() => {
-                    ELEMENT.Message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
             }
-
-        }, created() {
-            this.searchList();
-            setTimeout(()=>{
-                this.allMenuTreeList=this.tableData;
-                this.selectOptions=this.formatData();
-                console.log("allMenuTreeList:",this.allMenuTreeList);
-                console.log("selectOptions:",this.selectOptions);
-            },300)
-
-        }
-    });
+        });
 
 
 </script>

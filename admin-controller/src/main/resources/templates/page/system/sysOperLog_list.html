@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -9,17 +9,18 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>菜单按钮</title>
     <!-- element-ui 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" th:href="@{/static/element-ui/index.css}">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+          th:href="@{/static/element-ui/index.css}">
     <style>
-        .container{
+        .container {
             padding: 5px;
         }
 
-        .container .search-box{
+        .container .search-box {
             margin-bottom: 20px;
         }
 
-        .container .content-header{
+        .container .content-header {
             margin-bottom: 10px;
         }
 
@@ -54,10 +55,13 @@
         <section class="content-header">
             <el-row :gutter="2">
                 <el-col :span="11">
-                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+                    <el-button sa:hasPermissionOr="system:sysOperLog:list:del,admin" @click="batchDel" type="danger"
+                               size="mini" icon="el-icon-delete">删除
+                    </el-button>
                 </el-col>
                 <div class="content-header-right">
-                    <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search" circle></el-button>
+                    <el-button type="primary" @click="showSearchBox" size="mini" icon="el-icon-search"
+                               circle></el-button>
                 </div>
             </el-row>
 
@@ -73,39 +77,43 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-<!--                    <el-table-column prop="id" label="日志主键" width="100" ></el-table-column>-->
-                    <el-table-column prop="title" label="模块标题" width="100" ></el-table-column>
-                    <el-table-column prop="businessType" label="业务类型" width="100" >
-                        <template slot-scope="scope">
-                            <el-tag type="info" v-if="scope.row.businessType==0">其它</el-tag>
-                            <el-tag type="success" v-if="scope.row.businessType==1">新增</el-tag>
-                            <el-tag type="primary" v-if="scope.row.businessType==2">修改</el-tag>
-                            <el-tag type="danger" v-if="scope.row.businessType==3">删除</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="requestMethod" label="请求方式" width="100" ></el-table-column>
-                    <el-table-column prop="status" label="操作状态" width="100" >
-                        <template slot-scope="scope">
-                            <el-tag type="success" v-if="scope.row.status==0">正常</el-tag>
-                            <el-tag type="danger" v-if="scope.row.status==1">异常</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="operName" label="操作人员" width="100" ></el-table-column>
-<!--                    <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>-->
-                    <el-table-column prop="operIp" label="主机地址" width="100" ></el-table-column>
-                    <el-table-column prop="operLocation" label="操作地点" width="100" ></el-table-column>
-                    <el-table-column prop="operTime" label="操作时间" width="160" ></el-table-column>
-                    <el-table-column prop="costTime" label="消耗时间" width="160" ></el-table-column>
+                <!--                    <el-table-column prop="id" label="日志主键" width="100" ></el-table-column>-->
+                <el-table-column prop="title" label="模块标题" width="100"></el-table-column>
+                <el-table-column prop="businessType" label="业务类型" width="100">
+                    <template slot-scope="scope">
+                        <el-tag type="info" v-if="scope.row.businessType==0">其它</el-tag>
+                        <el-tag type="success" v-if="scope.row.businessType==1">新增</el-tag>
+                        <el-tag type="primary" v-if="scope.row.businessType==2">修改</el-tag>
+                        <el-tag type="danger" v-if="scope.row.businessType==3">删除</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="requestMethod" label="请求方式" width="100"></el-table-column>
+                <el-table-column prop="status" label="操作状态" width="100">
+                    <template slot-scope="scope">
+                        <el-tag type="success" v-if="scope.row.status==0">正常</el-tag>
+                        <el-tag type="danger" v-if="scope.row.status==1">异常</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="operName" label="操作人员" width="100"></el-table-column>
+                <!--                    <el-table-column prop="deptName" label="部门名称" width="100" ></el-table-column>-->
+                <el-table-column prop="operIp" label="主机地址" width="100"></el-table-column>
+                <el-table-column prop="operLocation" label="操作地点" width="100"></el-table-column>
+                <el-table-column prop="operTime" label="操作时间" width="160"></el-table-column>
+                <el-table-column prop="costTime" label="消耗时间" width="160"></el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
                         min-width="140">
                     <template slot-scope="scope">
-                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:view,admin" class="item" effect="dark" content="查看详情" placement="top-start">
-                            <el-button @click="view(scope.row)" type="primary" icon="el-icon-view" size="mini" circle></el-button>
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:view,admin" class="item" effect="dark"
+                                    content="查看详情" placement="top-start">
+                            <el-button @click="view(scope.row)" type="primary" icon="el-icon-view" size="mini"
+                                       circle></el-button>
                         </el-tooltip>
-                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:del,admin" class="item" effect="dark" content="删除" placement="top-start">
-                            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+                        <el-tooltip sa:hasPermissionOr="system:sysOperLog:list:del,admin" class="item" effect="dark"
+                                    content="删除" placement="top-start">
+                            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" size="mini"
+                                       circle></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -130,13 +138,19 @@
     </el-card>
 
 
-    <el-dialog :title="dialogTitle"  :visible.sync="addDialogVisible">
+    <el-dialog :title="dialogTitle" :visible.sync="addDialogVisible">
         <el-descriptions title="" :column="1">
             <el-descriptions-item label="请求地址">{{itemData.operUrl}}</el-descriptions-item>
             <el-descriptions-item label="请求方法">{{itemData.method}}</el-descriptions-item>
-            <el-descriptions-item label="请求参数"><pre>{{formatJSON(itemData.operParam)}}</pre></el-descriptions-item>
-            <el-descriptions-item label="返回参数"><pre>{{formatJSON(itemData.jsonResult)}}</pre></el-descriptions-item>
-            <el-descriptions-item v-if="itemData.errorMsg != ''" label="错误消息"><pre>{{itemData.errorMsg}}</pre></el-descriptions-item>
+            <el-descriptions-item label="请求参数">
+                <pre>{{formatJSON(itemData.operParam)}}</pre>
+            </el-descriptions-item>
+            <el-descriptions-item label="返回参数">
+                <pre>{{formatJSON(itemData.jsonResult)}}</pre>
+            </el-descriptions-item>
+            <el-descriptions-item v-if="itemData.errorMsg != ''" label="错误消息">
+                <pre>{{itemData.errorMsg}}</pre>
+            </el-descriptions-item>
         </el-descriptions>
     </el-dialog>
 
@@ -157,7 +171,7 @@
                     batchDelUrl: ctx + 'system/sysOperLog/batchDel',
                     addUrl: ctx + 'system/sysOperLog/add',
                     editUrl: ctx + 'system/sysOperLog/edit',
-                    dialogUrl:'',
+                    dialogUrl: '',
                     tableData: [],
                     multipleSelection: [],
                     formDto: {
@@ -174,54 +188,54 @@
                     },
                     addDialogVisible: false,
                     itemData: {
-                        menuIdList:[],
+                        menuIdList: [],
                     },
                     dialogTitle: '新增',
                     formLabelWidth: '100px',
                     formTimeLabelWidth: '120px',
                     rules: {
-                                    title: [
-                                        { required: true, message: '请输入模块标题', trigger: 'blur' },
-                                    ],
-                                    businessType: [
-                                        { required: true, message: '请输入业务类型（0其它 1新增 2修改 3删除）', trigger: 'blur' },
-                                    ],
-                                    method: [
-                                        { required: true, message: '请输入方法名称', trigger: 'blur' },
-                                    ],
-                                    requestMethod: [
-                                        { required: true, message: '请输入请求方式', trigger: 'blur' },
-                                    ],
-                                    operatorType: [
-                                        { required: true, message: '请输入操作类别（0其它 1后台用户 2手机端用户）', trigger: 'blur' },
-                                    ],
-                                    operName: [
-                                        { required: true, message: '请输入操作人员', trigger: 'blur' },
-                                    ],
-                                    deptName: [
-                                        { required: true, message: '请输入部门名称', trigger: 'blur' },
-                                    ],
-                                    operUrl: [
-                                        { required: true, message: '请输入请求URL', trigger: 'blur' },
-                                    ],
-                                    operIp: [
-                                        { required: true, message: '请输入主机地址', trigger: 'blur' },
-                                    ],
-                                    operLocation: [
-                                        { required: true, message: '请输入操作地点', trigger: 'blur' },
-                                    ],
-                                    operParam: [
-                                        { required: true, message: '请输入请求参数', trigger: 'blur' },
-                                    ],
-                                    jsonResult: [
-                                        { required: true, message: '请输入返回参数', trigger: 'blur' },
-                                    ],
-                                    status: [
-                                        { required: true, message: '请输入操作状态（0正常 1异常）', trigger: 'blur' },
-                                    ],
-                                    errorMsg: [
-                                        { required: true, message: '请输入错误消息', trigger: 'blur' },
-                                    ],
+                        title: [
+                            {required: true, message: '请输入模块标题', trigger: 'blur'},
+                        ],
+                        businessType: [
+                            {required: true, message: '请输入业务类型（0其它 1新增 2修改 3删除）', trigger: 'blur'},
+                        ],
+                        method: [
+                            {required: true, message: '请输入方法名称', trigger: 'blur'},
+                        ],
+                        requestMethod: [
+                            {required: true, message: '请输入请求方式', trigger: 'blur'},
+                        ],
+                        operatorType: [
+                            {required: true, message: '请输入操作类别（0其它 1后台用户 2手机端用户）', trigger: 'blur'},
+                        ],
+                        operName: [
+                            {required: true, message: '请输入操作人员', trigger: 'blur'},
+                        ],
+                        deptName: [
+                            {required: true, message: '请输入部门名称', trigger: 'blur'},
+                        ],
+                        operUrl: [
+                            {required: true, message: '请输入请求URL', trigger: 'blur'},
+                        ],
+                        operIp: [
+                            {required: true, message: '请输入主机地址', trigger: 'blur'},
+                        ],
+                        operLocation: [
+                            {required: true, message: '请输入操作地点', trigger: 'blur'},
+                        ],
+                        operParam: [
+                            {required: true, message: '请输入请求参数', trigger: 'blur'},
+                        ],
+                        jsonResult: [
+                            {required: true, message: '请输入返回参数', trigger: 'blur'},
+                        ],
+                        status: [
+                            {required: true, message: '请输入操作状态（0正常 1异常）', trigger: 'blur'},
+                        ],
+                        errorMsg: [
+                            {required: true, message: '请输入错误消息', trigger: 'blur'},
+                        ],
 
 
                     }
@@ -257,11 +271,11 @@
                     this.searchList();
                 },
                 handleSizeChange(val) {
-                    this.pageDto.pageSize=val;
+                    this.pageDto.pageSize = val;
                     this.searchList();
                 },
                 handleCurrentChange(val) {
-                    this.pageDto.currentPage=val;
+                    this.pageDto.currentPage = val;
                     this.searchList();
                 },
                 handleSelectionChange(val) {
@@ -317,6 +331,9 @@
                     });
                 },
                 formatJSON(jsonString) {
+                    if (!jsonString) {
+                        return false;
+                    }
                     try {
                         const parsedJson = JSON.parse(jsonString);
                         return JSON.stringify(parsedJson, null, 2);
