@@ -96,3 +96,4 @@ security:
     - /login
     - /captcha
     - /upload/**
+    - /show/**

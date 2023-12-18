@@ -71,9 +71,9 @@
                 <el-table-column prop="id" label="菜单ID"></el-table-column>
                 <el-table-column prop="nickName" label="用户昵称" width="120"></el-table-column>
                 <el-table-column prop="username" label="用户名" sortable width="120"></el-table-column>
-                <el-table-column prop="picUrl" label="用户头像">
+                <el-table-column prop="avatar" label="用户头像">
                     <template slot-scope="scope">
-                        <el-avatar :size="35" :src="scope.row.picUrl"></el-avatar>
+                        <el-avatar :size="35" :src="scope.row.avatar"></el-avatar>
                     </template>
                 </el-table-column>
                 <el-table-column prop="status" label="用户状态"></el-table-column>
@@ -136,7 +136,7 @@
                 <el-input show-password v-model="itemData.password" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="头像" prop="picUrl" :label-width="formLabelWidth">
-                <el-input v-model="itemData.picUrl" autocomplete="off"></el-input>
+                <el-input v-model="itemData.avatar" autocomplete="off"></el-input>
                 <el-upload
                         class="upload-demo"
                         drag
@@ -390,7 +390,7 @@
                 uploadSuccess(res, file, fileList) {
                     console.log("res:", res);
                     if (res.code === 200) {
-                        this.itemData.picUrl = res.data;
+                        this.itemData.avatar = res.data;
                     } else {
                         ELEMENT.Message({
                             showClose: true,

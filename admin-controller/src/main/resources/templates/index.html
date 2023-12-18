@@ -72,6 +72,38 @@
                 -ms-transform: rotate(360deg);
             }
         }
+        .user-menu{
+            max-width: 200px;
+        }
+
+        .user-menu img{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-footer {
+           padding: 5px;
+        }
+
+        .user-footer:hover {
+            background-color: #cccccc;
+            color: #FFFFFF;
+            cursor:pointer;
+        }
+        .user-footer span{
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .user-panel > .image > img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
     </style>
 
 </head>
@@ -113,10 +145,11 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-user-circle user-image"></i>
+<!--                            <i class="fa fa-user-circle user-image"></i>-->
+                            <img th:src="${user.avatar}" src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle" alt="User Image">
                             <span class="hidden-xs" th:text="${user.nickName}">系统管理员</span>
                         </a>
-                        <ul class="dropdown-menu  dropdown-menu-right" style="padding-top:0;width:280px;">
+                        <ul class="dropdown-menu  dropdown-menu-right">
                             <!-- User image -->
 <!--                            <li class="user-header" style="text-align: center; margin-bottom: 20px">-->
 <!--                                <img src="http://rstyro.gitee.io/blog/images/avatar.jpg" class="img-circle"-->
@@ -133,13 +166,10 @@
 <!--                            </li>-->
                             <!-- Menu Footer-->
                             <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat" id="editPwd"><i class="fa fa-key"></i>修改密码</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="#" id="logout" class="btn btn-default btn-flat"><i
-                                            class="fa fa-sign-out"></i>登出</a>
-                                </div>
+                                <div id="editPwd"><i class="fa fa-key"></i><span>修改密码</span></div>
+                            </li>
+                            <li class="user-footer">
+                                <div id="logout" ><i class="fa fa-sign-out"></i><span>登出</span></div>
                             </li>
                         </ul>
                     </li>
