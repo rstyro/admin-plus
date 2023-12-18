@@ -17,11 +17,7 @@
     <link href="adminlte/css/AdminLTE.lite.css" th:href="@{/static/adminlte/css/AdminLTE.lite.css}" rel="stylesheet"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
      folder instead of downloading all of them to reduce the load. -->
-    <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}"
-          rel="stylesheet"/>
-    <!-- element-ui 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
-          th:href="@{/static/element-ui/index.css}">
+    <link href="adminlte/css/skins/all-skins.min.css" th:href="@{/static/adminlte/css/skins/all-skins.min.css}" rel="stylesheet"/>
 
     <style type="text/css">
         html {
@@ -138,7 +134,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" @click="addDialogVisible = true" class="btn btn-default btn-flat"><i class="fa fa-key"></i>修改密码</a>
+                                    <a href="#" class="btn btn-default btn-flat" id="editPwd"><i class="fa fa-key"></i>修改密码</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="#" id="logout" class="btn btn-default btn-flat"><i
@@ -294,6 +290,34 @@
         </div>
     </el-dialog>
 
+    <div class="modal fade" id="menuModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="menumodelHead">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <input type="hidden" name="id" value="0"/>
+                        <input type="hidden" name="actionurl" value="/"/>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">新密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" value="" id="password" placeholder="请输入新密码">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-success" id="submitBtn" >修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -301,8 +325,7 @@
 <!-- jQuery -->
 <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js" th:src="@{/static/bootstrap/jquery.min.js}"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
-        th:src="@{/static/bootstrap/bootstrap.min.js}"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{/static/bootstrap/bootstrap.min.js}"></script>
 <!--&lt;!&ndash; Slimscroll &ndash;&gt;-->
 <script src="adminlte/js/jquery.slimscroll.min.js" th:src="@{/static/adminlte/js/jquery.slimscroll.min.js}"></script>
 <!--&lt;!&ndash; AdminLTE App &ndash;&gt;-->
@@ -312,11 +335,7 @@
 <script src="adminlte/js/jquery.blockUI.min.js" th:src="@{/static/adminlte/js/jquery.blockUI.min.js}"></script>
 <!--&lt;!&ndash;tabs&ndash;&gt;-->
 <script src="adminlte/js/app_iframe.js" th:src="@{/static/adminlte/js/app_iframe.js}"></script>
-<!-- element-ui -->
-<script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
-<script th:src="@{/static/vue/api.js}"></script>
+
 
 <script type="text/javascript" th:inline="javascript">
     let ctx = [[@{/}]];
@@ -390,47 +409,74 @@
                 }
             }*/
             $("#logout").click(function () {
-                axios.post(ctx + 'logout')
-                    .then(({status, data}) => {
-                        if (status === 200 && data.code === 200) {
+                $.ajax({
+                    type:"POST",
+                    url:ctx + 'logout',
+                    data:{time:new Date().getTime()},
+                    dataType:"json",
+                    cache:false,
+                    success:function(data){
+                        if(data.code == 200){
+                            //刷新
                             window.location.href = ctx + 'index';
-                        } else {
-                            ELEMENT.Message({
-                                showClose: true,
-                                message: data.msg,
-                                type: 'error'
-                            });
-                            console.log("result=", data);
+                        }else{
+                            alert(data.message);
                         }
-                    })
-                    .catch(error => {
-                        console.error("请求失败：", error);
-                        ELEMENT.Message({
-                            showClose: true,
-                            message: "请求失败，请稍后重试",
-                            type: 'error'
-                        });
-                    });
+                    }
+                });
+
+
             });
 
             $("#icon").click(function () {
                 addTabs({
-                    id: "188",
+                    id: "11188",
                     title: "ICON",
                     url: ctx + "icon",
                     targetType: "iframe-tab",
                     close: false
                 });
             });
+
+            $("#editPwd").click(function (){
+                let userId=[[${user.id}]];
+                $("#menuModal input[name='id']").val(userId);
+                $("#menuModal").modal("show");
+            });
+
+            $("#submitBtn").click(function(){
+                var userId = $("input[name='id']").val();
+                var password = $("input[name='password']").val();
+                $.ajax({
+                    type:"POST",
+                    url:ctx + 'system/user/edit',
+                    contentType: "application/json; charset=utf-8",
+                    data:JSON.stringify({id:userId,password:password}),
+                    dataType:"json",
+                    cache:false,
+                    success:function(data){
+                        if(data.code == 200){
+                            $("#menuModal").modal("hide");
+                            //刷新
+                            location.reload();
+                        }else{
+                            alert(data.msg);
+                        }
+                    }
+                });
+
+            });
+
             $("#welcome").click(function () {
                 openWelcome();
             });
+
 
         });
 
 function openWelcome(){
     addTabs({
-        id: "168",
+        id: "11168",
         title: "欢迎页",
         url: ctx + "welcome",
         targetType: "iframe-tab",
@@ -439,29 +485,7 @@ function openWelcome(){
     });
 }
 </script>
-<script type="text/javascript" th:inline="javascript">
-    let userId=[[${userId}]];
-    new Vue({
-        el: '#app',
-        data: function () {
-            return {
-                editUrl: ctx + 'system/user/edit',
-                itemData:{
-                    id:[[${userId}]]
-                },
-                addDialogVisible:false,
-                formLabelWidth:"100px"
-            }
-        },
-        methods: {
-            editPwd(){
-                requestPost(this.editUrl, this.itemData);
-            }
-        },
-        created(){
-        }
-    });
-</script>
+
 </body>
 
 </html>

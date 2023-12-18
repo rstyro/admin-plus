@@ -6,6 +6,7 @@ import com.lrs.common.vo.R;
 import com.lrs.common.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,7 +42,13 @@ public class RestExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public R HttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
+	public R httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
+		log.error(ex.getMessage(),ex);
+		return R.error(ApiResultEnum.ERROR_REQUEST_ERR);
+	}
+
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	public R httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex){
 		log.error(ex.getMessage(),ex);
 		return R.error(ApiResultEnum.ERROR_REQUEST_ERR);
 	}
@@ -71,6 +78,8 @@ public class RestExceptionHandler {
 		log.error(ex.getMessage(),ex);
 		return R.error(message);
 	}
+
+
 
 	/**
 	 * 自定义验证异常
