@@ -94,6 +94,6 @@ security:
     - /error/**
     - /toLogin
     - /login
-    - /captcha
+    - /captcha**
     - /upload/**
     - /show/**

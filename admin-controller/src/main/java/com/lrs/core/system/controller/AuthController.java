@@ -1,6 +1,5 @@
 package com.lrs.core.system.controller;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.lrs.common.constant.Const;
 import com.lrs.common.utils.CaptchaUtil;
 import com.lrs.common.vo.R;
