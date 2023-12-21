@@ -45,7 +45,6 @@ public class RedisSimulation {
     public <T> void set(String key, T value, long expiration, TimeUnit unit) {
         dataMap.put(key, value);
         expirationMap.put(key, System.currentTimeMillis() + unit.toMillis(expiration));
-        checkExpiredKeys();
     }
 
     /**
@@ -60,6 +59,7 @@ public class RedisSimulation {
         Long oldExpiration = expirationMap.putIfAbsent(key, currentExpiration);
         if (oldExpiration == null || System.currentTimeMillis() > oldExpiration) {
             dataMap.put(key, value);
+            expirationMap.put(key, currentExpiration);
             return true;
         }
         return false;
