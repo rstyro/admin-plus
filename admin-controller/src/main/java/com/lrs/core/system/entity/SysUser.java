@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lrs.common.sensitive.Sensitive;
+import com.lrs.common.sensitive.SensitiveStrategy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -48,11 +50,14 @@ public class SysUser implements Serializable {
     /**
      * 密码
      */
+    @Sensitive(strategy = SensitiveStrategy.PASSWORD)
     @NotBlank(message = "密码不能为空")
     private String password;
+
     /**
      * 密码随机盐
      */
+    @Sensitive(strategy = SensitiveStrategy.PASSWORD)
     private String salt;
 
     /**

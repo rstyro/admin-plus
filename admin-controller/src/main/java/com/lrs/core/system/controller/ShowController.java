@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+/**
+ * 上传图片展示类
+ */
 @Controller
 @RequestMapping("/show")
 public class ShowController {
