@@ -172,7 +172,7 @@ public class BaseController {
     public static SysUser getLoginSysUser() {
         try {
             SaSession session = StpUtil.getSession();
-            return Convert.convert(SysUser.class, session.get(Const.SESSION_USER));
+            return Convert.convert(SysUser.class, session.get(Const.SessionKey.SESSION_USER));
         } catch (Exception e) {
             return null;
         }

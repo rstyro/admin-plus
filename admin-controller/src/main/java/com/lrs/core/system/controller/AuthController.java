@@ -47,7 +47,7 @@ public class AuthController {
             response.setContentType("image/png");
             ImageIO.write(image, "png", os);
             os.flush();
-            session.setAttribute(Const.SESSION_CODE,img[1]);
+            session.setAttribute(Const.SessionKey.SESSION_CODE,img[1]);
         } catch (IOException e) {
             log.error("验证码输出异常:{}", e.getMessage(),e);
             // 返回适当的错误响应
@@ -69,7 +69,7 @@ public class AuthController {
             response.setContentType("image/png");
             ImageIO.write(image, "png", os);
             os.flush();
-            session.setAttribute(Const.SESSION_CODE,img[1]);
+            session.setAttribute(Const.SessionKey.SESSION_CODE,img[1]);
         } catch (IOException e) {
             log.error("验证码输出异常:{}", e.getMessage(),e);
             // 返回适当的错误响应

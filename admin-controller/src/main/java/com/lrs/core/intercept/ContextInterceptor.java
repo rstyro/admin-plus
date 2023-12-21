@@ -19,9 +19,9 @@ import java.util.Optional;
 public class ContextInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String pageNo = Optional.ofNullable(request.getHeader(Const.PAGE_NO)).orElse(request.getParameter(Const.PAGE_NO));
-        String pageSize = Optional.ofNullable(request.getHeader(Const.PAGE_SIZE)).orElse(request.getParameter(Const.PAGE_SIZE));
-        String trackerId = Optional.ofNullable(request.getHeader(Const.TRACKER_ID)).orElse(request.getParameter(Const.TRACKER_ID));
+        String pageNo = Optional.ofNullable(request.getHeader(Const.HeaderKey.PAGE_NO)).orElse(request.getParameter(Const.HeaderKey.PAGE_NO));
+        String pageSize = Optional.ofNullable(request.getHeader(Const.HeaderKey.PAGE_SIZE)).orElse(request.getParameter(Const.HeaderKey.PAGE_SIZE));
+        String trackerId = Optional.ofNullable(request.getHeader(Const.HeaderKey.TRACKER_ID)).orElse(request.getParameter(Const.HeaderKey.TRACKER_ID));
         ContextVo contextVo = new ContextVo();
         contextVo.setTrackerId(StringUtils.hasLength(trackerId)?trackerId:IdUtil.fastSimpleUUID());
         contextVo.setPageNo(StringUtils.hasLength(pageNo)&&StrUtil.isNumeric(pageNo)?Integer.parseInt(pageNo):1);

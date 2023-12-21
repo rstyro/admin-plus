@@ -5,8 +5,10 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,7 +16,10 @@ import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
 import com.lrs.common.constant.SystemConst;
 import com.lrs.common.exception.ApiException;
+import com.lrs.common.utils.RedisSimulation;
 import com.lrs.common.vo.TabsVo;
+import com.lrs.core.base.BaseController;
+import com.lrs.core.system.config.CommonConfig;
 import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.dto.LoginDto;
 import com.lrs.core.system.entity.SysMenu;
@@ -27,6 +32,7 @@ import com.lrs.core.system.service.ISysMenuService;
 import com.lrs.core.system.service.ISysRoleMenuService;
 import com.lrs.core.system.service.ISysUserRoleService;
 import com.lrs.core.system.service.ISysUserService;
+import org.omg.CORBA.UserException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -35,6 +41,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +63,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private ISysMenuService sysMenuService;
+
+    @Resource
+    private CommonConfig.UserConfig userConfig;
+
+    @Resource
+    private RedisSimulation redisSimulation;
 
 
     /**
@@ -194,7 +208,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean update = updateById(item);
         if (update && sysUser.getId().equals(StpUtil.getLoginIdAsLong())) {
             // 刷新用户session
-            StpUtil.getSession().set(Const.SESSION_USER, getById(item.getId()));
+            StpUtil.getSession().set(Const.SessionKey.SESSION_USER, getById(item.getId()));
         }
         return update;
     }
@@ -211,38 +225,51 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SysUser login(HttpServletRequest request, LoginDto dto) {
-        String codeStr = (String) request.getSession().getAttribute(Const.SESSION_CODE);
-        if (!dto.getCode().equalsIgnoreCase(codeStr)) {
-            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_CODE_ERROR.getMessage());
-            throw new ApiException(ApiResultEnum.SYSTEM_CODE_ERROR);
+        String errKey = Const.RedisKey.USER_ACCOUNT_ERR_KEY+dto.getUsername()+ BaseController.getRemoteIP(request);
+        int errorNumber = ObjectUtil.defaultIfNull(redisSimulation.get(errKey), 0);
+        // 锁定时间内登录 则踢出
+        int maxRetryCount = userConfig.getMaxRetryCount();
+        if (errorNumber >= maxRetryCount) {
+            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT.getMessage());
+            throw new ApiException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
         }
+        String codeStr = (String) request.getSession().getAttribute(Const.SessionKey.SESSION_CODE);
+        checkLoginError(request, dto.getUsername(),errKey,errorNumber,maxRetryCount,ApiResultEnum.SYSTEM_CODE_ERROR,()->!dto.getCode().equalsIgnoreCase(codeStr));
         SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, dto.getUsername()));
-        if(sysUser==null){
-            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND.getMessage());
-            throw new ApiException(ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND);
-        }
+        checkLoginError(request, dto.getUsername(),errKey,errorNumber,maxRetryCount,ApiResultEnum.SYSTEM_ACCOUNT_NOT_FOUND,()->sysUser==null);
         String salt = sysUser.getSalt();
         String pwd = SecureUtil.md5(dto.getPassword() + salt);
-        if (!pwd.equals(sysUser.getPassword())) {
-            recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_PASSWORD_ERROR.getMessage());
-            throw new ApiException(ApiResultEnum.SYSTEM_PASSWORD_ERROR);
-        }
+        checkLoginError(request, dto.getUsername(),errKey,errorNumber,maxRetryCount,ApiResultEnum.SYSTEM_PASSWORD_ERROR,()->!pwd.equals(sysUser.getPassword()));
         // 登录成功
         StpUtil.login(sysUser.getId(), dto.isRememberMe());
         recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.SUCCESS,"登录成功");
         // 更新最后登录时间
         updateUserRecord(sysUser);
         SaSession session = StpUtil.getSession();
-        session.set(Const.SESSION_USER, sysUser);
+        session.set(Const.SessionKey.SESSION_USER, sysUser);
         // 数据脱敏
         sysUser.setPassword("****");
         sysUser.setSalt("****");
+        List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
+        System.out.println(JSON.toJSONString(keys));
         return sysUser;
+    }
+
+    private void checkLoginError(HttpServletRequest request, String username, String errKey, int errorNumber, int maxRetryCount, ApiResultEnum errorEnum, Supplier<Boolean> supplier) {
+        if(supplier.get()){
+            redisSimulation.set(errKey, ++errorNumber, userConfig.getLockTime(), TimeUnit.MINUTES);
+            recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, errorEnum.getMessage());
+            if (errorNumber >= maxRetryCount) {
+                recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT.getMessage());
+                throw new ApiException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
+            }
+            throw new ApiException(errorEnum);
+        }
     }
 
     @Override
     public boolean logout(HttpServletRequest request) {
-        SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SESSION_USER));
+        SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SessionKey.SESSION_USER));
         recordLoginInfo(request,sysUser.getUsername(), SystemConst.LoginInfoStatus.SUCCESS,"退出登录");
         StpUtil.logout();
         return true;

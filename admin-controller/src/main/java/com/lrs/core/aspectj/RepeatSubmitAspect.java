@@ -61,7 +61,7 @@ public class RepeatSubmitAspect {
 
         submitKey = SecureUtil.md5(submitKey + ":" + nowParams);
         // 唯一标识（指定key + url + 消息头）
-        String cacheRepeatKey = Const.REPEAT_SUBMIT_KEY + url + submitKey;
+        String cacheRepeatKey = Const.RedisKey.REPEAT_SUBMIT_KEY + url + submitKey;
         if (redisSimulation.setObjectIfAbsent(cacheRepeatKey, "", interval)) {
             KEY_CACHE.set(cacheRepeatKey);
         } else {

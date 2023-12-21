@@ -42,7 +42,7 @@ public class IndexController {
      */
     @GetMapping("/index")
     public String index(Model model) {
-        SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SESSION_USER));
+        SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SessionKey.SESSION_USER));
         model.addAttribute("systemName", commonConfig.getSystemName());
         model.addAttribute("user", sysUser);
         // tabs菜单
