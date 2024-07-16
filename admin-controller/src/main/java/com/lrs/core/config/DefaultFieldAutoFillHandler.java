@@ -18,11 +18,18 @@ public class DefaultFieldAutoFillHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createBy", () -> StpUtil.getLoginId(-1l), Long.class);
         this.strictInsertFill(metaObject, "createTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictInsertFill(metaObject, "updateBy", () -> StpUtil.getLoginId(-1l), Long.class);
+        this.strictInsertFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "updateBy", () -> StpUtil.getLoginId(-1l), Long.class);
-        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        // 有则不填充
+//        this.strictUpdateFill(metaObject, "updateBy", () -> StpUtil.getLoginId(-1l), Long.class);
+//        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        // 不管有没有值都填充
+        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("updateBy", StpUtil.getLoginId(-1l), metaObject);
+
     }
 }

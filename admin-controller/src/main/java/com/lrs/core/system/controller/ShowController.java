@@ -1,8 +1,9 @@
 package com.lrs.core.system.controller;
 
-import com.lrs.common.utils.PathsUtils;
 import com.lrs.core.system.config.CommonConfig;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,47 +27,58 @@ public class ShowController {
     //显示本地图片
     @GetMapping(value = "/{filename:.+}")
     public void getImg(@PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String address =  uploadConfig.getRoot()+"/"+filename;
-        writeImg(response, PathsUtils.getAbsolutePath(address));
+        String address = uploadConfig.getRoot() + "/" + filename;
+        sendImageToResponse(response, address);
     }
 
     @GetMapping(value = "/{folderName}/{filename:.+}")
     public void getImg(@PathVariable("folderName") String folderName, @PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String address =  uploadConfig.getRoot()+"/"+folderName+"/"+filename;
-        writeImg(response,PathsUtils.getAbsolutePath(address));
+        String address = uploadConfig.getRoot() + "/" + folderName + "/" + filename;
+        sendImageToResponse(response, address);
     }
 
     @GetMapping(value = "/{folderName}/{folderName2}/{filename:.+}")
     public void getImg(@PathVariable("folderName") String folderName, @PathVariable("folderName2") String folderName2, @PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String address =  uploadConfig.getRoot()+"/"+folderName+"/"+folderName2+"/"+filename;
-        writeImg(response, PathsUtils.getAbsolutePath(address));
+        String address = uploadConfig.getRoot() + "/" + folderName + "/" + folderName2 + "/" + filename;
+        sendImageToResponse(response, address);
     }
 
-    //获取图片的绝对地址
-    public FileInputStream query_getPhotoImageBlob(String adress) {
-        FileInputStream is = null;
-        File filePic = new File(adress);
-        try {
-            is = new FileInputStream(filePic);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    // 输出图片到HTTP响应
+    public void sendImageToResponse(HttpServletResponse response, String filePath) throws IOException {
+        if (ObjectUtils.isEmpty(filePath)) {
+            throw new IllegalArgumentException("文件路径不能为空.");
         }
-        return is;
+        File filePic = new File(filePath);
+        if (!filePic.exists()) {
+            filePic = new File(System.getProperty("user.dir") + "/" + filePath);
+        }
+        if (!filePic.exists() || !filePic.isFile()) {
+            throw new FileNotFoundException("文件不存在，路径: " + filePath);
+        }
+        response.setContentType(getContentType(filePath));
+        try (FileInputStream fis = new FileInputStream(filePic);
+             OutputStream outputStream = response.getOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        } catch (FileNotFoundException e) {
+            throw new IOException("查找文件失败：err=", e);
+        }
     }
 
-    //输出图片
-    public void writeImg(HttpServletResponse response, String address) throws IOException {
-        response.setContentType("image/jpeg");
-        FileInputStream is =this.query_getPhotoImageBlob(address);
-        if (is != null){
-            int i = is.available(); // 得到文件大小
-            byte data[] = new byte[i];
-            is.read(data); // 读数据
-            is.close();
-            response.setContentType("image/jpeg"); // 设置返回的文件类型
-            OutputStream toClient = response.getOutputStream(); // 得到向客户端输出二进制数据的对象
-            toClient.write(data); // 输出数据
-            toClient.close();
+    // 根据文件扩展名获取MIME类型
+    private String getContentType(String imagePath) {
+        String extension = FilenameUtils.getExtension(imagePath).toLowerCase();
+        switch (extension) {
+            case "png":
+                return "image/png";
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            default:
+                return "application/octet-stream";
         }
     }
 }

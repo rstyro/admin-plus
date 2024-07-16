@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import com.lrs.common.constant.Const;
 import com.lrs.common.vo.ContextUtil;
 import com.lrs.common.vo.ContextVo;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
