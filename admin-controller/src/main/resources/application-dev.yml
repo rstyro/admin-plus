@@ -5,7 +5,7 @@ admin:
     systemName: 后台管理系统
     name: Admin LRS
     upload:
-      root: upload
+      root: D:/upload
       pre: http://localhost:8800/show/
     user:
       # 密码最大错误次数

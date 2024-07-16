@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class DefaultFieldAutoFillHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createBy", () -> StpUtil.getLoginId(-1l), Long.class);
-        this.strictInsertFill(metaObject, "createTime", () -> LocalDateTime.now(), LocalDateTime.class);
-        this.strictInsertFill(metaObject, "updateBy", () -> StpUtil.getLoginId(-1l), Long.class);
-        this.strictInsertFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictInsertFill(metaObject, "createBy", () -> StpUtil.getLoginId(-1L), Long.class);
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
+        this.strictInsertFill(metaObject, "updateBy", () -> StpUtil.getLoginId(-1L), Long.class);
+        this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class DefaultFieldAutoFillHandler implements MetaObjectHandler {
 //        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
         // 不管有没有值都填充
         this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("updateBy", StpUtil.getLoginId(-1l), metaObject);
+        this.setFieldValByName("updateBy", StpUtil.getLoginId(-1L), metaObject);
 
     }
 }

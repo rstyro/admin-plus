@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -26,19 +25,19 @@ public class ShowController {
 
     //显示本地图片
     @GetMapping(value = "/{filename:.+}")
-    public void getImg(@PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getImg(@PathVariable("filename") String filename, HttpServletResponse response) throws IOException {
         String address = uploadConfig.getRoot() + "/" + filename;
         sendImageToResponse(response, address);
     }
 
     @GetMapping(value = "/{folderName}/{filename:.+}")
-    public void getImg(@PathVariable("folderName") String folderName, @PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getImg(@PathVariable("folderName") String folderName, @PathVariable("filename") String filename, HttpServletResponse response) throws IOException {
         String address = uploadConfig.getRoot() + "/" + folderName + "/" + filename;
         sendImageToResponse(response, address);
     }
 
     @GetMapping(value = "/{folderName}/{folderName2}/{filename:.+}")
-    public void getImg(@PathVariable("folderName") String folderName, @PathVariable("folderName2") String folderName2, @PathVariable("filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getImg(@PathVariable("folderName") String folderName, @PathVariable("folderName2") String folderName2, @PathVariable("filename") String filename, HttpServletResponse response) throws IOException {
         String address = uploadConfig.getRoot() + "/" + folderName + "/" + folderName2 + "/" + filename;
         sendImageToResponse(response, address);
     }

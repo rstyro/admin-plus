@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -28,7 +29,6 @@ public class UploadController {
     /**
      * 上传图片
      * @param file 文件
-     * @return
      */
     @PostMapping(value = "/image")
     public R<String> imgUpload(@RequestParam(value = "file") MultipartFile file){
@@ -37,12 +37,12 @@ public class UploadController {
         }
         // 获取文件名
         String fileName = file.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        String suffixName = Objects.requireNonNull(fileName).substring(fileName.lastIndexOf("."));
         String folder = "/"+ DateUtil.getDays()+"/";
         fileName  = System.currentTimeMillis()+suffixName;
         File dest = ImgUtil.createFile(uploadConfig.getRoot()+folder+fileName);
         try {
-            file.transferTo(dest);
+            file.transferTo(Objects.requireNonNull(dest));
         }catch (IOException e) {
             log.error(e.getMessage(),e);
             throw new ApiException(ApiResultEnum.ERROR_IO);

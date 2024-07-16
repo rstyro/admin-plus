@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public class ContextInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String pageNo = Optional.ofNullable(request.getHeader(Const.HeaderKey.PAGE_NO)).orElse(request.getParameter(Const.HeaderKey.PAGE_NO));
         String pageSize = Optional.ofNullable(request.getHeader(Const.HeaderKey.PAGE_SIZE)).orElse(request.getParameter(Const.HeaderKey.PAGE_SIZE));
         String trackerId = Optional.ofNullable(request.getHeader(Const.HeaderKey.TRACKER_ID)).orElse(request.getParameter(Const.HeaderKey.TRACKER_ID));
