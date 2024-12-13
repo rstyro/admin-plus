@@ -6,13 +6,15 @@
 [![Apache2.0](https://img.shields.io/badge/Apache-2.0-success.svg)]()
 
 # admin-plus
-这个项目是我把以前的 [admin](https://github.com/rstyro/admin) 项目重新整理了一个
+- 这个项目是我把以前的 [admin](https://github.com/rstyro/admin) 项目重新整理了一个
+- 全新升级，使用轻量级Java权限认证框架Sa-Token
+- 代码优化重构
 
 ## Maven 模块包
 + admin-common     
 公用包，这个是存放一些常用的工具类，把它当成一个jar 使用.  
 所以可以 用maven 命令，把它安装到本地仓库
-+ admin-core       
++ admin-controller       
 核心包，这个就是admin 的 所有核心内容了，部署也是部署这个包就可以了，  
 都是springboot 项目，部署应该也不难  
 如果不怎么清楚部署的话，可以看我以前的文章：[Spring Boot-打包部署](https://rstyro.github.io/blog/2017/09/20/Spring%20Boot%20(%E5%8D%81)%EF%BC%9A%E6%89%93%E5%8C%85%E9%83%A8%E7%BD%B2/)
