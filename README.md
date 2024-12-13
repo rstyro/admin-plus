@@ -44,10 +44,9 @@
 #### 2、MybatisPlus 文档：  
 [https://mp.baomidou.com/guide/config.html](https://mp.baomidou.com/guide/config.html)
 
-#### 3、mini分支
-- 这个是分支算是优化版本，权限更改为sa-token校验
-- 新增tab标签页，去除不用的样式和多余插件，只保留核心的css和js
-- 集成element-ui和vue,不用JQuery了
+#### 3、old分支
+- 这个是分支是旧版的代码
+- 目前的master分支是经过瘦身处理，adminlte只保留了小部分内容
 
 #### 4、代码生成器教程示例图
 
