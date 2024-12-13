@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.lrs.admin.*.mapper*")
+@MapperScan("com.lrs.core.*.mapper*")
 public class MybatisPlusConfig {
     /**
      * mybatis-plus配置

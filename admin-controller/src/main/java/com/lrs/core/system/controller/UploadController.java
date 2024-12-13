@@ -5,17 +5,16 @@ import com.lrs.common.exception.ApiException;
 import com.lrs.common.utils.ImgUtil;
 import com.lrs.common.utils.date.DateUtil;
 import com.lrs.common.vo.R;
-import com.lrs.core.system.config.CommonConfig;
+import com.lrs.core.config.CommonConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -30,8 +29,13 @@ public class UploadController {
      * 上传图片
      * @param file 文件
      */
-    @PostMapping(value = "/image")
+    @PostMapping(value = {"/image"})
     public R<String> imgUpload(@RequestParam(value = "file") MultipartFile file){
+        String url = uploadFile(file);
+        return R.ok(url);
+    }
+
+    private String uploadFile(MultipartFile file){
         if (file.isEmpty()) {
             throw new ApiException(ApiResultEnum.ERROR_IO,null);
         }
@@ -47,7 +51,16 @@ public class UploadController {
             log.error(e.getMessage(),e);
             throw new ApiException(ApiResultEnum.ERROR_IO);
         }
-        return R.ok("/show"+folder+fileName);
+        return "/show"+folder+fileName;
     }
 
+    @PostMapping(value = {"/tinyImage","tinyFile"})
+    @ResponseBody
+    public Object tinyImage(@RequestParam(value = "file") MultipartFile file){
+        String url = uploadFile(file);
+        Map<String,String> data = new HashMap<>();
+        // tinymce上传文件必须要返回location这样的格式
+        data.put("location",url);
+        return data;
+    }
 }

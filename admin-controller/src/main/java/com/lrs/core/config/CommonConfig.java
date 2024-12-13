@@ -1,4 +1,4 @@
-package com.lrs.core.system.config;
+package com.lrs.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,8 +14,6 @@ public class CommonConfig {
     /**
      * index页面的名称配置
      */
-    private String name;
-
     private String systemName;
 
     @ConfigurationProperties(prefix = "admin.common.upload")
@@ -30,6 +28,11 @@ public class CommonConfig {
          * 上传文件地址前缀
          */
         private String pre;
+
+        public String getRoot() {
+            // 如果没有写入具体路径，就使用相对于项目根目录
+            return "upload".equals(root)?System.getProperty("user.dir")+"/"+root:root;
+        }
 
     }
 

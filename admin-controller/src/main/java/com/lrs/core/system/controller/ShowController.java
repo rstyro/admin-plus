@@ -1,6 +1,6 @@
 package com.lrs.core.system.controller;
 
-import com.lrs.core.system.config.CommonConfig;
+import com.lrs.core.config.CommonConfig;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;

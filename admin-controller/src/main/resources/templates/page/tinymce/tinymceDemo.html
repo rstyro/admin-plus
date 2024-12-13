@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sa="http://www.thymeleaf.org/extras/sa-token">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>tinymce Demo</title>
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+          th:href="@{/static/element-ui/index.css}">
+    <style>
+        .container {
+            padding: 5px;
+        }
+
+        .container .search-box {
+            margin-bottom: 20px;
+        }
+
+        .container .content-header {
+            margin-bottom: 10px;
+        }
+
+        .container .content-header .content-header-right {
+            text-align: right;
+        }
+
+        /*
+            让tinymce菜单在最上层
+         */
+        .tox-tinymce-aux{
+            z-index: 9999 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" class="container">
+
+    <el-card class="box-card">
+        <!-- Main content -->
+        <section class="content">
+            <el-form ref="form" :model="itemData" label-width="80px">
+                <el-form-item label="标题">
+                    <el-input v-model="itemData.title"></el-input>
+                </el-form-item>
+
+                <el-form-item label="内容">
+                    <editor v-model="itemData.content" :init="setting" :tinymce-script-src="tinymceScriptSrc" />
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                    <el-button>取消</el-button>
+                </el-form-item>
+            </el-form>
+        </section>
+    </el-card>
+
+</div>
+<!-- element-ui -->
+<script src="https://unpkg.com/vue@2/dist/vue.js" th:src="@{/static/vue/vue.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" th:src="@{/static/vue/axios.min.js}"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js" th:src="@{/static/element-ui/index.js}"></script>
+<script th:src="@{/static/vue/api.js}"></script>
+<script th:src="@{/static/tinymce/tinymce-vue.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    let ctx = [[@{/}]];
+
+        new Vue({
+            el: '#app',
+            components: {
+                // 导入tinymce富文本组件
+                'editor': Editor
+            },
+            data: function () {
+                return {
+                    itemData: {
+                        title: '',
+                        content: ''
+                    },
+                    tinymceScriptSrc:'/static/tinymce/tinymce.min.js',
+                    setting: {
+                        language: 'zh_CN',
+                        plugins: 'image link autolink code table preview codesample emoticons fullscreen lists advlist media pagebreak searchreplace',
+                        // plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap  pagebreak nonbreaking anchor insertdatetime advlist lists wordcount  help emoticons autosave  autoresize',
+                        toolbar: 'code undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | \
+    styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat | \
+    table image media charmap emoticons pagebreak insertdatetime preview | fullscreen |  lineheight ',
+                        images_upload_url: '/upload/tinyImage',
+                        images_upload_base_path: '',
+                        max_height: 750,
+                        fontsize_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
+                        font_formats: '微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;',
+                        toolbar_sticky: true,
+                        autosave_ask_before_unload: false,
+                        file_picker_callback: function (callback, value, meta) {
+                            //文件分类
+                            let filetype = '.pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4';
+                            //后端接收上传文件的地址
+                            let upurl = '/upload/tinyFile';
+                            //为不同插件指定文件类型及后端地址
+                            switch (meta.filetype) {
+                                case 'image':
+                                    filetype = '.jpg, .jpeg, .png, .gif';
+                                    break;
+                                case 'media':
+                                    filetype = '.mp3, .mp4';
+                                    break;
+                                case 'file':
+                                default:
+                            }
+                            //模拟出一个input用于添加本地文件
+                            let input = document.createElement('input');
+                            input.setAttribute('type', 'file');
+                            input.setAttribute('accept', filetype);
+                            input.click();
+                            input.onchange = function () {
+                                let file = this.files[0];
+                                let xhr, formData;
+                                console.log(file.name);
+                                xhr = new XMLHttpRequest();
+                                xhr.withCredentials = false;
+                                xhr.open('POST', upurl);
+                                xhr.onload = function () {
+                                    let json;
+                                    if (xhr.status != 200) {
+                                        failure('HTTP Error: ' + xhr.status);
+                                        return;
+                                    }
+                                    json = JSON.parse(xhr.responseText);
+                                    console.log("json:",json);
+                                    if (!json || typeof json.location != 'string') {
+                                        failure('Invalid JSON: ' + xhr.responseText);
+                                        return;
+                                    }
+                                    callback(json.location);
+                                };
+                                formData = new FormData();
+                                formData.append('file', file, file.name);
+                                xhr.send(formData);
+                            }
+                        }
+                    },
+                }
+            },
+            methods: {
+                onSubmit: function () {
+                    console.log("formDto=",this.itemData)
+                },
+            },
+            created() {
+            }
+        });
+</script>
+
+</body>
+</html>

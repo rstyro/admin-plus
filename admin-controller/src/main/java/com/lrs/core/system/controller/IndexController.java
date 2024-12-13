@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
 import com.lrs.common.constant.Const;
 import com.lrs.common.vo.TabsVo;
-import com.lrs.core.system.config.CommonConfig;
+import com.lrs.core.config.CommonConfig;
 import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +65,14 @@ public class IndexController {
     @GetMapping("/icon")
     public String icon() {
         return "icon";
+    }
+
+    /**
+     * tinymce Demo 页面
+     */
+    @GetMapping("/tinymceDemo")
+    public String tinymceDemo() {
+        return "page/tinymce/tinymceDemo";
     }
 
 

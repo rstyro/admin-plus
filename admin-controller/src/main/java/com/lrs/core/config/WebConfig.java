@@ -5,7 +5,6 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import com.lrs.core.intercept.ContextInterceptor;
 import com.lrs.core.intercept.LoginIntercept;
-import com.lrs.core.system.config.CommonConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
