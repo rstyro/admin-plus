@@ -114,7 +114,6 @@ public class RedisSimulation {
      * 遍历数据，过期就删除
      */
     private void checkExpiredKeys() {
-        log.info("开始定时扫描过期的键值对");
         Iterator<Map.Entry<String, Long>> iterator = expirationMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Long> entry = iterator.next();
@@ -126,7 +125,6 @@ public class RedisSimulation {
                 iterator.remove();
             }
         }
-        log.info("结束定时扫描过期的键值对");
     }
 
     /**
