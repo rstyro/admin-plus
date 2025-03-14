@@ -240,8 +240,8 @@
                     axios.post(url, this.formDto).then(r => {
                         if (r.data.code === 200) {
                             let data = r.data.data;
-                            this.pageDto.total = data.total;
-                            this.pageDto.pageCount = data.pages;
+                            this.pageDto.total = Number(data.total);
+                            this.pageDto.pageCount = Number(data.pages);
                             this.tableData = data.records;
                         }
                     }).catch(error => {
