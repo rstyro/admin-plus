@@ -7,6 +7,7 @@
         a.id,
         a.parent_id,
         a.menu_name,
+        a.sort_num,
         b.id IS NOT NULL hasRoleFlag
     FROM
         sys_menu a
