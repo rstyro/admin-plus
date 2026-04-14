@@ -5,16 +5,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.annotation.OperateLog;
 import com.lrs.common.annotation.RepeatSubmit;
 import com.lrs.common.constant.BusinessType;
-import com.lrs.common.vo.ContextUtil;
+import com.lrs.common.utils.SecurityContextHolder;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysBtn;
 import com.lrs.core.system.service.ISysBtnService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -48,7 +48,7 @@ public class SysBtnController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody BaseDto dto) {
-        Page<SysBtn> menuPage = sysBtnService.getPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
+        Page<SysBtn> menuPage = sysBtnService.getPage(new Page<>(SecurityContextHolder.getPageNo(), SecurityContextHolder.getPageSize()), dto);
         return R.ok(menuPage);
     }
 

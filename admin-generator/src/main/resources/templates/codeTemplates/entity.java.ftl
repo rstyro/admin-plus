@@ -3,7 +3,7 @@ package ${package.Entity};
 <#list table.importPackages as pkg>
 import ${pkg};
 </#list>
-<#if swagger2>
+<#if swagger>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
@@ -42,7 +42,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 <#if table.convert>
 @TableName("${table.name}")
 </#if>
-<#if swagger2>
+<#if swagger>
 @ApiModel(value="${entity}对象", description="${table.comment!}")
 </#if>
 <#if superEntityClass??>
@@ -61,7 +61,7 @@ public class ${entity} implements Serializable {
     </#if>
 
     <#if field.comment!?length gt 0>
-    <#if swagger2>
+    <#if swagger>
     @ApiModelProperty(value = "${field.comment}")
     <#else>
     /**

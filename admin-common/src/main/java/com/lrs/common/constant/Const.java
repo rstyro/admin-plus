@@ -16,6 +16,8 @@ public interface Const {
 		 */
 		String PAGE_NO="pageNum";
 		String PAGE_SIZE="pageSize";
+		String TOKEN="token";
+		String USER_ID="uid";
 		/**
 		 * 请求追踪ID
 		 */

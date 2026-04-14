@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lrs.common.constant.ApiResultEnum;
 import com.lrs.common.constant.Const;
 import com.lrs.common.constant.SystemConst;
-import com.lrs.common.exception.ApiException;
+import com.lrs.common.exception.ServiceException;
 import com.lrs.common.utils.RedisSimulation;
 import com.lrs.common.vo.TabsVo;
 import com.lrs.core.base.BaseController;
@@ -36,8 +36,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -183,20 +183,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void checkUserName(SysUser item){
         long count = count(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, item.getUsername()));
         if (count > 0) {
-            throw new ApiException(ApiResultEnum.SYSTEM_USER_EXIST);
+            throw new ServiceException(ApiResultEnum.SYSTEM_USER_EXIST);
         }
     }
     @Override
     public boolean edit(SysUser item) {
         SysUser sysUser = getById(item.getId());
         if (sysUser == null) {
-            throw new ApiException(ApiResultEnum.SYSTEM_USER_NOT_FOUND);
+            throw new ServiceException(ApiResultEnum.SYSTEM_USER_NOT_FOUND);
         }
         // 重命名判断
         if (!sysUser.getUsername().equals(item.getUsername())) {
             SysUser existingUser = getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, item.getUsername()));
             if (existingUser != null && !existingUser.getId().equals(item.getId())) {
-                throw new ApiException(ApiResultEnum.SYSTEM_USER_EXIST);
+                throw new ServiceException(ApiResultEnum.SYSTEM_USER_EXIST);
             }
         }
         // 密码盐从初始化后，不可更改
@@ -230,7 +230,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         int maxRetryCount = userConfig.getMaxRetryCount();
         if (errorNumber >= maxRetryCount) {
             recordLoginInfo(request,dto.getUsername(), SystemConst.LoginInfoStatus.FAIL,ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT.getMessage());
-            throw new ApiException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
+            throw new ServiceException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
         }
         String codeStr = (String) request.getSession().getAttribute(Const.SessionKey.SESSION_CODE);
         checkLoginError(request, dto.getUsername(),errKey,errorNumber,maxRetryCount,ApiResultEnum.SYSTEM_CODE_ERROR,()->!dto.getCode().equalsIgnoreCase(codeStr));
@@ -260,9 +260,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, errorEnum.getMessage());
             if (errorNumber >= maxRetryCount) {
                 recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT.getMessage());
-                throw new ApiException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
+                throw new ServiceException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
             }
-            throw new ApiException(errorEnum);
+            throw new ServiceException(errorEnum);
         }
     }
 

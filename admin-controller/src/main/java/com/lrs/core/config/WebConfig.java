@@ -9,9 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 接口拦截
@@ -45,5 +46,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
                 .addPathPatterns("/**")
                 .excludePathPatterns(securityConfig.getExcludes());
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //  映射favicon.ico，解决No endpoint GET /favicon.ico
+        registry.addResourceHandler("/favicon.ico")
+                .addResourceLocations("classpath:/static/","classpath:/resources/");
+        WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 }

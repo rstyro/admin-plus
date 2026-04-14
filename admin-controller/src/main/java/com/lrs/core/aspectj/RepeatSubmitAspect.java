@@ -9,10 +9,12 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.lrs.common.annotation.RepeatSubmit;
 import com.lrs.common.constant.Const;
-import com.lrs.common.exception.ApiException;
+import com.lrs.common.exception.ServiceException;
 import com.lrs.common.utils.RedisSimulation;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -22,8 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -48,7 +49,7 @@ public class RepeatSubmitAspect {
         // 如果注解不为0 则使用注解数值
         long interval = repeatSubmit.timeUnit().toMillis(repeatSubmit.interval());
         if (interval < 1000) {
-            throw new ApiException("重复提交间隔时间不能小于'1'秒");
+            throw new ServiceException("重复提交间隔时间不能小于'1'秒");
         }
         HttpServletRequest request = BaseController.getRequest();
         String nowParams = argsArrayToString(point.getArgs());
@@ -66,7 +67,7 @@ public class RepeatSubmitAspect {
             KEY_CACHE.set(cacheRepeatKey);
         } else {
             String message = repeatSubmit.message();
-            throw new ApiException(message);
+            throw new ServiceException(message);
         }
     }
 

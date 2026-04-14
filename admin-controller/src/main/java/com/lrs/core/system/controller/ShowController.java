@@ -1,15 +1,17 @@
 package com.lrs.core.system.controller;
 
+import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import com.lrs.core.config.CommonConfig;
-import org.apache.commons.io.FilenameUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.annotation.Resource;
 import java.io.*;
 
 /**
@@ -69,7 +71,7 @@ public class ShowController {
 
     // 根据文件扩展名获取MIME类型
     private String getContentType(String imagePath) {
-        String extension = FilenameUtils.getExtension(imagePath).toLowerCase();
+        String extension = FileNameUtil.extName(imagePath).toLowerCase();
         switch (extension) {
             case "png":
                 return "image/png";

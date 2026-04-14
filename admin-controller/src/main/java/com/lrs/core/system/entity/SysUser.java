@@ -10,12 +10,12 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lrs.common.sensitive.Sensitive;
 import com.lrs.common.sensitive.SensitiveStrategy;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
 
 /**
  * <p>

@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpInterface;
 import com.lrs.core.system.service.ISysUserService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**

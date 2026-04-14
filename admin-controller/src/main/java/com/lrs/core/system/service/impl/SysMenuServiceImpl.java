@@ -14,7 +14,7 @@ import com.lrs.core.system.vo.RoleMenuTreeVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 

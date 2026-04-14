@@ -1,7 +1,7 @@
 package com.lrs.core.system.controller;
 
 import com.lrs.common.constant.ApiResultEnum;
-import com.lrs.common.exception.ApiException;
+import com.lrs.common.exception.ServiceException;
 import com.lrs.common.utils.ImgUtil;
 import com.lrs.common.utils.date.DateUtil;
 import com.lrs.common.vo.R;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class UploadController {
 
     private String uploadFile(MultipartFile file){
         if (file.isEmpty()) {
-            throw new ApiException(ApiResultEnum.ERROR_IO,null);
+            throw new ServiceException(ApiResultEnum.ERROR_IO,null);
         }
         // 获取文件名
         String fileName = file.getOriginalFilename();
@@ -49,7 +49,7 @@ public class UploadController {
             file.transferTo(Objects.requireNonNull(dest));
         }catch (IOException e) {
             log.error(e.getMessage(),e);
-            throw new ApiException(ApiResultEnum.ERROR_IO);
+            throw new ServiceException(ApiResultEnum.ERROR_IO);
         }
         return "/show"+folder+fileName;
     }

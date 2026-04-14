@@ -6,7 +6,7 @@ import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HtmlUtil;
-import com.lrs.common.exception.ApiException;
+import com.lrs.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
 
@@ -29,7 +29,7 @@ public class RegionUtils {
         if (!FileUtil.exist(existFile)) {
             ClassPathResource fileStream = new ClassPathResource(fileName);
             if (ObjectUtil.isEmpty(fileStream.getStream())) {
-                throw new ApiException("RegionUtils初始化失败，原因：IP地址库数据不存在！");
+                throw new ServiceException("RegionUtils初始化失败，原因：IP地址库数据不存在！");
             }
             FileUtil.writeFromStream(fileStream.getStream(), existFile);
         }
@@ -41,13 +41,13 @@ public class RegionUtils {
         try {
             cBuff = Searcher.loadContentFromFile(dbPath);
         } catch (Exception e) {
-            throw new ApiException("RegionUtils初始化失败，原因：从ip2region.xdb文件加载内容失败！" + e.getMessage());
+            throw new ServiceException("RegionUtils初始化失败，原因：从ip2region.xdb文件加载内容失败！" + e.getMessage());
         }
         // 2、使用上述的 cBuff 创建一个完全基于内存的查询对象。
         try {
             SEARCHER = Searcher.newWithBuffer(cBuff);
         } catch (Exception e) {
-            throw new ApiException("RegionUtils初始化失败，原因：" + e.getMessage());
+            throw new ServiceException("RegionUtils初始化失败，原因：" + e.getMessage());
         }
     }
 

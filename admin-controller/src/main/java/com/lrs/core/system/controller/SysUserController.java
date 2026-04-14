@@ -6,18 +6,18 @@ import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.annotation.OperateLog;
 import com.lrs.common.constant.BusinessType;
-import com.lrs.common.vo.ContextUtil;
+import com.lrs.common.utils.SecurityContextHolder;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.system.dto.BaseDto;
 import com.lrs.core.system.entity.SysUser;
 import com.lrs.core.system.service.ISysUserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -52,7 +52,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody BaseDto dto) {
-        Page<SysUser> menuPage = sysUserService.getUserPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
+        Page<SysUser> menuPage = sysUserService.getUserPage(new Page<>(SecurityContextHolder.getPageNo(), SecurityContextHolder.getPageSize()), dto);
         return R.ok(menuPage);
     }
 

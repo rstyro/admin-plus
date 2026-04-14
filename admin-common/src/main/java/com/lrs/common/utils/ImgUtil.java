@@ -1,10 +1,11 @@
 package com.lrs.common.utils;
 
-import org.apache.commons.io.FileUtils;
+import cn.hutool.core.io.IoUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 public class ImgUtil {
 	
@@ -22,7 +23,7 @@ public class ImgUtil {
 		String rusultPath = rootPATH+filePath;
 		createFile(rusultPath);
 		File realFile =new File(rusultPath);
-		FileUtils.copyInputStreamToFile(in, realFile);
+		IoUtil.copy(in, Files.newOutputStream(realFile.toPath()));
 		return "/upload/show"+filePath;
 	}
 	

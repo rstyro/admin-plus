@@ -8,7 +8,7 @@ import com.lrs.core.system.dto.LoginDto;
 import com.lrs.core.system.entity.SysMenu;
 import com.lrs.core.system.entity.SysUser;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

@@ -2,7 +2,7 @@ package com.lrs.core.${package.ModuleName}.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
-import com.lrs.common.vo.ContextUtil;
+import com.lrs.common.utils.SecurityContextHolder;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;
 import com.lrs.core.system.dto.BaseDto;
@@ -10,8 +10,7 @@ import com.lrs.core.${package.ModuleName}.entity.${table.entityName};
 import com.lrs.core.${package.ModuleName}.service.${table.serviceName};
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 
@@ -25,10 +24,10 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/${package.ModuleName}/${table.entityPath}")
+@RequiredArgsConstructor
 public class ${table.controllerName} extends BaseController {
 
-    @Resource
-    private ${table.serviceName} ${table.entityPath}Service;
+    private final ${table.serviceName} ${table.entityPath}Service;
 
 
     /**
@@ -37,7 +36,7 @@ public class ${table.controllerName} extends BaseController {
     @SaCheckPermission(value = {"${package.ModuleName}:${table.entityPath}:list","${package.ModuleName}:${table.entityPath}:list:view"},mode = SaMode.OR)
     @GetMapping("/page")
     public String page() {
-        return "page/${package.ModuleName}/${table.entityPath}_list";
+        return "page/${package.ModuleName}/${table.name}";
     }
 
     /**

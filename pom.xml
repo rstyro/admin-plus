@@ -14,22 +14,22 @@
 
     <properties>
         <revision>1.0.0</revision>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- springboot -->
-        <spring-boot.version>2.7.14</spring-boot.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
-        <druid.version>1.2.20</druid.version>
-        <sa-token.version>1.37.0</sa-token.version>
-        <fastjson2.version>2.0.42</fastjson2.version>
-        <mysql.version>8.0.33</mysql.version>
-        <lombok.version>1.18.30</lombok.version>
-        <hutool.version>5.8.23</hutool.version>
+        <spring-boot.version>3.5.12</spring-boot.version>
+        <mybatis-plus.version>3.5.15</mybatis-plus.version>
+        <druid.version>1.2.28</druid.version>
+        <sa-token.version>1.45.0</sa-token.version>
+        <sa-token-thymeleaf.version>1.40.0</sa-token-thymeleaf.version>
+        <fastjson2.version>2.0.61</fastjson2.version>
+        <mysql.version>8.3.0</mysql.version>
+        <lombok.version>1.18.44</lombok.version>
+        <hutool.version>5.8.42</hutool.version>
         <transmittable-thread-local.version>2.14.0</transmittable-thread-local.version>
-        <commons.io.version>2.18.0</commons.io.version>
         <nekohtml.version>1.9.22</nekohtml.version>
         <freemarker.version>2.3.8</freemarker.version>
         <!-- 离线IP地址定位库 -->
@@ -37,10 +37,9 @@
 
 
         <!-- 插件版本 -->
-        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
-        <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
-        <maven-compiler-plugin.verison>2.7.14</maven-compiler-plugin.verison>
-        <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
+        <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+        <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     </properties>
 
 
@@ -57,11 +56,15 @@
                 <scope>import</scope>
             </dependency>
 
+            <!--  mybatis-plus     -->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter-test</artifactId>
+                <artifactId>mybatis-plus-bom</artifactId>
                 <version>${mybatis-plus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
+
             <!--  阿里巴巴数据库连接池     -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -70,8 +73,8 @@
             </dependency>
 
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
 
@@ -89,43 +92,49 @@
 
             <dependency>
                 <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
             <!-- 在 thymeleaf 标签中使用 Sa-Token -->
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-dialect-thymeleaf</artifactId>
-                <version>${sa-token.version}</version>
+                <version>${sa-token-thymeleaf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>cn.dev33</groupId>
+                        <artifactId>sa-token-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- hutool 模块，按需引用吧 -->
-<!--            <module>hutool-all</module>-->
-<!--            <module>hutool-bom</module>-->
-<!--            <module>hutool-aop</module>-->
-<!--            <module>hutool-bloomFilter</module>-->
-<!--            <module>hutool-cache</module>-->
-<!--            <module>hutool-core</module>-->
-<!--            <module>hutool-cron</module>-->
-<!--            <module>hutool-crypto</module>-->
-<!--            <module>hutool-db</module>-->
-<!--            <module>hutool-dfa</module>-->
-<!--            <module>hutool-extra</module>-->
-<!--            <module>hutool-http</module>-->
-<!--            <module>hutool-log</module>-->
-<!--            <module>hutool-script</module>-->
-<!--            <module>hutool-setting</module>-->
-<!--            <module>hutool-system</module>-->
-<!--            <module>hutool-json</module>-->
-<!--            <module>hutool-poi</module>-->
-<!--            <module>hutool-captcha</module>-->
-<!--            <module>hutool-socket</module>-->
-<!--            <module>hutool-jwt</module>-->
-<!--            <dependency>-->
-<!--                <groupId>cn.hutool</groupId>-->
-<!--                <artifactId>hutool-all</artifactId>-->
-<!--                <version>${hutool.version}</version>-->
-<!--            </dependency>-->
+            <!--            <module>hutool-all</module>-->
+            <!--            <module>hutool-bom</module>-->
+            <!--            <module>hutool-aop</module>-->
+            <!--            <module>hutool-bloomFilter</module>-->
+            <!--            <module>hutool-cache</module>-->
+            <!--            <module>hutool-core</module>-->
+            <!--            <module>hutool-cron</module>-->
+            <!--            <module>hutool-crypto</module>-->
+            <!--            <module>hutool-db</module>-->
+            <!--            <module>hutool-dfa</module>-->
+            <!--            <module>hutool-extra</module>-->
+            <!--            <module>hutool-http</module>-->
+            <!--            <module>hutool-log</module>-->
+            <!--            <module>hutool-script</module>-->
+            <!--            <module>hutool-setting</module>-->
+            <!--            <module>hutool-system</module>-->
+            <!--            <module>hutool-json</module>-->
+            <!--            <module>hutool-poi</module>-->
+            <!--            <module>hutool-captcha</module>-->
+            <!--            <module>hutool-socket</module>-->
+            <!--            <module>hutool-jwt</module>-->
+            <!--            <dependency>-->
+            <!--                <groupId>cn.hutool</groupId>-->
+            <!--                <artifactId>hutool-all</artifactId>-->
+            <!--                <version>${hutool.version}</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -141,13 +150,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable-thread-local.version}</version>
-            </dependency>
-
-            <!-- io常用工具类 -->
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
             </dependency>
 
             <!-- 离线IP地址定位库 ip2region -->
@@ -185,10 +187,25 @@
             </resource>
         </resources>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <parameters>true</parameters>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${maven-compiler-plugin.verison}</version>
+                <version>${spring-boot.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
