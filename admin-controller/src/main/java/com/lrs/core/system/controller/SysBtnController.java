@@ -55,7 +55,7 @@ public class SysBtnController extends BaseController {
     /**
      * 添加
      */
-    @RepeatSubmit(interval = 30000)
+    @RepeatSubmit(lockTime = 30000)
     @OperateLog(title = "按钮管理",businessType = BusinessType.INSERT)
     @SaCheckPermission("system:btn:list:add")
     @PostMapping("/add")
@@ -67,7 +67,7 @@ public class SysBtnController extends BaseController {
     /**
      * 编辑
      */
-    @RepeatSubmit(interval = 30000)
+    @RepeatSubmit(lockTime = 30000)
     @OperateLog(title = "按钮管理",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @SaCheckPermission("system:btn:list:edit")

@@ -66,6 +66,45 @@ public class RedisSimulation {
     }
 
     /**
+     * 尝试获取分布式锁（带时间单位）
+     * @param lockKey    锁的 key
+     * @param requestId  请求标识（用于释放时校验身份）
+     * @param expireTime 过期时间
+     * @param timeUnit   时间单位
+     * @return 是否成功获取锁
+     */
+    public boolean tryLock(String lockKey, String requestId, long expireTime, TimeUnit timeUnit) {
+        long expireMillis = timeUnit.toMillis(expireTime);
+        return setObjectIfAbsent(lockKey, requestId, expireMillis);
+    }
+
+    /**
+     * 尝试获取分布式锁
+     * @param lockKey    锁的 key
+     * @param requestId  请求标识（值）
+     * @param expireTime 过期时间（毫秒）
+     * @return 是否成功获取锁
+     */
+    public boolean tryLock(String lockKey, String requestId, long expireTime) {
+        return tryLock(lockKey,requestId,expireTime,TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 释放分布式锁（需要验证 requestId）
+     * @param lockKey   锁的 key
+     * @param requestId 请求标识
+     * @return 是否释放成功
+     */
+    public boolean releaseLock(String lockKey, String requestId) {
+        String current = get(lockKey);
+        if (requestId.equals(current)) {
+            del(lockKey);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 设置有效时间
      * @param key 缓存的键值
      * @param expiration 过期时间

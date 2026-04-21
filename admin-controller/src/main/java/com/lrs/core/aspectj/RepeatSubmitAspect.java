@@ -1,149 +1,174 @@
 package com.lrs.core.aspectj;
 
-import cn.dev33.satoken.SaManager;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.alibaba.fastjson2.JSON;
 import com.lrs.common.annotation.RepeatSubmit;
 import com.lrs.common.constant.Const;
 import com.lrs.common.exception.ServiceException;
+import com.lrs.common.utils.AopUtil;
 import com.lrs.common.utils.RedisSimulation;
-import com.lrs.common.vo.R;
+import com.lrs.common.utils.RemoteIpUtil;
 import com.lrs.core.base.BaseController;
+import com.lrs.core.system.entity.SysUser;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
  * 防止重复提交
  */
+@Slf4j
 @Aspect
 @Component
 public class RepeatSubmitAspect {
 
-    private static final ThreadLocal<String> KEY_CACHE = new ThreadLocal<>();
-
+    private static final String LOCK_KEY_PREFIX = Const.RedisKey.REPEAT_SUBMIT_KEY;
+    private static final String SPEL_PARSER = "#";
     /**
      * redis 模拟，有条件可集成Redis
      */
     private static final RedisSimulation redisSimulation = SpringUtil.getBean(RedisSimulation.class);
 
-    @Before("@annotation(repeatSubmit)")
-    public void doBefore(JoinPoint point, RepeatSubmit repeatSubmit) throws Throwable {
-        // 如果注解不为0 则使用注解数值
-        long interval = repeatSubmit.timeUnit().toMillis(repeatSubmit.interval());
-        if (interval < 1000) {
-            throw new ServiceException("重复提交间隔时间不能小于'1'秒");
+    /**
+     * 环绕通知
+     */
+    @Around(value = "@annotation(repeatSubmit)")
+    public Object around(ProceedingJoinPoint joinPoint, RepeatSubmit repeatSubmit) throws Throwable {
+        // 生成锁的key
+        String lockKey = generateLockKey(joinPoint, repeatSubmit);
+        String requestId = IdUtil.simpleUUID();
+        // 尝试获取锁
+        Boolean success = redisSimulation.tryLock(lockKey, requestId, repeatSubmit.lockTime(), repeatSubmit.timeUnit());
+        if(Boolean.FALSE.equals(success)) {
+            // 获取锁失败，抛出重复提交异常
+            throw new ServiceException(repeatSubmit.message());
         }
+        try {
+            log.debug("获取请求锁key：{} 成功",lockKey);
+            // 获取锁成功，执行目标方法
+            return joinPoint.proceed();
+        } catch (Throwable e) {
+            log.error("around,err:{}",e.getMessage(), e);
+            // 方法执行失败时，才会删除锁
+            redisSimulation.releaseLock(lockKey, requestId);
+            throw e;
+        }
+    }
+
+    /**
+     * 生成锁的key - 核心逻辑
+     */
+    private String generateLockKey(ProceedingJoinPoint joinPoint, RepeatSubmit repeatSubmit) {
+        StringBuilder keyBuilder = new StringBuilder(LOCK_KEY_PREFIX);
+        // 基础key（方法签名或自定义key）
+        String baseKey = buildBaseKey(joinPoint, repeatSubmit);
+        keyBuilder.append(baseKey);
+
+        // 处理key生成策略
+        String keyByStrategy = buildKeyByStrategy(joinPoint, repeatSubmit);
+        if (StringUtils.hasText(keyByStrategy)) {
+            keyBuilder.append(":").append(keyByStrategy);
+        }
+        return keyBuilder.toString();
+    }
+
+    /**
+     * 构建基础key
+     */
+    private String buildBaseKey(ProceedingJoinPoint joinPoint, RepeatSubmit repeatSubmit) {
+        String key = repeatSubmit.key();
+        if (StringUtils.hasText(key)) {
+            // 处理SpEL表达式
+            if (key.contains(SPEL_PARSER)) {
+                return AopUtil.parseSpel(key, joinPoint);
+            }
+            return key;
+        }
+        // 默认使用类名+方法名
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        return method.getDeclaringClass().getSimpleName() + ":" + method.getName();
+    }
+
+    /**
+     * 根据策略构建key
+     */
+    private String buildKeyByStrategy(ProceedingJoinPoint joinPoint, RepeatSubmit antiResubmit) {
+        StringBuilder keyBuilder = new StringBuilder();
+
         HttpServletRequest request = BaseController.getRequest();
-        String nowParams = argsArrayToString(point.getArgs());
-
-        // 请求地址（作为存放cache的key值）
-        String url = request.getRequestURI();
-
-        // 唯一值（没有消息头则使用请求地址）
-        String submitKey = StrUtil.trimToEmpty(request.getHeader(SaManager.getConfig().getTokenName()));
-
-        submitKey = SecureUtil.md5(submitKey + ":" + nowParams);
-        // 唯一标识（指定key + url + 消息头）
-        String cacheRepeatKey = Const.RedisKey.REPEAT_SUBMIT_KEY + url + submitKey;
-        if (redisSimulation.setObjectIfAbsent(cacheRepeatKey, "", interval)) {
-            KEY_CACHE.set(cacheRepeatKey);
-        } else {
-            String message = repeatSubmit.message();
-            throw new ServiceException(message);
-        }
-    }
-
-    /**
-     * 处理完请求后执行
-     *
-     * @param joinPoint 切点
-     */
-    @AfterReturning(pointcut = "@annotation(repeatSubmit)", returning = "jsonResult")
-    public void doAfterReturning(JoinPoint joinPoint, RepeatSubmit repeatSubmit, Object jsonResult) {
-        if (jsonResult instanceof R<?>) {
-            R<?> r = (R<?>) jsonResult;
-            try {
-                // 成功则不删除redis数据 保证在有效时间内无法重复提交
-                if (r.getCode() == R.SUCCESS) {
-                    return;
+        // 根据锁类型添加不同标识
+        switch (antiResubmit.lockType()) {
+            case SYSTEM_USER:
+                SysUser loginSysUser = BaseController.getLoginSysUser();
+                String userId = loginSysUser != null?String.valueOf(loginSysUser.getId()):"";
+                if (StringUtils.hasText(userId)) {
+                    addSeparator(keyBuilder);
+                    keyBuilder.append("system_user:").append(userId);
                 }
-                redisSimulation.del(KEY_CACHE.get());
-            } finally {
-                KEY_CACHE.remove();
+                break;
+            case IP:
+                String clientIp = RemoteIpUtil.getRemoteIpSafely(request);
+                if (StringUtils.hasText(clientIp)) {
+                    addSeparator(keyBuilder);
+                    keyBuilder.append("ip:").append(clientIp);
+                }
+                break;
+            case SESSION:
+                String sessionId = StpUtil.getSession().getId();
+                if (StringUtils.hasText(sessionId)) {
+                    addSeparator(keyBuilder);
+                    keyBuilder.append("session:").append(sessionId);
+                }
+                break;
+            case PARAM:
+                // 参数级别的锁，使用所有参数hash
+                String paramHash = generateParamHash(joinPoint);
+                if (StringUtils.hasText(paramHash)) {
+                    addSeparator(keyBuilder);
+                    keyBuilder.append("param:").append(paramHash);
+                }
+                break;
+        }
+
+        return keyBuilder.toString();
+    }
+
+    private String generateParamHash(ProceedingJoinPoint joinPoint) {
+        try {
+            Object[] args = joinPoint.getArgs();
+            if (args == null || args.length == 0) {
+                return "no_params";
             }
+            String paramStr = Arrays.stream(args)
+                    .filter(o-> Objects.nonNull(o) && !(o instanceof MultipartFile))
+                    .map(Object::toString)
+                    .collect(Collectors.joining("|"));
+            return DigestUtils.md5DigestAsHex(paramStr.getBytes());
+        } catch (Exception e) {
+            log.warn("生成参数hash失败", e);
+            return "error";
         }
     }
 
-    /**
-     * 拦截异常操作
-     *
-     * @param joinPoint 切点
-     * @param e         异常
-     */
-    @AfterThrowing(value = "@annotation(repeatSubmit)", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, RepeatSubmit repeatSubmit, Exception e) {
-        redisSimulation.del(KEY_CACHE.get());
-        KEY_CACHE.remove();
-    }
-
-    /**
-     * 参数拼装
-     */
-    private String argsArrayToString(Object[] paramsArray) {
-        StringJoiner params = new StringJoiner(" ");
-        if (ArrayUtil.isEmpty(paramsArray)) {
-            return params.toString();
+    private void addSeparator(StringBuilder builder) {
+        if (!builder.isEmpty()) {
+            builder.append(":");
         }
-        for (Object o : paramsArray) {
-            if (ObjectUtil.isNotNull(o) && !isFilterObject(o)) {
-                params.add(JSON.toJSONString(o));
-            }
-        }
-        return params.toString();
-    }
-
-    /**
-     * 判断是否需要过滤的对象。
-     *
-     * @param o 对象信息。
-     * @return 如果是需要过滤的对象，则返回true；否则返回false。
-     */
-    @SuppressWarnings("rawtypes")
-    public boolean isFilterObject(final Object o) {
-        Class<?> clazz = o.getClass();
-        if (clazz.isArray()) {
-            return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
-        } else if (Collection.class.isAssignableFrom(clazz)) {
-            Collection collection = (Collection) o;
-            for (Object value : collection) {
-                return value instanceof MultipartFile;
-            }
-        } else if (Map.class.isAssignableFrom(clazz)) {
-            Map map = (Map) o;
-            for (Object value : map.values()) {
-                return value instanceof MultipartFile;
-            }
-        }
-        return o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse
-               || o instanceof BindingResult;
     }
 
 }
