@@ -314,19 +314,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
-
-    private void checkLoginError(HttpServletRequest request, String username, String errKey, int errorNumber, int maxRetryCount, ApiResultEnum errorEnum, Supplier<Boolean> supplier) {
-        if(supplier.get()){
-            redisSimulation.set(errKey, ++errorNumber, userConfig.getLockTime(), TimeUnit.MINUTES);
-            recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, errorEnum.getMessage());
-            if (errorNumber >= maxRetryCount) {
-                recordLoginInfo(request, username, SystemConst.LoginInfoStatus.FAIL, ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT.getMessage());
-                throw new ServiceException(ApiResultEnum.SYSTEM_USER_ABOVE_MAX_RETRY_COUNT);
-            }
-            throw new ServiceException(errorEnum);
-        }
-    }
-
     @Override
     public boolean logout(HttpServletRequest request) {
         SysUser sysUser = Convert.convert(SysUser.class, StpUtil.getSession().get(Const.SessionKey.SESSION_USER));
