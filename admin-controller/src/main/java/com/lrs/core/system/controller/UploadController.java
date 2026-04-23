@@ -1,6 +1,6 @@
 package com.lrs.core.system.controller;
 
-import com.lrs.common.constant.ApiResultEnum;
+import com.lrs.common.enums.ApiResultEnum;
 import com.lrs.common.exception.ServiceException;
 import com.lrs.common.utils.ImgUtil;
 import com.lrs.common.utils.date.DateUtil;

@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.lrs.common.annotation.RepeatSubmit;
 import com.lrs.common.constant.Const;
+import com.lrs.common.enums.RedisKeyEnum;
 import com.lrs.common.exception.ServiceException;
 import com.lrs.common.utils.AopUtil;
 import com.lrs.common.utils.RedisSimulation;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 @Component
 public class RepeatSubmitAspect {
 
-    private static final String LOCK_KEY_PREFIX = Const.RedisKey.REPEAT_SUBMIT_KEY;
+    private static final String LOCK_KEY_PREFIX = RedisKeyEnum.REPEAT_SUBMIT.getKey();
     private static final String SPEL_PARSER = "#";
     /**
      * redis 模拟，有条件可集成Redis

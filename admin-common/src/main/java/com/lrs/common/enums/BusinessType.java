@@ -1,4 +1,4 @@
-package com.lrs.common.constant;
+package com.lrs.common.enums;
 
 /**
  * 业务操作类型

@@ -4,7 +4,7 @@ import cn.dev33.satoken.annotation.SaMode;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lrs.common.annotation.OperateLog;
 import com.lrs.common.annotation.RepeatSubmit;
-import com.lrs.common.constant.BusinessType;
+import com.lrs.common.enums.BusinessType;
 import com.lrs.common.utils.SecurityContextHolder;
 import com.lrs.common.vo.R;
 import com.lrs.core.base.BaseController;

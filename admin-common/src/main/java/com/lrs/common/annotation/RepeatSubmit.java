@@ -1,6 +1,6 @@
 package com.lrs.common.annotation;
 
-import com.lrs.common.constant.LockType;
+import com.lrs.common.enums.LockType;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;

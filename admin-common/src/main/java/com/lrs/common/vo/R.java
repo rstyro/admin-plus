@@ -1,6 +1,6 @@
 package com.lrs.common.vo;
 
-import com.lrs.common.constant.ApiResultEnum;
+import com.lrs.common.enums.ApiResultEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

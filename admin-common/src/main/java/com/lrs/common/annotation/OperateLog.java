@@ -1,8 +1,8 @@
 package com.lrs.common.annotation;
 
 
-import com.lrs.common.constant.BusinessType;
-import com.lrs.common.constant.OperatorType;
+import com.lrs.common.enums.BusinessType;
+import com.lrs.common.enums.OperatorType;
 
 import java.lang.annotation.*;
 

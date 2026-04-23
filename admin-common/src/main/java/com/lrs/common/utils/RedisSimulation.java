@@ -150,6 +150,38 @@ public class RedisSimulation {
     }
 
     /**
+     * 原子性地将 key 对应的整数值增加 delta（delta 可为负数，实现自减）
+     * @param key   缓存的键值
+     * @param delta 增加的值（负数则减少）
+     * @return 增加后的新值
+     * @throws IllegalArgumentException 如果 key 对应的值不是数字类型
+     */
+    public long incr(String key, long delta) {
+        synchronized (dataMap) {
+            // 检查过期情况
+            Long expiration = expirationMap.get(key);
+            if (expiration == null || System.currentTimeMillis() > expiration) {
+                // 键不存在或已过期：清理并初始化为 delta
+                del(key);
+                dataMap.put(key, delta);
+                return delta;
+            } else {
+                // 键存在且未过期，获取当前值
+                Object currentObj = dataMap.get(key);
+                long currentValue;
+                if (currentObj instanceof Number) {
+                    currentValue = ((Number) currentObj).longValue();
+                } else {
+                    throw new IllegalArgumentException("Value for key '" + key + "' is not a number");
+                }
+                long newValue = currentValue + delta;
+                dataMap.put(key, newValue);
+                return newValue;
+            }
+        }
+    }
+
+    /**
      * 遍历数据，过期就删除
      */
     private void checkExpiredKeys() {

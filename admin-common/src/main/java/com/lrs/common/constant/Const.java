@@ -42,20 +42,4 @@ public interface Const {
 
 	}
 
-	/**
-	 * Redis 缓存key
-	 */
-	interface RedisKey {
-		/**
-		 * 防重提交 redis key
-		 */
-		String REPEAT_SUBMIT_KEY = "repeat_submit:";
-		/**
-		 * 用户登录报错key
-		 */
-		String USER_ACCOUNT_ERR_KEY = "user:account:err:";
-
-	}
-
-
 }

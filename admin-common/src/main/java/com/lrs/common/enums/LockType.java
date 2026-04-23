@@ -1,4 +1,4 @@
-package com.lrs.common.constant;
+package com.lrs.common.enums;
 
 public enum LockType {
     PARAM,     // 根据参数锁定

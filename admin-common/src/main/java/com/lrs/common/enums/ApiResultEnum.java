@@ -1,4 +1,4 @@
-package com.lrs.common.constant;
+package com.lrs.common.enums;
 
 public enum ApiResultEnum {
 	SUCCESS(200,"ok"),

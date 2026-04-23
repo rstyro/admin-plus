@@ -1,4 +1,4 @@
-package com.lrs.common.constant;
+package com.lrs.common.enums;
 
 /**
  * 操作人类别
