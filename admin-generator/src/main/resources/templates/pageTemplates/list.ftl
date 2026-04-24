@@ -235,6 +235,11 @@
             },
             methods: {
                 searchList: function () {
+                    // 点击检索-重置分页
+                    this.pageDto.currentPage=1;
+                    this.requestData();
+                },
+                requestData: function () {
                     // 列表检索
                     let url = this.listUrl + '?pageNum=' + this.pageDto.currentPage + '&pageSize=' + this.pageDto.pageSize;
                     axios.post(url, this.formDto).then(r => {
@@ -255,19 +260,19 @@
                 },
                 prePage() {
                     this.pageDto.currentPage -= 1;
-                    this.searchList();
+                    this.requestData();
                 },
                 nextPage() {
                     this.pageDto.currentPage += 1;
-                    this.searchList();
+                    this.requestData();
                 },
                 handleSizeChange(val) {
                     this.pageDto.pageSize=val;
-                    this.searchList();
+                    this.requestData();
                 },
                 handleCurrentChange(val) {
                     this.pageDto.currentPage=val;
-                    this.searchList();
+                    this.requestData();
                 },
                 handleSelectionChange(val) {
                     //当选择项发生变化时会触发该事件

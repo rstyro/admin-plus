@@ -16,8 +16,7 @@ public class BaseGenerator {
      * 作者
      */
     public static final String AUTHOR = "rstyro";
-    // 模块名
-    public static final String MODULE_NAME = "test";
+
     /**
      * 父级包名
      */
@@ -48,12 +47,12 @@ public class BaseGenerator {
                 .outputDir(outPath + "/src/main/java");
     }
 
-    public static PackageConfig.Builder getPackageConfig(String outPath) {
+    public static PackageConfig.Builder getPackageConfig(String outPath,String moduleName) {
         return new PackageConfig.Builder().parent(BASE_PACKAGES)
                 // 设置父包模块名
-                .moduleName(MODULE_NAME)
+                .moduleName(moduleName)
                 // 设置mapperXml生成路径
-                .pathInfo(Collections.singletonMap(OutputFile.xml, outPath + "/src/main/resources/mapper/"+MODULE_NAME));
+                .pathInfo(Collections.singletonMap(OutputFile.xml, outPath + "/src/main/resources/mapper/"+moduleName));
     }
 
     /**

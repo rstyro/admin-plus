@@ -46,7 +46,7 @@ public class ${table.controllerName} extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public R list(@RequestBody BaseDto dto) {
-    Page<${table.entityName}> menuPage = ${table.entityPath}Service.getPage(new Page<>(ContextUtil.getPageNo(), ContextUtil.getPageSize()), dto);
+    Page<${table.entityName}> menuPage = ${table.entityPath}Service.getPage(new Page<>(SecurityContextHolder.getPageNo(), SecurityContextHolder.getPageSize()), dto);
         return R.ok(menuPage);
     }
 

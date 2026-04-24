@@ -25,7 +25,7 @@ public class MyGenCode extends BaseGenerator {
         AutoGenerator autoGenerator =  new AutoGenerator(getDataSourceConfig().build());
         //配置相关
         GlobalConfig globalConfig = getGlobalConfig(outPath).build();
-        PackageConfig packageConfig = getPackageConfig(outPath).build();
+        PackageConfig packageConfig = getPackageConfig(outPath,scannerNext("输入模块名（如果需要生成页面模块要确定）：")).build();
         param.put("basePackage", packageConfig.getParent());
         String result = scannerNext("是否需要生成页面，1=生成，0=取消");
         List<String> tables = getTables(scannerNext("请输入表名，多个英文逗号分隔？所有输入 all"));
