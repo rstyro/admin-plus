@@ -3,7 +3,12 @@
  * @description 静态路由 + 动态路由注入 + 全局守卫
  *   动态路由来自后端菜单，解析规则见 ./menuRoutes.ts，注入到名为 Layout 的主框架路由下
  */
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalized,
+  type RouteRecordRaw,
+} from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { usePermissionStore } from '@/store/permission'
 import { useTabsStore } from '@/store/tabs'
@@ -96,14 +101,20 @@ router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore()
   const permissionStore = usePermissionStore()
 
-  // 动态路由注册前，未匹配的地址会被兜底路由重定向到 /404；
-  // 刷新页面时要以原始地址为准，注册完成后再导航回去
-  const target = !permissionStore.isRoutesReady && to.redirectedFrom ? to.redirectedFrom : to
+  // 动态路由注册前，未匹配的地址会被兜底路由重定向到 /404，/ 也会被重定向到 /welcome；
+  // 沿重定向链回溯到最原始的用户请求地址（链根是没有 path 的 LocationAsRaw 空对象）
+  const originalRoute: RouteLocationNormalized = (() => {
+    let t: RouteLocationNormalized = to
+    while (t.redirectedFrom?.path) t = t.redirectedFrom as RouteLocationNormalized
+    return t
+  })()
+  const target = permissionStore.isRoutesReady ? to : originalRoute
 
   // 已登录（cookie 里有 saToken 视为已登录）
   if (userStore.isLogin) {
-    if (target.path === '/login') {
-      next({ path: '/' })
+    // 已登录访问登录页回首页；to.path 判断防止 redirect 参数变化引起的反复重定向
+    if (to.path === '/login' || target.path === '/login') {
+      next({ path: '/', replace: true })
       return
     }
     // 首次进入（或刷新后）拉取权限数据并生成动态路由
@@ -122,16 +133,27 @@ router.beforeEach(async (to, _from, next) => {
         // 菜单/权限拉取失败（多为登录态失效）：清干净后回登录页
         resetRouter()
         await userStore.logout()
-        next(`/login?redirect=${encodeURIComponent(target.fullPath)}`)
+        next({ path: '/login', replace: true, query: { redirect: target.fullPath } })
         return
       }
     }
   } else {
-    // 未登录白名单放行
-    if (!WHITE_LIST.includes(target.path)) {
-      next(`/login?redirect=${encodeURIComponent(target.fullPath)}`)
+    // 未登录：白名单（登录页/错误页）放行，其余跳登录页。
+    // 注意：这里必须以 to.path 为准判断，不能拿 redirectedFrom 的原始地址做白名单——
+    // 否则 '/login?redirect=/' 这类跳转会被解析回 /welcome，守卫每次都返回同一路由、
+    // 永远不满足放行条件，触发 vue-router 的无限重定向保护（导航中止、页面白屏）。
+    // 兜底路由把未知地址重定向到 /404 时，/404 只是中转页（有 redirectedFrom），
+    // 不能按白名单放行；用户主动访问 /404 时 redirectedFrom 为空对象，正常展示
+    const isTransit404 = to.path === '/404' && Boolean(to.redirectedFrom?.path)
+    // 已经跳过一次登录页就放行：redirect 里带的是原始地址，若每次重算 query
+    // （如带时间戳参数）会让 vue-router 的同位置判定失效，绕过无限重定向检测
+    const alreadyGoingLogin = to.path === '/login' && Boolean(to.query.redirect)
+    if (alreadyGoingLogin || (WHITE_LIST.includes(to.path) && !isTransit404)) {
+      next()
       return
     }
+    next({ path: '/login', replace: true, query: { redirect: target.fullPath } })
+    return
   }
   next()
 })

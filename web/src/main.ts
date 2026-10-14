@@ -6,6 +6,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
 // Font Awesome 4.7：后端菜单表存的图标是 fa fa-* class，与旧前端保持同一套图标
 import '@/assets/fontawesome/css/font-awesome.min.css'
@@ -25,8 +26,8 @@ app.use(pinia)
 // vue-router
 app.use(router)
 
-// Element Plus
-app.use(ElementPlus)
+// Element Plus（中文语言包：空数据/分页等内置文案与旧版中文界面保持一致）
+app.use(ElementPlus, { locale: zhCn })
 // 全局注册 Element Plus 图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component as never)

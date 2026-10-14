@@ -4,7 +4,7 @@
  *   旧前端要保留对照，数据库与旧接口都不动，因此由前端把这层旧地址解析成
  *   vue-router 路由 + views 下的组件。
  *
- *   解析顺序：显式映射表 → 通用规则（去掉尾部 page 后按目录/文件名查找视图）。
+ *   解析顺序：显式映射表 → 通用规则（去掉尾部 page/list 后按目录/文件名查找视图）。
  */
 import type { Component } from 'vue'
 
@@ -58,8 +58,8 @@ export function resolveMenuRoute(rawUrl?: string | null): ResolvedRoute | null {
   const mapped = LEGACY_MENU_MAP[key]
   if (mapped) return mapped
 
-  // 通用规则：兼容 xxx/page、xxx、a/b 等形态
-  const modulePath = key.replace(/\/page$/, '')
+  // 通用规则：兼容 xxx/page、xxx/list、a/b 等形态（page/list 是后端页面路由后缀，前端组件在 xxx/index.vue）
+  const modulePath = key.replace(/\/(page|list)$/, '')
   const view = [`${modulePath}/index.vue`, `${modulePath}.vue`].find((c) => viewModules[`../views/${c}`])
   if (!view) return null
 

@@ -58,8 +58,7 @@ public class BaseGenerator {
     /**
      * 自定义策略，生成自定义模版页面
      */
-    public static StrategyConfig.Builder getStrategyConfig(List<String> includes) {
-        StrategyConfig.Builder builder = new StrategyConfig.Builder();
+    public static StrategyConfig.Builder getStrategyConfig(List<String> includes) {        StrategyConfig.Builder builder = new StrategyConfig.Builder();
         builder.addInclude(includes) // 设置需要生成的表名
                 // 设置过滤表前缀
                 .addTablePrefix("t_", "c_")
@@ -116,21 +115,45 @@ public class BaseGenerator {
         return builder;
     }
 
-    public static InjectionConfig.Builder getInjectionConfig(Map<String, Object> param) {
+    /**
+     * 注入配置：按模式追加自定义产物
+     * @param param      模板自定义参数
+     * @param mode       0=仅后端代码；1=追加旧版页面（admin-generator 下 html）；2=追加新版 web 页面与菜单 SQL
+     * @param projectRoot 仓库根目录（绝对路径）
+     * @param moduleName 模块名
+     */
+    public static InjectionConfig.Builder getInjectionConfig(Map<String, Object> param, int mode, String projectRoot, String moduleName) {
         // 自定义代码参数
-        return new InjectionConfig.Builder()
+        InjectionConfig.Builder builder = new InjectionConfig.Builder()
                 .beforeOutputFile((tableInfo, objectMap) -> {
                     System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
                 })
-                .customMap(param)
-                // 生成自定义页面
-                .customFile(new CustomFile.Builder()
-                        .formatNameFunction(TableInfo::getName)
-                        .fileName(".html")
-                        .enableFileOverride()
-                        .templatePath("/templates/pageTemplates/list.ftl").build());
-//                .customFile(new CustomFile.Builder().fileName("Vo.java")
-//                        .templatePath("/templates/vo.java.ftl").packageName("vo").build());
+                .customMap(param);
+        if (mode == 1) {
+            // 旧版 Vue2 + Thymeleaf 页面（对照用），写到 admin-generator 输出目录
+            builder.customFile(new CustomFile.Builder()
+                    .formatNameFunction(TableInfo::getName)
+                    .fileName(".html")
+                    .enableFileOverride()
+                    .templatePath("/templates/pageTemplates/list.ftl").build());
+        } else if (mode == 2) {
+            // 新版 Vue3 页面：直接写到 web/src/views/{模块}/{实体}/index.vue
+            // filePath 为绝对目录，文件名 = {entityPath}/index.vue（entityPath 无分隔符，天然形成子目录）
+            builder.customFile(new CustomFile.Builder()
+                    .filePath(projectRoot + "/web/src/views/" + moduleName)
+                    .formatNameFunction(TableInfo::getEntityPath)
+                    .fileName("/index.vue")
+                    .enableFileOverride()
+                    .templatePath("/templates/vueTemplates/index.vue.ftl").build());
+            // 菜单登记 SQL：写到 admin-generator/gen-sql/
+            builder.customFile(new CustomFile.Builder()
+                    .filePath(projectRoot + "/admin-generator/gen-sql")
+                    .formatNameFunction(tableInfo -> moduleName + "_" + tableInfo.getEntityPath())
+                    .fileName("_menu.sql")
+                    .enableFileOverride()
+                    .templatePath("/templates/vueTemplates/menu.sql.ftl").build());
+        }
+        return builder;
     }
 
 
