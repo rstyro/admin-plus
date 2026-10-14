@@ -4,12 +4,25 @@
  * @description 由旧版 templates/system/menu.html 重构而来
  *   - 使用 Element Plus 替代 Element UI 2
  *   - 使用 useCrud composable 复用通用 CRUD 逻辑
- *   - 树形表格（tree-props.children = 'child'）展示菜单层级
+ *   - 树形表格（tree-props.children = 'child'）展示菜单层级：
+ *     菜单名称列置于首个普通列（内置展开箭头固定渲染在第一个普通列），
+ *     配 default-expand-all + 展开/折叠全部切换按钮
  *   - el-tree-select 替代旧版 el-select + el-tree 组合实现父级菜单选择
  *   - v-permission 替代 sa:hasPermissionOr
  */
 import { computed, onMounted, ref } from 'vue'
-import { Plus, Delete, Edit, Search } from '@element-plus/icons-vue'
+import type { TableInstance } from 'element-plus'
+import {
+  Plus,
+  Delete,
+  Edit,
+  Search,
+  Expand,
+  Fold,
+  FolderOpened,
+  Document,
+  Mouse,
+} from '@element-plus/icons-vue'
 import { useCrud } from '@/composables/useCrud'
 import {
   getMenuPage,
@@ -133,6 +146,45 @@ const menuTypeMap: Record<MenuType, { label: string; type: 'info' | 'success' | 
   1: { label: '菜单', type: 'success' },
   2: { label: '按钮', type: 'warning' },
 }
+
+/**
+ * 树形表格展开控制
+ * @description el-table 没有内置"全部展开/折叠"，需拿表格实例逐行 toggleRowExpansion；
+ *   表格 default-expand-all 初始全展开，所以 allExpanded 初值为 true
+ */
+const tableRef = ref<TableInstance>()
+/** 是否存在任意可展开行（有子节点的目录/菜单），决定按钮是否出现 */
+const hasTree = computed(() => collectExpandable(tableData.value).length > 0)
+
+/** 递归收集所有带子节点的行 */
+function collectExpandable(nodes: SysMenu[]): SysMenu[] {
+  const out: SysMenu[] = []
+  const walk = (list: SysMenu[]) => {
+    list.forEach((n) => {
+      if (n.child && n.child.length) {
+        out.push(n)
+        walk(n.child)
+      }
+    })
+  }
+  walk(nodes)
+  return out
+}
+
+const allExpanded = ref(true)
+function toggleExpandAll() {
+  const table = tableRef.value
+  if (!table) return
+  allExpanded.value = !allExpanded.value
+  collectExpandable(tableData.value).forEach((row) =>
+    table.toggleRowExpansion(row, allExpanded.value)
+  )
+}
+
+/** 菜单行配置的 fa class（如 fa fa-user）才渲染图标，避免脏数据撑破布局 */
+function asFaIcon(icon?: string): string | null {
+  return icon && /^fa(\s|$)/.test(icon.trim()) ? icon.trim() : null
+}
 </script>
 
 <template>
@@ -159,22 +211,45 @@ const menuTypeMap: Record<MenuType, { label: string; type: 'info' | 'success' | 
           删除
         </el-button>
         <div class="content-header-right">
+          <el-button
+            v-if="hasTree"
+            :icon="allExpanded ? Fold : Expand"
+            @click="toggleExpandAll"
+          >
+            {{ allExpanded ? '折叠全部' : '展开全部' }}
+          </el-button>
           <el-button type="primary" :icon="Search" circle @click="showSearchBox" />
         </div>
       </div>
 
       <!-- 树形表格：子菜单在 child 字段 -->
       <el-table
+        ref="tableRef"
         v-loading="loading"
         :data="tableData"
         border
         row-key="id"
+        :indent="24"
         :tree-props="{ children: 'child' }"
+        default-expand-all
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
+        <!-- 菜单名称放最前：el-table 的树形展开箭头固定渲染在第一个普通列，
+             放 ID 列会导致箭头与文字脱节；名称列自带缩进层级与类型图标 -->
+        <el-table-column label="菜单名称" min-width="240">
+          <template #default="scope">
+            <span class="menu-name-cell">
+              <el-icon class="type-icon" :class="'type-' + scope.row.menuType">
+                <FolderOpened v-if="scope.row.menuType === 0" />
+                <Mouse v-else-if="scope.row.menuType === 2" />
+                <Document v-else />
+              </el-icon>
+              <span>{{ scope.row.menuName }}</span>
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="menuName" label="菜单名称" />
         <el-table-column prop="menuUrl" label="菜单地址" />
         <!-- 菜单类型：用 el-tag 显示目录/菜单/按钮 -->
         <el-table-column label="菜单类型" width="100">
@@ -186,7 +261,16 @@ const menuTypeMap: Record<MenuType, { label: string; type: 'info' | 'success' | 
         </el-table-column>
         <el-table-column prop="permit" label="权限Key" />
         <el-table-column prop="sortNum" label="排序" width="80" />
-        <el-table-column prop="icon" label="icon" width="100" />
+        <!-- icon 列：渲染真实图标预览，脏数据原样显示 -->
+        <el-table-column label="icon" width="110">
+          <template #default="scope">
+            <span v-if="asFaIcon(scope.row.icon)" class="icon-preview">
+              <i class="fa" :class="asFaIcon(scope.row.icon) || ''" />
+            </span>
+            <span v-else-if="scope.row.icon" class="icon-raw">{{ scope.row.icon }}</span>
+            <span v-else class="icon-empty">-</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
@@ -319,5 +403,70 @@ const menuTypeMap: Record<MenuType, { label: string; type: 'info' | 'success' | 
   margin-top: 12px;
   display: flex;
   justify-content: flex-end;
+}
+
+/* 树形表格：菜单名称单元格 */
+.menu-name-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+}
+.type-icon {
+  font-size: 15px;
+}
+.type-icon.type-0 {
+  color: #e6a23c;
+}
+.type-icon.type-1 {
+  color: var(--el-color-primary);
+}
+.type-icon.type-2 {
+  color: #a8abb2;
+}
+
+/* 内置展开箭头美化为圆形按钮（名称列即树形首个普通列） */
+:deep(.el-table__expand-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+  border-radius: 50%;
+  color: #909399;
+  font-size: 11px;
+  transition: all 0.2s;
+}
+:deep(.el-table__expand-icon:hover) {
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+}
+:deep(.el-table__expand-icon .el-icon) {
+  transition: transform 0.2s ease-in-out;
+}
+:deep(.el-table__placeholder) {
+  width: 20px;
+  margin-right: 2px;
+}
+
+/* icon 列预览 */
+.icon-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--el-fill-color-light);
+  font-size: 14px;
+  color: #606266;
+}
+.icon-raw {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+}
+.icon-empty {
+  color: var(--el-text-color-placeholder);
 }
 </style>
