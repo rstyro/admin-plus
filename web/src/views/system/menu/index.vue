@@ -23,6 +23,9 @@ import {
   Document,
   Mouse,
 } from '@element-plus/icons-vue'
+import MenuIcon from '@/components/MenuIcon.vue'
+import IconPicker from '@/components/IconPicker.vue'
+import { isEpIconName } from '@/utils/epIcons'
 import { useCrud } from '@/composables/useCrud'
 import {
   getMenuPage,
@@ -180,11 +183,6 @@ function toggleExpandAll() {
     table.toggleRowExpansion(row, allExpanded.value)
   )
 }
-
-/** 菜单行配置的 fa class（如 fa fa-user）才渲染图标，避免脏数据撑破布局 */
-function asFaIcon(icon?: string): string | null {
-  return icon && /^fa(\s|$)/.test(icon.trim()) ? icon.trim() : null
-}
 </script>
 
 <template>
@@ -261,11 +259,12 @@ function asFaIcon(icon?: string): string | null {
         </el-table-column>
         <el-table-column prop="permit" label="权限Key" />
         <el-table-column prop="sortNum" label="排序" width="80" />
-        <!-- icon 列：渲染真实图标预览，脏数据原样显示 -->
-        <el-table-column label="icon" width="110">
+        <!-- icon 列：存 Element Plus 图标名，命中则渲染预览，脏数据原样显示 -->
+        <el-table-column label="icon" width="150">
           <template #default="scope">
-            <span v-if="asFaIcon(scope.row.icon)" class="icon-preview">
-              <i class="fa" :class="asFaIcon(scope.row.icon) || ''" />
+            <span v-if="isEpIconName(scope.row.icon)" class="icon-preview">
+              <MenuIcon :icon="scope.row.icon" />
+              <span class="icon-name">{{ scope.row.icon }}</span>
             </span>
             <span v-else-if="scope.row.icon" class="icon-raw">{{ scope.row.icon }}</span>
             <span v-else class="icon-empty">-</span>
@@ -364,9 +363,9 @@ function asFaIcon(icon?: string): string | null {
         <el-form-item v-if="itemData.menuType === 1" label="排序">
           <el-input-number v-model="itemData.sortNum" :min="0" />
         </el-form-item>
-        <!-- 菜单icon：非按钮（目录/菜单）显示 -->
+        <!-- 菜单icon：非按钮（目录/菜单）显示，存 Element Plus 图标名 -->
         <el-form-item v-if="itemData.menuType !== 2" label="菜单icon">
-          <el-input v-model="itemData.icon" placeholder="请输入图标class" />
+          <IconPicker v-model="itemData.icon" />
         </el-form-item>
         <!-- 添加按钮权限：仅菜单类型显示 -->
         <el-form-item v-if="itemData.menuType === 1" label="添加按钮权限">
@@ -454,13 +453,13 @@ function asFaIcon(icon?: string): string | null {
 .icon-preview {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: var(--el-fill-color-light);
-  font-size: 14px;
+  gap: 2px;
   color: #606266;
+  font-size: 14px;
+}
+.icon-preview .icon-name {
+  font-size: 12px;
+  color: var(--el-text-color-regular);
 }
 .icon-raw {
   color: var(--el-text-color-secondary);

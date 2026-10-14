@@ -1,22 +1,15 @@
 <script setup lang="ts">
 /**
  * @file 菜单 ICON 参考页
- * @description 由旧版 templates/icon.html 重构而来。旧版是 2300 行硬编码的 Font Awesome 4 图标清单，
- *   这里直接从同一份 font-awesome.css 解析出图标名，既保证与侧栏实际可用的图标一致，也不会随版本脱节。
- *   菜单表 sys_menu.icon 存的就是 `fa fa-xxx` 形式的 class，点击图标即可复制。
+ * @description 旧版 templates/icon.html 是 2300 行硬编码的 Font Awesome 清单；
+ *   新前端统一使用 Element Plus 图标，这里直接取其导出清单渲染图标墙，
+ *   菜单表 sys_menu.icon 存的就是图标名（如 Setting），点击即可复制。
  */
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import faCss from '@/assets/fontawesome/css/font-awesome.min.css?raw'
+import { epIconNames, epIconRegistry } from '@/utils/epIcons'
 
 defineOptions({ name: 'IconList' })
-
-/** 从 CSS 源码里提取 .fa-xxx:before 选择器得到图标名 */
-const iconNames = computed<string[]>(() => {
-  const names = new Set<string>()
-  for (const m of faCss.matchAll(/\.fa-([a-z0-9-]+):before/g)) names.add(m[1])
-  return Array.from(names).sort()
-})
 
 /** 搜索关键词 */
 const keyword = ref('')
@@ -24,18 +17,17 @@ const keyword = ref('')
 /** 过滤后的图标 */
 const filteredIcons = computed(() => {
   const kw = keyword.value.trim().toLowerCase()
-  if (!kw) return iconNames.value
-  return iconNames.value.filter((n) => n.includes(kw))
+  if (!kw) return epIconNames
+  return epIconNames.filter((n) => n.toLowerCase().includes(kw))
 })
 
 /**
- * 复制完整 class（菜单表里要填的形式）
+ * 复制图标名（菜单表里要填的值）
  */
-async function copyClass(name: string) {
-  const text = `fa fa-${name}`
+async function copyName(name: string) {
   try {
-    await navigator.clipboard.writeText(text)
-    ElMessage.success(`已复制：${text}`)
+    await navigator.clipboard.writeText(name)
+    ElMessage.success(`已复制：${name}`)
   } catch {
     ElMessage.warning('复制失败，请手动复制')
   }
@@ -46,7 +38,7 @@ async function copyClass(name: string) {
   <el-card shadow="never">
     <template #header>
       <div class="header">
-        <span>Font Awesome 图标（共 {{ iconNames.length }} 个）</span>
+        <span>Element Plus 图标（共 {{ epIconNames.length }} 个，当前 {{ filteredIcons.length }} 个）</span>
         <el-input
           v-model="keyword"
           placeholder="搜索图标名"
@@ -61,10 +53,10 @@ async function copyClass(name: string) {
         v-for="name in filteredIcons"
         :key="name"
         class="icon-item"
-        @click="copyClass(name)"
+        @click="copyName(name)"
       >
-        <i :class="`fa fa-${name} icon`" />
-        <div class="icon-name">fa-{{ name }}</div>
+        <el-icon class="icon"><component :is="epIconRegistry[name]" /></el-icon>
+        <div class="icon-name">{{ name }}</div>
       </div>
     </div>
 

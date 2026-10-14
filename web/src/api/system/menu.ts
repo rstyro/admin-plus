@@ -17,7 +17,7 @@ export interface MenuVo {
   id: string
   /** 菜单文本 */
   text: string
-  /** 图标 class，旧数据存的是 fa 图标名（如 fa fa-user） */
+  /** 图标名，取 Element Plus 图标集（如 Setting），见 /icon 参考页 */
   icon?: string
   /** 旧版后端页面地址，如 system/user/page；目录节点为空串，前端用 resolveMenuRoute 解析 */
   url?: string

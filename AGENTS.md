@@ -59,3 +59,4 @@
 - 后端接口前缀：业务接口直接以 `/system/**`、`/login` 等裸路径提供服务，仅页面路由由旧模板系统承担
 - 文件上传与展示：`/upload` 上传、`/show/**` 访问（upload 根目录见 `admin.common.upload.root` 配置）
 - 开发代理后端地址通过 `web/.env.development` 的 `VITE_BACKEND_URL` 统一管理
+- 菜单图标：`sys_menu.icon` 存 **Element Plus 图标名**（如 `Setting`），全量清单见 web 前端 `/icon` 页与 `web/src/utils/epIcons.ts`；新前端不再引入 Font Awesome。旧前端侧栏仍按 fa class 渲染，故其菜单图标不再显示（旧前端只读保留，清理后此影响消失）

@@ -84,12 +84,13 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, 0, 0, '系统管理', '', NULL, 0, 'fa fa-gears', 1, '2023-12-01 21:31:35');
-INSERT INTO `sys_menu` VALUES (2, 0, 0, '日志', 'test', NULL, 1, 'fa fa-hand-peace-o', 1, '2023-12-02 22:20:39');
-INSERT INTO `sys_menu` VALUES (3, 1, 1, '菜单列表', 'system/menu/page', 'system:menu:list', 1, 'fa fa-circle-o', 1, '2023-12-01 21:32:57');
-INSERT INTO `sys_menu` VALUES (4, 1, 1, '公用按钮', 'system/btn/page', 'system:btn:list', 1, NULL, 1, '2023-12-04 21:30:52');
-INSERT INTO `sys_menu` VALUES (5, 1, 1, '用户列表', 'system/user/page', 'system:user:list', 2, 'fa fa-circle-o', NULL, NULL);
-INSERT INTO `sys_menu` VALUES (6, 1, 1, '角色列表', 'system/role/page', 'system:role:list', 3, 'fa fa-circle-o', 1, '2023-12-02 22:24:05');
+-- icon 列存 Element Plus 图标名（web 新前端「菜单ICON」页可查全量 293 个）
+INSERT INTO `sys_menu` VALUES (1, 0, 0, '系统管理', '', NULL, 0, 'Setting', 1, '2023-12-01 21:31:35');
+INSERT INTO `sys_menu` VALUES (2, 0, 0, '日志', 'test', NULL, 1, 'Tickets', 1, '2023-12-02 22:20:39');
+INSERT INTO `sys_menu` VALUES (3, 1, 1, '菜单列表', 'system/menu/page', 'system:menu:list', 1, 'Menu', 1, '2023-12-01 21:32:57');
+INSERT INTO `sys_menu` VALUES (4, 1, 1, '公用按钮', 'system/btn/page', 'system:btn:list', 1, 'Pointer', 1, '2023-12-04 21:30:52');
+INSERT INTO `sys_menu` VALUES (5, 1, 1, '用户列表', 'system/user/page', 'system:user:list', 2, 'User', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (6, 1, 1, '角色列表', 'system/role/page', 'system:role:list', 3, 'UserFilled', 1, '2023-12-02 22:24:05');
 INSERT INTO `sys_menu` VALUES (7, 3, 2, 'del', NULL, 'system:menu:list:del', 1, NULL, 1, '2023-12-04 21:40:11');
 INSERT INTO `sys_menu` VALUES (8, 3, 2, 'add', NULL, 'system:menu:list:add', 1, NULL, 1, '2023-12-04 21:40:11');
 INSERT INTO `sys_menu` VALUES (9, 3, 2, 'edit', NULL, 'system:menu:list:edit', 1, NULL, 1, '2023-12-04 21:40:11');

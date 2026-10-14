@@ -10,7 +10,8 @@ import { usePermissionStore } from '@/store/permission'
 import { useUserStore } from '@/store/user'
 import { useThemeStore } from '@/store/theme'
 import SidebarItem from './SidebarItem.vue'
-import { Fold, Expand } from '@element-plus/icons-vue'
+import MenuIcon from '@/components/MenuIcon.vue'
+import { Fold, Expand, Grid } from '@element-plus/icons-vue'
 import type { NavNode } from '@/store/permission'
 
 const route = useRoute()
@@ -56,7 +57,7 @@ function handleSelect(index: string) {
 <template>
   <div class="sidebar" :class="{ 'is-collapse': collapse }">
     <div class="sidebar-logo" @click="router.push('/welcome')">
-      <i class="fa fa-cube logo-icon" />
+      <el-icon class="logo-icon"><Grid /></el-icon>
       <span v-show="!collapse" class="logo-text">{{ title }}</span>
     </div>
     <el-menu
@@ -71,7 +72,7 @@ function handleSelect(index: string) {
     >
       <!-- 固定入口：对应旧版侧栏「主导航」下的欢迎页，不在菜单表中 -->
       <el-menu-item index="/welcome">
-        <i class="fa fa-dashboard menu-icon" />
+        <MenuIcon icon="Odometer" />
         <template #title>欢迎页</template>
       </el-menu-item>
       <SidebarItem v-for="item in permissionStore.navTree" :key="item.id" :item="item" />
@@ -127,12 +128,6 @@ function handleSelect(index: string) {
   overflow-x: hidden;
 }
 
-.menu-icon {
-  width: 24px;
-  margin-right: 4px;
-  font-size: 15px;
-  text-align: center;
-}
 /* el-menu collapse 时宽度固定为 64，避免撑破侧栏 */
 .sidebar-menu:not(.el-menu--collapse) {
   width: 100%;

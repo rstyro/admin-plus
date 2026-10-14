@@ -8,8 +8,6 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
-// Font Awesome 4.7：后端菜单表存的图标是 fa fa-* class，与旧前端保持同一套图标
-import '@/assets/fontawesome/css/font-awesome.min.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
