@@ -1,20 +1,31 @@
 package com.lrs.core.system.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.alibaba.fastjson2.JSON;
 import com.lrs.common.constant.Const;
 import com.lrs.common.utils.CaptchaUtil;
 import com.lrs.common.vo.R;
+import com.lrs.core.config.CommonConfig;
 import com.lrs.core.system.dto.LoginDto;
+import com.lrs.core.system.entity.SysRole;
+import com.lrs.core.system.entity.SysUser;
+import com.lrs.core.system.service.ISysRoleService;
 import com.lrs.core.system.service.ISysUserService;
+import com.lrs.core.system.vo.AuthInfoVo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 import javax.imageio.ImageIO;
@@ -33,6 +44,12 @@ public class AuthController {
 
     @Resource
     private ISysUserService sysUserService;
+
+    @Resource
+    private ISysRoleService sysRoleService;
+
+    @Resource
+    private CommonConfig commonConfig;
 
     /**
      * 验证码
@@ -97,5 +114,36 @@ public class AuthController {
     @ResponseBody
     public R logout(HttpServletRequest request){
         return R.ok(sysUserService.logout(request));
+    }
+
+    /**
+     * 当前登录用户的认证信息
+     * @description 供前后端分离的 web 前端做按钮级权限控制（v-permission）与系统名展示，
+     *   数据口径与 Sa-Token 服务端校验一致（同一套 sys_menu.permit 权限 KEY）
+     * @return R<AuthInfoVo> 用户、角色名、权限 KEY 列表、系统名
+     */
+    @GetMapping("/auth/info")
+    @ResponseBody
+    public R<AuthInfoVo> authInfo() {
+        Long userId = StpUtil.getLoginId(0L);
+        SysUser sysUser = JSON.parseObject(
+                JSON.toJSONString(StpUtil.getSession().get(Const.SessionKey.SESSION_USER)), SysUser.class);
+        if (sysUser != null) {
+            sysUser.setPassword(null);
+            sysUser.setSalt(null);
+        }
+        List<String> roles = sysRoleService.getUserRoleList(userId).stream()
+                .map(SysRole::getRoleName)
+                .collect(Collectors.toList());
+        // 目录/菜单节点的 permit 为空，过滤后前端权限判断才不会被空值干扰
+        List<String> permissions = sysUserService.getUserPermissionList(userId).stream()
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
+        AuthInfoVo vo = new AuthInfoVo()
+                .setUser(sysUser)
+                .setRoles(roles)
+                .setPermissions(permissions)
+                .setSystemName(commonConfig.getSystemName());
+        return R.ok(vo);
     }
 }
